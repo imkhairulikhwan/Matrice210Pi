@@ -33,6 +33,10 @@
 #include "flight_control.hpp"
 #include "mobile.h"
 
+#include <iostream>
+#include <string>
+#include <sstream>
+
 using namespace DJI::OSDK;
 using namespace DJI::OSDK::Telemetry;
 
@@ -42,7 +46,13 @@ void parseFromMobileCallback(DJI::OSDK::Vehicle*      vehicle,
 
 void sendData();
 
+void displayMenu();
+int getNumber(std::string message);
+
 Vehicle*   vehicle;
+
+#define FRAME_TO_SEND 300
+#define FRAME_LENGTH 100
 
 /*! main
  *
@@ -57,6 +67,19 @@ main(int argc, char** argv)
     };
 
     bool running = true;
+    int delayMs, frame_length;
+    useconds_t delayUs;
+    uint16_t framesToSend = FRAME_TO_SEND;
+
+    uint8_t frame[FRAME_LENGTH];
+    uint8_t n = 0;
+    while (true) {
+        frame[n] = n;
+        n++;
+        if (n == FRAME_LENGTH) {
+            break;
+        }
+    }
 
     // Initialize variables
     int functionTimeout = 1;
@@ -78,20 +101,10 @@ main(int argc, char** argv)
     vehicle->moc->setFromMSDKCallback(parseFromMobileCallback);
 
     // Display interactive prompt
-    std::cout
-        << "| Available commands:                                            |"
-        << std::endl;
-    std::cout
-        << "| [a] Monitored Takeoff + Landing                                |"
-        << std::endl;
-    std::cout
-        << "| [b] Monitored Takeoff + Position Control + Landing             |"
-        << std::endl;
-    std::cout
-        << "| [s] Send data                                                  |"
-        << std::endl;
+
 
     while(running) {
+        displayMenu();
         char inputChar;
         std::cin >> inputChar;
 
@@ -110,11 +123,68 @@ main(int argc, char** argv)
             case 's':
                 sendData();
                 break;
+            case 't':
+                frame_length = getNumber("Chose frame length : ");
+                delayMs = getNumber("Chose delay (ms) : ");
+                if(frame_length > 100) {
+                    frame_length = 100;
+                }
+
+                std::cout << "MOC test running : frame_length = " << frame_length << ", delayMs = " << delayMs << std::endl;
+                std::cout << "..." << std::endl;
+                delayUs = delayMs * (useconds_t)1000;
+
+                while(framesToSend != 0) {
+                    vehicle->moc->sendDataToMSDK(frame, (uint8_t)frame_length);
+                    DSTATUS("Frame %u sent", FRAME_TO_SEND - framesToSend);
+                    usleep(delayUs);
+                    framesToSend--;
+                }
+                framesToSend = FRAME_TO_SEND;
+                DSTATUS("%u frames sent", FRAME_TO_SEND);
+                break;
             default:
                 break;
+
         }
     }
     return 0;
+}
+
+void displayMenu() {
+    std::cout << std::endl;
+    std::cout
+            << "| Available commands:                                            |"
+            << std::endl;
+    std::cout
+            << "| [a] Monitored Takeoff + Landing                                |"
+            << std::endl;
+    std::cout
+            << "| [b] Monitored Takeoff + Position Control + Landing             |"
+            << std::endl;
+    std::cout
+            << "| [s] Send data                                                  |"
+            << std::endl;
+    std::cout
+            << "| [t] Test speed                                                  |"
+            << std::endl;
+}
+
+int
+getNumber(std::string message) {
+    int number;
+    while (true) {
+        std::string input = "";
+        std::cout << message;
+        std::getline(std::cin, input);
+
+        // This code converts from string to delayMs safely.
+        std::stringstream myStream(input);
+        if (myStream >> number)
+            break;
+        std::cout << "Invalid number" << std::endl;
+    }
+    return number;
 }
 
 void
@@ -139,7 +209,7 @@ parseFromMobileCallback(DJI::OSDK::Vehicle*      vehicle,
         data[msgLength] = '\0';
         DSTATUS("MOC - String received : %s", recvFrame.recvData.raw_ack_array);
     }
-    vehicle->moc->sendDataToMSDK(data, msgLength);
+    //vehicle->moc->sendDataToMSDK(data, msgLength);
 }
 
 void
