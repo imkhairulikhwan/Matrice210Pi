@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="M210Pi">
+    <serverData>
+      <paths name="M210Pi">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/Matrice210/Onboard-SDK/osdk-core" local="$PROJECT_DIR$/../../Onboard-SDK/osdk-core" web="/" />
+            <mapping deploy="/Matrice210/code/Matrice210" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>
