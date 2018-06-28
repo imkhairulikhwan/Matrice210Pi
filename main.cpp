@@ -31,11 +31,12 @@
  */
 
 #include "flight_control.hpp"
-#include "mobile.h"
 
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <pthread.h>
+#include "time.h"
 
 using namespace DJI::OSDK;
 using namespace DJI::OSDK::Telemetry;
@@ -54,6 +55,10 @@ Vehicle*   vehicle;
 #define FRAME_TO_SEND 300
 #define FRAME_LENGTH 100
 
+uint8_t frame[FRAME_LENGTH];
+uint16_t frameCounter;
+struct timespec lastTime;
+
 /*! main
  *
  */
@@ -66,12 +71,12 @@ main(int argc, char** argv)
         end
     };
 
+
+    // MOC Frames tests
     bool running = true;
     int delayMs, frame_length;
     useconds_t delayUs;
     uint16_t framesToSend = FRAME_TO_SEND;
-
-    uint8_t frame[FRAME_LENGTH];
     uint8_t n = 0;
     while (true) {
         frame[n] = n;
@@ -80,6 +85,7 @@ main(int argc, char** argv)
             break;
         }
     }
+    frameCounter = 0;
 
     // Initialize variables
     int functionTimeout = 1;
@@ -120,6 +126,10 @@ main(int argc, char** argv)
                 moveByPositionOffset(vehicle, -6, -6, 0, 0);
                 monitoredLanding(vehicle);
                 break;
+            case 'd':
+                DSTATUS("Frame counter : %u", frameCounter);
+                frameCounter = 0;
+                break;
             case 's':
                 sendData();
                 break;
@@ -130,18 +140,18 @@ main(int argc, char** argv)
                     frame_length = 100;
                 }
 
-                std::cout << "MOC test running : frame_length = " << frame_length << ", delayMs = " << delayMs << std::endl;
+                std::cout << "Down-test running : length = " << frame_length << " bytes, delay = " << delayMs << " ms" << std::endl;
                 std::cout << "..." << std::endl;
                 delayUs = delayMs * (useconds_t)1000;
 
                 while(framesToSend != 0) {
                     vehicle->moc->sendDataToMSDK(frame, (uint8_t)frame_length);
                     DSTATUS("Frame %u sent", FRAME_TO_SEND - framesToSend);
-                    usleep(delayUs);
                     framesToSend--;
+                    usleep(delayUs);
                 }
                 framesToSend = FRAME_TO_SEND;
-                DSTATUS("%u frames sent", FRAME_TO_SEND);
+                DSTATUS("Down-test ended : %u frames sent", FRAME_TO_SEND);
                 break;
             default:
                 break;
@@ -163,10 +173,13 @@ void displayMenu() {
             << "| [b] Monitored Takeoff + Position Control + Landing             |"
             << std::endl;
     std::cout
-            << "| [s] Send data                                                  |"
+            << "| [d] Display and reset frame counter                            |"
             << std::endl;
     std::cout
-            << "| [t] Test speed                                                  |"
+            << "| [s] Send \"Hello word from M210Pi3\"                             |"
+            << std::endl;
+    std::cout
+            << "| [t] Test speed                                                 |"
             << std::endl;
 }
 
@@ -196,26 +209,33 @@ parseFromMobileCallback(DJI::OSDK::Vehicle*      vehicle,
     uint16_t msgLength = recvFrame.recvInfo.len - formatFrameLength;
     uint8_t* data = recvFrame.recvData.raw_ack_array;
 
+    frameCounter++;
+
     if(data[0] == '#') {
-        switch (data[1]) {
-            case '1':			// toggle LED
-                DSTATUS("MOC - Led toggled");
-                break;
-            default:
-                DERROR("MOC - Unknown command");
-                break;
+        if(data[1] < 101) {
+            frame[0] = data[1];
+            DSTATUS("%u", data[1]);
+            vehicle->moc->sendDataToMSDK(frame, 100);
         }
     } else {
-        data[msgLength] = '\0';
-        DSTATUS("MOC - String received : %s", recvFrame.recvData.raw_ack_array);
+        struct timespec currentTime;
+        clock_gettime(CLOCK_MONOTONIC_RAW, &currentTime);
+
+        long ms;
+        long diff = currentTime.tv_nsec - lastTime.tv_nsec;
+        ms = diff / (long)1.0e6;
+
+        lastTime = currentTime;
+
+        DSTATUS("Diff ms = %lu", diff);
+        DSTATUS("MOC - Data received : %u", msgLength);
     }
-    //vehicle->moc->sendDataToMSDK(data, msgLength);
 }
 
 void
 sendData()
 {
-    char c[] = "Hello world from M210Pi";
+    char c[] = "Hello world from M210Pi3";
     DSTATUS("Send data to mobile: %s", c);
     vehicle->moc->sendDataToMSDK(reinterpret_cast<uint8_t*>(&c), sizeof(c));
 }

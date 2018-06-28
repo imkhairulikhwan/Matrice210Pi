@@ -1,4 +1,0 @@
-ToolSet: 3.20@C:\Program Files (x86)\MinGW
-Options: 
-
-Options:
