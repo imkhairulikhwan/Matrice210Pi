@@ -48,8 +48,6 @@ void parseFromMobileCallback(DJI::OSDK::Vehicle*      vehicle,
 #define START_CHAR '@'
 #define END_CHAR '#'
 
-void sendData();
-
 void displayMenu();
 int getNumber(std::string message);
 long getTimeMs();
@@ -57,13 +55,18 @@ long getTimeMs();
 Vehicle*   vehicle;
 
 #define FRAME_TO_SEND 300
-#define FRAME_LENGTH 100
+#define MAX_FRAME_LENGTH 100
 
-uint8_t testFrame[FRAME_LENGTH];
+uint8_t testFrame[MAX_FRAME_LENGTH];
 uint16_t ackCounter;
 long startTime;
 long receivedFrames, receivedBytes;
 
+// 4 existing test modes
+// down     : launched by M210, aircraft send 300 frames of 1-100 bytes each x ms, x is chosen on launch
+// up       : launched on Android, ground station send 100 frames of 1-100 bytes x ms, x is chosen on launch
+// ack up   : launched on Android, ground station ask numbered frames and aircraft send 100 bytes as ack. 100 frames are asked
+// ack down :launched on M210, aircraft ask numbered frames and ground station send 100 bytes as ack. 100 frames are asked
 enum MocTestMode {
     none = 0,
     down,
@@ -95,7 +98,7 @@ main(int argc, char** argv)
     while (true) {
         testFrame[n] = n;
         n++;
-        if (n == FRAME_LENGTH) {
+        if (n == MAX_FRAME_LENGTH) {
             break;
         }
     }
@@ -153,6 +156,7 @@ main(int argc, char** argv)
                 startTime = getTimeMs();
                 uint16_t framesSent = 0;
                 while(framesSent < FRAME_TO_SEND) {
+                    testFrame[1] = (uint8_t)framesSent; // /!\ framesSent > 255, value will overflow
                     vehicle->moc->sendDataToMSDK(testFrame, (uint8_t)frame_length);
                     DSTATUS("Down test : Frame %u sent", framesSent);
                     framesSent++;
@@ -171,10 +175,9 @@ main(int argc, char** argv)
                 testMode = none;
             }
                 break;
-            case '2': {
+            case '2':
                 DSTATUS("MOC - Ack down test initialization");
                 sendModeStartRequest(ackDown);
-            }
                 break;
             case 'r':
                 DSTATUS("Test status reset");
@@ -245,12 +248,11 @@ parseFromMobileCallback(DJI::OSDK::Vehicle*      vehicle,
 
     switch (data[0]) {
         // New test launched
-        case '@':
+        case START_CHAR:
             switch (data[1]) {
                 case up:
                     testMode = up;
                     DSTATUS("MOC - Up test launched");
-                    testMode = up;
                     receivedFrames = 0;
                     receivedBytes = 0;
                     sendModeStartRequest(up);
@@ -271,8 +273,9 @@ parseFromMobileCallback(DJI::OSDK::Vehicle*      vehicle,
                     receivedFrames = 0;
                     receivedBytes = 0;
                     uint8_t b[2];
-                    b[0] = '-';
+                    b[0] = '-';     // '-' to avoid START_CHAR and END_CHAR
                     b[1] = 0;
+                    startTime = getTimeMs();
                     vehicle->moc->sendDataToMSDK(b, 2);
                     break;
                 default:
@@ -281,7 +284,7 @@ parseFromMobileCallback(DJI::OSDK::Vehicle*      vehicle,
             }
             break;
         // Test ended
-        case '#':
+        case END_CHAR:
             switch (data[1]) {
                 // Reset status mode
                 case none:
@@ -290,6 +293,7 @@ parseFromMobileCallback(DJI::OSDK::Vehicle*      vehicle,
                     break;
                 case up: {
                     long diffTime = getTimeMs() - startTime - 1000;   // 1000ms before send of # end character
+                    // last send delay is not subtracted !
                     DSTATUS("MOC - Up test ended : %ld frames received (%ld Bytes) in %ld ms", receivedFrames,
                             receivedBytes, diffTime);
                     double dataFlow = receivedBytes * 1000 / diffTime;
@@ -317,18 +321,18 @@ parseFromMobileCallback(DJI::OSDK::Vehicle*      vehicle,
         default:
             switch (testMode) {
                 case down:
-                    // No data to received in this mode
+                    // No data are supposed to be received in this mode
                     break;
                 case up:
                     // Increment received counter
-                    DSTATUS("MOC - Test up : Data received (%u) : %u", msgLength, receivedFrames);
+                    DSTATUS("MOC - Test up : Data received (%u) : %u/%u", msgLength, data[1], receivedFrames);
                     receivedFrames++;
                     receivedBytes += msgLength;
                     break;
                 case ackUp:
                     // Verify that requested testFrame is correctly numbered
                     if(data[1] == ackCounter) {
-                        testFrame[0] = '-'; // random char to avoid START_CHAR or END_CHAR
+                        testFrame[0] = '-'; // '-' to avoid START_CHAR or END_CHAR
                         testFrame[1] = data[1];
                         DSTATUS("MOC - Ack up test send testFrame %u", data[1]);
                         vehicle->moc->sendDataToMSDK(testFrame, 100);
@@ -339,27 +343,20 @@ parseFromMobileCallback(DJI::OSDK::Vehicle*      vehicle,
                     }
                     break;
                 case ackDown: {
-                    bool sendData = true;
                     uint8_t index = data[1];
                     DSTATUS("MOC - Ack down test : Frame %u received (%u bytes)", index, msgLength);
                     receivedBytes += msgLength;
                     receivedFrames++;
 
-                    if (index == 0) {
-                        startTime = getTimeMs();
-                    } else if (index == 99) {  // 100 frames received
-                        sendModeEndRequest(ackDown);
-                        sendData = false;
+                    if (index == 99) {  // 100 frames received
                         long diffTime = getTimeMs() - startTime;
+                        sendModeEndRequest(ackDown);
                         DSTATUS("MOC - Ack down test ended : %ld frames received (%ld Bytes) in %ld ms", receivedFrames,
                                 receivedBytes, diffTime);
                         double dataFlow = receivedBytes * 1000 / diffTime;
                         DSTATUS("MOC - Ack down flow = %lf Bytes/s", dataFlow);
                         testMode = none;
-                    }
-
-                    // Send next frame request
-                    if (sendData) {
+                    } else {
                         index++;
                         uint8_t b[2];
                         b[0] = '-'; // random char to avoid START_CHAR or END_CHAR
