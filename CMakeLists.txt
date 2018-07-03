@@ -54,7 +54,7 @@ FILE(GLOB SOURCE_FILES *.hpp *.cpp
         ${HELPER_FUNCTIONS_DIR}/dji_linux_helpers.cpp
         )
 
-add_executable(${PROJECT_NAME} ${SOURCE_FILES} mobile.cpp mobile.h)
+add_executable(${PROJECT_NAME} ${SOURCE_FILES} Mission/mobile.cpp Mission/mobile.h timer.cpp timer.h Mission/PackageManager.cpp Mission/PackageManager.h Mission/flight_control.cpp Mission/flight_control.hpp)
 target_link_libraries(${PROJECT_NAME} djiosdk-core)
 
 
