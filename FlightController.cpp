@@ -1,25 +1,51 @@
-/*! @file flight_control.cpp
+/*! @file FlightController.cpp
  *  @version 1.0
  *  @date Jul 03 2018
  *  @author Jonathan Michel
  */
 
-#include "flight_control.hpp"
+#include "FlightController.hpp"
 
-using namespace DJI::OSDK;
-using namespace DJI::OSDK::Telemetry;
+FlightController::FlightController() {
+    this->emergencyState = false;
+    this->linuxEnvironment = nullptr;
+    this->vehicle = nullptr;
+    this->flightControllerThreadRunning = false;
+    this->velocityActivated = false;
+}
+
+
+void FlightController::setupVehicle(int argc, char** argv) {
+    // Get vehicle
+    linuxEnvironment = new LinuxSetup(argc, argv);
+    do{
+        vehicle = linuxEnvironment->getVehicle();
+        if(vehicle == nullptr)
+            DERROR("Vehicle not initialized, retrying");
+    } while(vehicle == nullptr);
+
+    // Obtain control authority
+    ACK::ErrorCode ack;
+    do {
+        ack = vehicle->obtainCtrlAuthority(1);
+        if(ACK::getError(ack) != ACK::SUCCESS)
+            DERROR("Obtain control authority failed, retrying");
+    }while(ACK::getError(ack) != ACK::SUCCESS);
+
+    startFlightControllerThread();
+}
+
+
 
 /**
  *  Monitored take-off. Return true if success
 */
-bool monitoredTakeoff(Vehicle* vehicle, int timeout) {
-    char func[50];
-
+bool FlightController::monitoredTakeoff(int timeout) {
     // Telemetry: Verify the subscription
     ACK::ErrorCode ack;
     ack = vehicle->subscribe->verify(timeout);
     if (ACK::getError(ack) != ACK::SUCCESS) {
-        ACK::getErrorCodeMessage(ack, func);
+        ACK::getErrorCodeMessage(ack, __func__);
         return false;
     }
 
@@ -45,7 +71,7 @@ bool monitoredTakeoff(Vehicle* vehicle, int timeout) {
     ack = vehicle->subscribe->startPackage(pkgIndex, timeout);
     if (ACK::getError(ack) != ACK::SUCCESS)
     {
-        ACK::getErrorCodeMessage(ack, func);
+        ACK::getErrorCodeMessage(ack, __func__);
         // Cleanup before return
         vehicle->subscribe->removePackage(pkgIndex, timeout);
         return false;
@@ -55,7 +81,7 @@ bool monitoredTakeoff(Vehicle* vehicle, int timeout) {
     ack = vehicle->control->takeoff(timeout);
     if (ACK::getError(ack) != ACK::SUCCESS)
     {
-        ACK::getErrorCodeMessage(ack, func);
+        ACK::getErrorCodeMessage(ack, __func__);
         vehicle->subscribe->removePackage(pkgIndex, timeout);
         return false;
     }
@@ -146,15 +172,13 @@ bool monitoredTakeoff(Vehicle* vehicle, int timeout) {
 /**
  *  Monitored landing. Return true if success
 */
-bool monitoredLanding(Vehicle* vehicle, int timeout)
+bool FlightController::monitoredLanding(int timeout)
 {
-    char func[50];
-
     // Telemetry: Verify the subscription
     ACK::ErrorCode ack;
     ack = vehicle->subscribe->verify(timeout);
     if (ACK::getError(ack) != ACK::SUCCESS) {
-        ACK::getErrorCodeMessage(ack, func);
+        ACK::getErrorCodeMessage(ack, __func__);
         return false;
     }
 
@@ -179,7 +203,7 @@ bool monitoredLanding(Vehicle* vehicle, int timeout)
 
     ack = vehicle->subscribe->startPackage(pkgIndex, timeout);
     if (ACK::getError(ack) != ACK::SUCCESS) {
-        ACK::getErrorCodeMessage(ack, func);
+        ACK::getErrorCodeMessage(ack, __func__);
         // Cleanup before return
         vehicle->subscribe->removePackage(pkgIndex, timeout);
         return false;
@@ -188,7 +212,7 @@ bool monitoredLanding(Vehicle* vehicle, int timeout)
     // Start landing
     ACK::ErrorCode landingStatus = vehicle->control->land(timeout);
     if (ACK::getError(landingStatus) != ACK::SUCCESS) {
-        ACK::getErrorCodeMessage(landingStatus, func);
+        ACK::getErrorCodeMessage(landingStatus, __func__);
         return false;
     }
 
@@ -253,67 +277,107 @@ bool monitoredLanding(Vehicle* vehicle, int timeout)
     return true;
 }
 
-/*! Position Control. Allows you to set an offset from your current
-    location. The aircraft will move to that position and stay there.
-    Typical use would be as a building block in an outer loop that does not
-    require many fast changes, perhaps a few-waypoint trajectory. For smoother
-    transition and response you should convert your trajectory to attitude
-    setpoints and use attitude control or convert to velocity setpoints
-    and use velocity control.
+
+void FlightController::moveByVelocity(Vector3f *velocity, float yaw) {
+    this->velocity.x = velocity->x;
+    this->velocity.y = velocity->y;
+    this->velocity.z = velocity->z;
+    this->yaw = yaw;
+    this->velocityActivated = true;
+}
+
+
+void FlightController::stopVelocity() {
+    velocityActivated = false;
+}
+
+void FlightController::startFlightControllerThread() {
+    if(!flightControllerThreadRunning) {
+        flightControllerThreadRunning = true;
+        pthread_attr_init(&flightControllerThreadAttr);
+        pthread_attr_setdetachstate(&flightControllerThreadAttr, PTHREAD_CREATE_JOINABLE);
+        int ret = pthread_create(&flightControllerThreadID, nullptr, flightControllerThread, (void*)this);
+        string infoStr = "flightControllerThread";
+
+        if (0 != ret)
+            cout << "Fail to create thread for " << infoStr.c_str() << "!" << endl;
+
+        ret = pthread_setname_np(flightControllerThreadID, infoStr.c_str());
+        if (0 != ret)
+            cout << "Fail to set thread name for " << infoStr.c_str() << "!" << endl;
+
+        cout << infoStr.c_str() << " running..." << endl;
+    }
+}
+
+void FlightController::stopFlightControllerThread() {
+    flightControllerThreadRunning = false;
+    void* status;
+    pthread_join(flightControllerThreadID, &status);
+}
+
+void *FlightController::flightControllerThread(void *param) {
+    auto fc = (FlightController*) param;
+    while(fc->flightControllerThreadRunning) {
+        if(fc->isvelocityActivated()) {
+            fc->velocityAndYawRateCtrl(fc->getVelocity(), fc->getYaw());
+            nanosleep((const struct timespec[]){{0, 500000000L}}, NULL);
+        }
+    }
+    return nullptr;
+}
+
+/*! Position Control. Allows user to set an offset from current location.
+    The aircraft will move to that position and stay there.
 !*/
-bool moveByPositionOffset(Vehicle *vehicle, float xOffsetDesired,
-                     float yOffsetDesired, float zOffsetDesired,
-                     float yawDesired, float posThresholdInM,
-                     float yawThresholdInDeg)
+bool FlightController::moveByPositionOffset(Vector3f* offset, float yawDesired,
+                                            float posThresholdInM, float yawThresholdInDeg)
 {
-    // Set timeout: this timeout is the time you allow the drone to take to finish
-    // the mission
     ACK::ErrorCode ack;
     int responseTimeout              = 1;
-    int timeoutInMilSec              = 10000;
-    int controlFreqInHz              = 50; // Hz
+    int timeoutInMilSec              = 10000;   // Timeout to finish mission
+    int controlFreqInHz              = 50;      // Hz
     int cycleTimeInMs                = 1000 / controlFreqInHz;
     int outOfControlBoundsTimeLimit  = 10 * cycleTimeInMs; // 10 cycles
     int withinControlBoundsTimeReqmt = 50 * cycleTimeInMs; // 50 cycles
     int pkgIndex;
 
-    char func[50];
-
-
     // Telemetry: Verify the subscription
     ack = vehicle->subscribe->verify(responseTimeout);
     if (ACK::getError(ack) != ACK::SUCCESS)  {
-      ACK::getErrorCodeMessage(ack, func);
-      return false;
+        ACK::getErrorCodeMessage(ack, __func__);
+        return false;
     }
 
     /*/ Subscribe to package
             index : 0
             frequency : 50Hz
-            content : quaternion, fused lat/lon and altitud
+            content : quaternion, fused lat/lon and altitude
     //*/
     pkgIndex = 0;
     uint16_t frequency = 50;
-    TopicName topicList[] = { TOPIC_QUATERNION, TOPIC_GPS_FUSED };
-    int       numTopic = sizeof(topicList) / sizeof(topicList[0]);
-    bool      enableTimestamp = false;
+    TopicName topicList[] = {
+            TOPIC_QUATERNION,
+            TOPIC_GPS_FUSED
+    };
+    int numTopic = sizeof(topicList) / sizeof(topicList[0]);
+    bool enableTimestamp = false;
 
     bool pkgStatus = vehicle->subscribe->initPackageFromTopicList(
-      pkgIndex, numTopic, topicList, enableTimestamp, frequency);
+            pkgIndex, numTopic, topicList, enableTimestamp, frequency);
     if (!pkgStatus)
       return pkgStatus;
 
     ack = vehicle->subscribe->startPackage(pkgIndex, responseTimeout);
     if (ACK::getError(ack) != ACK::SUCCESS) {
-      ACK::getErrorCodeMessage(ack, func);
+      ACK::getErrorCodeMessage(ack, __func__);
       // Cleanup before return
       vehicle->subscribe->removePackage(pkgIndex, responseTimeout);
       return false;
     }
 
-    // Also, since we don't have a source for relative height through subscription,
-    // start using broadcast height
-    if (!startGlobalPositionBroadcast(vehicle))
+    // Broadcast height is used since relative height through subscription arrived
+    if (!startGlobalPositionBroadcast())
     {
       // Cleanup before return
       vehicle->subscribe->removePackage(pkgIndex, responseTimeout);
@@ -324,31 +388,28 @@ bool moveByPositionOffset(Vehicle *vehicle, float xOffsetDesired,
     sleep(1);
 
     // Get data
-
     // Global position retrieved via subscription
     Telemetry::TypeMap<TOPIC_GPS_FUSED>::type currentSubscriptionGPS;
     Telemetry::TypeMap<TOPIC_GPS_FUSED>::type originSubscriptionGPS;
     // Global position retrieved via broadcast
     Telemetry::GlobalPosition currentBroadcastGP;
-    Telemetry::GlobalPosition originBroadcastGP;
-
     // Convert position offset from first position to local coordinates
     Telemetry::Vector3f localOffset;
 
     currentSubscriptionGPS = vehicle->subscribe->getValue<TOPIC_GPS_FUSED>();
     originSubscriptionGPS  = currentSubscriptionGPS;
-    localOffsetFromGpsOffset(vehicle, localOffset,
+    localOffsetFromGpsOffset(localOffset,
                              static_cast<void*>(&currentSubscriptionGPS),
                              static_cast<void*>(&originSubscriptionGPS));
 
-    // Get the broadcast GP since we need the height for zCmd
+    // Get the broadcast GP since we need the height for position.z
     currentBroadcastGP = vehicle->broadcast->getGlobalPosition();
 
 
     // Get initial offset. We will update this in a loop later.
-    double xOffsetRemaining = xOffsetDesired - localOffset.x;
-    double yOffsetRemaining = yOffsetDesired - localOffset.y;
-    double zOffsetRemaining = zOffsetDesired - (-localOffset.z);
+    double xOffsetRemaining = offset->x - localOffset.x;
+    double yOffsetRemaining = offset->y - localOffset.y;
+    double zOffsetRemaining = offset->z - (-localOffset.z);
 
     // Conversions
     double yawDesiredRad     = DEG2RAD * yawDesired;
@@ -364,15 +425,14 @@ bool moveByPositionOffset(Vehicle *vehicle, float xOffsetDesired,
     double yawInRad;
 
     subscriptionQ = vehicle->subscribe->getValue<TOPIC_QUATERNION>();
-    yawInRad = toEulerAngle((static_cast<void*>(&subscriptionQ))).z / DEG2RAD;
-
+    yawInRad = toEulerAngle((static_cast<void*>(&subscriptionQ))).z;
 
     int   elapsedTimeInMs     = 0;
     int   withinBoundsCounter = 0;
     int   outOfBounds         = 0;
     int   brakeCounter        = 0;
     int   speedFactor         = 2;
-    float xCmd, yCmd, zCmd;
+    Telemetry::Vector3f position;
     // There is a deadband in position control
     // the z cmd is absolute height
     // while x and y are in relative
@@ -383,72 +443,63 @@ bool moveByPositionOffset(Vehicle *vehicle, float xOffsetDesired,
     *  from the current position - until we get within a threshold of the goal.
     *  From that point on, we send the remaining distance as the setpoint.
     */
-    if (xOffsetDesired > 0)
-    xCmd = (xOffsetDesired < speedFactor) ? xOffsetDesired : speedFactor;
-    else if (xOffsetDesired < 0)
-    xCmd =
-      (xOffsetDesired > -1 * speedFactor) ? xOffsetDesired : -1 * speedFactor;
+    if (offset->x > 0)
+        position.x = (offset->x < speedFactor) ? offset->x : speedFactor;
+    else if (offset->x < 0)
+        position.x = (offset->x > -1 * speedFactor) ? offset->x : -1 * speedFactor;
     else
-    xCmd = 0;
+        position.x = 0;
 
-    if (yOffsetDesired > 0)
-    yCmd = (yOffsetDesired < speedFactor) ? yOffsetDesired : speedFactor;
-    else if (yOffsetDesired < 0)
-    yCmd =
-      (yOffsetDesired > -1 * speedFactor) ? yOffsetDesired : -1 * speedFactor;
+    if (offset->y > 0)
+        position.y = (offset->y < speedFactor) ? offset->y : speedFactor;
+    else if (offset->y < 0)
+        position.y = (offset->y > -1 * speedFactor) ? offset->y : -1 * speedFactor;
     else
-    yCmd = 0;
+        position.y = 0;
 
-    zCmd = currentBroadcastGP.height + zOffsetDesired; //Since subscription cannot give us a relative height, use broadcast.
+    position.z = currentBroadcastGP.height + offset->z; //Since subscription cannot give us a relative height, use broadcast.
 
     //! Main closed-loop receding setpoint position control
     while (elapsedTimeInMs < timeoutInMilSec)
     {
-        vehicle->control->positionAndYawCtrl(xCmd, yCmd, zCmd, yawDesiredRad / DEG2RAD);
-
-        usleep(cycleTimeInMs * 1000);
+        positionAndYawCtrl(&position, (float32_t)(yawDesiredRad / DEG2RAD));
+        usleep((useconds_t)(cycleTimeInMs * 1000));
         elapsedTimeInMs += cycleTimeInMs;
 
         //! Get current position in required coordinates and units
-
         subscriptionQ = vehicle->subscribe->getValue<TOPIC_QUATERNION>();
         yawInRad      = toEulerAngle((static_cast<void*>(&subscriptionQ))).z;
         currentSubscriptionGPS = vehicle->subscribe->getValue<TOPIC_GPS_FUSED>();
-        localOffsetFromGpsOffset(vehicle, localOffset,
+        localOffsetFromGpsOffset(localOffset,
                                static_cast<void*>(&currentSubscriptionGPS),
                                static_cast<void*>(&originSubscriptionGPS));
 
-        // Get the broadcast GP since we need the height for zCmd
+        // Get the broadcast GP since we need the height for position.z
         currentBroadcastGP = vehicle->broadcast->getGlobalPosition();
 
         //! See how much farther we have to go
-        xOffsetRemaining = xOffsetDesired - localOffset.x;
-        yOffsetRemaining = yOffsetDesired - localOffset.y;
-        zOffsetRemaining = zOffsetDesired - (-localOffset.z);
+        xOffsetRemaining = offset->x - localOffset.x;
+        yOffsetRemaining = offset->y - localOffset.y;
+        zOffsetRemaining = offset->z - (-localOffset.z);
 
         //! See if we need to modify the setpoint
         if (std::abs(xOffsetRemaining) < speedFactor)
-          xCmd = xOffsetRemaining;
+            position.x = (float)xOffsetRemaining;
 
         if (std::abs(yOffsetRemaining) < speedFactor)
-          yCmd = yOffsetRemaining;
+            position.y = (float)yOffsetRemaining;
 
-        if (vehicle->isM100() && std::abs(xOffsetRemaining) < posThresholdInM &&
+        if (std::abs(xOffsetRemaining) < posThresholdInM &&
             std::abs(yOffsetRemaining) < posThresholdInM &&
+            std::abs(zOffsetRemaining) < zDeadband &&
             std::abs(yawInRad - yawDesiredRad) < yawThresholdInRad) {
-          //! 1. We are within bounds; start incrementing our in-bound counter
-          withinBoundsCounter += cycleTimeInMs;
-        } else if (std::abs(xOffsetRemaining) < posThresholdInM &&
-                 std::abs(yOffsetRemaining) < posThresholdInM &&
-                 std::abs(zOffsetRemaining) < zDeadband &&
-                 std::abs(yawInRad - yawDesiredRad) < yawThresholdInRad) {
-          //! 1. We are within bounds; start incrementing our in-bound counter
-          withinBoundsCounter += cycleTimeInMs;
+            //! 1. We are within bounds; start incrementing our in-bound counter
+            withinBoundsCounter += cycleTimeInMs;
         } else {
-          if (withinBoundsCounter != 0) {
-            //! 2. Start incrementing an out-of-bounds counter
-            outOfBounds += cycleTimeInMs;
-          }
+            if (withinBoundsCounter != 0) {
+                //! 2. Start incrementing an out-of-bounds counter
+                outOfBounds += cycleTimeInMs;
+            }
         }
         //! 3. Reset withinBoundsCounter if necessary
         if (outOfBounds > outOfControlBoundsTimeLimit) {
@@ -466,19 +517,16 @@ bool moveByPositionOffset(Vehicle *vehicle, float xOffsetDesired,
 
     while (brakeCounter < withinControlBoundsTimeReqmt) {
         vehicle->control->emergencyBrake();
-        usleep(cycleTimeInMs * 10);
+        usleep((useconds_t)cycleTimeInMs * 10);
         brakeCounter += cycleTimeInMs;
     }
 
-
     if (elapsedTimeInMs >= timeoutInMilSec) {
         std::cout << "Task timeout!\n";
-        if (!vehicle->isM100() && !vehicle->isLegacyM600()) {
-            ack = vehicle->subscribe->removePackage(pkgIndex, responseTimeout);
-            if (ACK::getError(ack)) {
-                std::cout << "Error unsubscribing; please restart the drone/FC to get "
-                         "back to a clean state.\n";
-            }
+        ack = vehicle->subscribe->removePackage(pkgIndex, responseTimeout);
+        if (ACK::getError(ack)) {
+            std::cout << "Error unsubscribing; please restart the drone/FC to get "
+                     "back to a clean state.\n";
         }
         return ACK::FAIL;
     }
@@ -494,29 +542,37 @@ bool moveByPositionOffset(Vehicle *vehicle, float xOffsetDesired,
   return ACK::SUCCESS;
 }
 
+void FlightController::velocityAndYawRateCtrl(Vector3f *velocity, float32_t yaw) {
+    if(!isEmergencyState()) {
+        vehicle->control->velocityAndYawRateCtrl(velocity->x, velocity->y, velocity->z, yaw);
+    }
+}
+void FlightController::positionAndYawCtrl(Vector3f* position, float32_t yaw) {
+    if(!isEmergencyState()) {
+        vehicle->control->positionAndYawCtrl(position->x, position->y, position->z, yaw);
+    }
+}
+
 // Helper Functions
 
 /*! Very simple calculation of local NED offset between two pairs of GPS
 /coordinates.
     Accurate when distances are small.
+    Functions given by DJI Programming Guide
 !*/
-void localOffsetFromGpsOffset(Vehicle* vehicle, Telemetry::Vector3f& deltaNed,
+void FlightController::localOffsetFromGpsOffset(Telemetry::Vector3f& deltaNed,
                          void* target, void* origin) {
-    Telemetry::GPSFused*       subscriptionTarget;
-    Telemetry::GPSFused*       subscriptionOrigin;
-    double                     deltaLon;
-    double                     deltaLat;
-
-    subscriptionTarget = (Telemetry::GPSFused*)target;
-    subscriptionOrigin = (Telemetry::GPSFused*)origin;
-    deltaLon   = subscriptionTarget->longitude - subscriptionOrigin->longitude;
-    deltaLat   = subscriptionTarget->latitude - subscriptionOrigin->latitude;
-    deltaNed.x = deltaLat * C_EARTH;
-    deltaNed.y = deltaLon * C_EARTH * cos(subscriptionTarget->latitude);
+    auto subscriptionTarget = (Telemetry::GPSFused*)target;
+    auto subscriptionOrigin = (Telemetry::GPSFused*)origin;
+    double deltaLon = subscriptionTarget->longitude - subscriptionOrigin->longitude;
+    double deltaLat = subscriptionTarget->latitude - subscriptionOrigin->latitude;
+    deltaNed.x = (float32_t)(deltaLat * C_EARTH);
+    deltaNed.y = (float32_t)(deltaLon * C_EARTH *
+            cos(subscriptionTarget->latitude / 2.0 + subscriptionOrigin->latitude / 2.0));
     deltaNed.z = subscriptionTarget->altitude - subscriptionOrigin->altitude;
 }
 
-Telemetry::Vector3f toEulerAngle(void* quaternionData) {
+Telemetry::Vector3f FlightController::toEulerAngle(void* quaternionData) {
     Telemetry::Vector3f    ans;
     auto quaternion = (Telemetry::Quaternion*)quaternionData;
 
@@ -535,14 +591,14 @@ Telemetry::Vector3f toEulerAngle(void* quaternionData) {
     t2 = (t2 > 1.0) ? 1.0 : t2;
     t2 = (t2 < -1.0) ? -1.0 : t2;
 
-    ans.x = asin(t2);
-    ans.y = atan2(t3, t4);
-    ans.z = atan2(t1, t0);
+    ans.x = (float32_t )asin(t2);       // pitch
+    ans.y = (float32_t )atan2(t3, t4);  // roll
+    ans.z = (float32_t )atan2(t1, t0);  // yaw
 
     return ans;
 }
 
-bool startGlobalPositionBroadcast(Vehicle* vehicle)
+bool FlightController::startGlobalPositionBroadcast()
 {
     uint8_t freq[16];
 
@@ -584,4 +640,20 @@ bool startGlobalPositionBroadcast(Vehicle* vehicle)
     } else {
         return true;
     }
+}
+
+void FlightController::sendDataToMSDK(uint8_t *data, uint8_t length) {
+    vehicle->moc->sendDataToMSDK(data, length);
+}
+
+void FlightController::emergencyStop() {
+    DERROR("Emergency break set !");
+    emergencyState = true;
+    velocityActivated = false;
+    vehicle->control->emergencyBrake();
+}
+
+void FlightController::emergencyRelease() {
+    DERROR("Emergency break released !");
+    emergencyState = false;
 }

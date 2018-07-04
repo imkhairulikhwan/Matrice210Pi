@@ -19,6 +19,7 @@
 # * SOFTWARE.
 # *
 # *
+
 cmake_minimum_required(VERSION 2.8)
 project(matrice210)
 
@@ -54,7 +55,7 @@ FILE(GLOB SOURCE_FILES *.hpp *.cpp
         ${HELPER_FUNCTIONS_DIR}/dji_linux_helpers.cpp
         )
 
-add_executable(${PROJECT_NAME} ${SOURCE_FILES} Mission/mobile.cpp Mission/mobile.h timer.cpp timer.h Mission/PackageManager.cpp Mission/PackageManager.h Mission/flight_control.cpp Mission/flight_control.hpp)
+add_executable(${PROJECT_NAME} ${SOURCE_FILES} Mobile.cpp Mobile.h timer.cpp timer.h Mission/PackageManager.cpp Mission/PackageManager.h FlightController.cpp FlightController.hpp Console.cpp Console.h)
 target_link_libraries(${PROJECT_NAME} djiosdk-core)
 
 
