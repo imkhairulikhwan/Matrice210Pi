@@ -8,17 +8,12 @@
 #include <string>
 #include <sstream>
 
-#include <dji_status.hpp>
 #include <dji_vehicle.hpp>
-#include <dji_control.hpp>
 
-#include "timer.h"
-#include "Console.h"
-#include "FlightController.hpp"
-#include "Mobile.h"
-
-using namespace DJI::OSDK;
-using namespace DJI::OSDK::Telemetry;
+#include "FlightController.h"
+#include "PackageManager/PackageManager.h"
+#include "Console/Console.h"
+#include "Mobile/Mobile.h"
 
 bool running = true;
 
@@ -26,15 +21,17 @@ FlightController *flightController;
 Console* console;
 Mobile *mobileCommunication;
 
-
-/*! main
- *
+/*!
+ *  main
  */
 int main(int argc, char** argv)
 {
     // Initialize flight controller
     flightController = new FlightController();
     flightController->setupVehicle(argc, argv);
+
+    // Package manager
+    PackageManager::getInstance()->setVehicle(flightController->getVehicle());
 
     // Console thread
     console =  new Console(flightController);
@@ -43,13 +40,13 @@ int main(int argc, char** argv)
     // Mobile-Onboard Communication
     mobileCommunication = new Mobile(flightController);
     mobileCommunication->setup();
-    //*/
+    //
 
     //
     while(running) {
 
     }
-     //*/
+    //*/
 
     return 0;
 }

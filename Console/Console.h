@@ -1,4 +1,4 @@
-/*! @file Console.hpp
+/*! @file Console.h
  *  @version 1.0
  *  @date Jul 04 2018
  *  @author Jonathan Michel
@@ -13,10 +13,12 @@
 #include <sstream>
 #include <iostream>
 
-#include "FlightController.hpp"
+#include <dji_vehicle.hpp>
 
 using namespace std;
 using namespace DJI::OSDK;
+
+class FlightController;
 
 class Console {
 private:

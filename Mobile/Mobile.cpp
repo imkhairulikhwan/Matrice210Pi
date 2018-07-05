@@ -1,10 +1,12 @@
-/*! @file MobileCommunication.cpp
+/*! @file Mobile.cpp
  *  @version 1.0
  *  @date Jul 03 2018
  *  @author Jonathan Michel
  */
 
 #include "Mobile.h"
+
+#include "../FlightController.h"
 
 Mobile::Mobile(FlightController *flightController) : flightController(flightController) {
 

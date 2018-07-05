@@ -55,7 +55,8 @@ FILE(GLOB SOURCE_FILES *.hpp *.cpp
         ${HELPER_FUNCTIONS_DIR}/dji_linux_helpers.cpp
         )
 
-add_executable(${PROJECT_NAME} ${SOURCE_FILES} Mobile.cpp Mobile.h timer.cpp timer.h Mission/PackageManager.cpp Mission/PackageManager.h FlightController.cpp FlightController.hpp Console.cpp Console.h)
+add_executable(${PROJECT_NAME} ${SOURCE_FILES} Mobile/Mobile.cpp Mobile/Mobile.h timer.cpp timer.h PackageManager/PackageManager.cpp PackageManager/PackageManager.h FlightController.cpp FlightController.h Console/Console.cpp Console/Console.h Mission/PositionOffsetMission.cpp Mission/PositionOffsetMission.h Mission/VelocityMission.cpp Mission/VelocityMission.h)
 target_link_libraries(${PROJECT_NAME} djiosdk-core)
+target_link_libraries(${PROJECT_NAME} pigpio)
 
 

@@ -1,10 +1,12 @@
-/*! @file Console.hpp
+/*! @file Console.cpp
  *  @version 1.0
  *  @date Jul 04 2018
  *  @author Jonathan Michel
  */
 
 #include "Console.h"
+
+#include "../FlightController.h"
 
 Console::Console(FlightController* flightController) : flightController(flightController) {
 
@@ -14,14 +16,16 @@ void Console::launchThread() {
     pthread_attr_init(&consoleThreadAttr);
     pthread_attr_setdetachstate(&consoleThreadAttr, PTHREAD_CREATE_JOINABLE);
     int ret  = pthread_create(&consoleThreadID, nullptr, consoleThread, (void*)this);
-    string infoStr = "consoleThread";
+    string threadName = "consoleThread";
 
-    if (0 != ret)
-        cout << "Fail to create thread for " << infoStr.c_str() << "!\n";
+    if (ret != 0)
+        DERROR("Fail to create thread for %s !", threadName.c_str());
 
-    ret = pthread_setname_np(consoleThreadID, infoStr.c_str());
-    if (0 != ret)
-        cout << "Fail to set thread name for " << infoStr.c_str() << "!\n";
+    ret = pthread_setname_np(consoleThreadID, threadName.c_str());
+    if (ret != 0)
+        DERROR("Fail to set thread name for %s !", threadName.c_str());
+
+    DSTATUS("%s running...", threadName.c_str());
 }
 
 void* Console::consoleThread(void* param) {
@@ -62,8 +66,8 @@ void* Console::consoleThread(void* param) {
                 break;
             }
             case '5':
-                DSTATUS("Stop velocityAndYawRateCtrl");
-                c->flightController->stopVelocity();
+                DSTATUS("Stop aircraft");
+                c->flightController->stopAircraft();
                 break;
             case 's': {
                 cout << "Type command to send : " << endl;
@@ -88,8 +92,8 @@ void Console::displayMenu() {
     displayMenuLine('1', "Monitored takeoff");
     displayMenuLine('2', "Monitored landing");
     displayMenuLine('3', "moveByPositionOffset");
-    displayMenuLine('4', "Init velocityAndYawRateCtrl");
-    displayMenuLine('5', "Stop velocityAndYawRateCtrl");
+    displayMenuLine('4', "moveByVelocity");
+    displayMenuLine('5', "Stop aircraft");
     displayMenuLine('s', "Send custom command");
     cout << endl;
 }

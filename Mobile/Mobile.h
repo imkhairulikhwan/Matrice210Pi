@@ -1,4 +1,4 @@
-/*! @file MobileCommunication.h
+/*! @file Mobile.h
  *  @version 1.0
  *  @date Jul 03 2018
  *  @author Jonathan Michel
@@ -8,10 +8,12 @@
 #ifndef MATRICE210_MOBILECOMMUNICATION_H
 #define MATRICE210_MOBILECOMMUNICATION_H
 
-#include "FlightController.hpp"
-
 // Helpers
-#include <dji_linux_helpers.hpp>
+#include <dji_vehicle.hpp>
+
+using namespace DJI::OSDK;
+
+class FlightController;
 
 class Mobile {
 private:
