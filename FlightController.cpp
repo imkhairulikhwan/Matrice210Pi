@@ -65,7 +65,6 @@ bool FlightController::monitoredTakeoff(int timeout) {
             frequency : 10Hz
             content : flight status and flight mode
     //*/
-    int pkgIndex            = 0;
     uint16_t frequency      = 10;
     TopicName topics[]      = {
             TOPIC_STATUS_FLIGHT,
@@ -73,8 +72,9 @@ bool FlightController::monitoredTakeoff(int timeout) {
     };
     int  numTopics          = sizeof(topics) / sizeof(topics[0]);
 
-    bool subscribed = PackageManager::getInstance()->subscribe(pkgIndex, topics, numTopics, frequency, false);
-    if(!subscribed) {
+    int pkgIndex = PackageManager::getInstance()->subscribe(topics, numTopics, frequency, false);
+    if(pkgIndex == PackageManager::PACKAGE_UNAVAILABLE) {
+        DERROR("Monitored takeoff - Failed to start package");
         return false;
     }
 
@@ -83,7 +83,7 @@ bool FlightController::monitoredTakeoff(int timeout) {
     if (ACK::getError(ack) != ACK::SUCCESS)
     {
         ACK::getErrorCodeMessage(ack, __func__);
-        vehicle->subscribe->removePackage(pkgIndex, timeout);
+        PackageManager::getInstance()->unsubscribe(pkgIndex);
         return false;
     }
 
@@ -179,14 +179,17 @@ bool FlightController::monitoredLanding(int timeout)
             frequency : 10Hz
             content : flight status and flight mode
     //*/
-    int pkgIndex            = 0;
     uint16_t frequency      = 10;
     TopicName topics[]      = {
             TOPIC_STATUS_FLIGHT,
             TOPIC_STATUS_DISPLAYMODE
     };
     int  numTopics          = sizeof(topics) / sizeof(topics[0]);
-    PackageManager::getInstance()->subscribe(pkgIndex, topics, numTopics, frequency, false);
+    int pkgIndex = PackageManager::getInstance()->subscribe(topics, numTopics, frequency, false);
+    if(pkgIndex == PackageManager::PACKAGE_UNAVAILABLE) {
+        DERROR("Monitored landing - Failed to start package");
+        return false;
+    }
 
     // Start landing
     ACK::ErrorCode landingStatus = vehicle->control->land(timeout);
@@ -286,11 +289,8 @@ void *FlightController::flightControllerThread(void *param) {
             case VELOCITY:
                 fc->velocityMission->update();
                 break;
-            case POSITION: {
-                // TODO Remove while loop in moveToPosition method
-                fc->positionOffsetMission->moveToPosition();
-                fc->setMovingMode(STOP);
-            }
+            case POSITION:
+                fc->positionOffsetMission->update();
                 break;
         }
     }
@@ -316,22 +316,16 @@ void FlightController::moveByPositionOffset(Vector3f* offset, float yawDesiredDe
                                             float posThresholdInM, float yawThresholdInDeg)
 {
     // Mission parameters
-    if(positionOffsetMission == nullptr) {
-        positionOffsetMission = new PositionOffsetMission(offset, yawDesiredDeg,
-                                                          posThresholdInM, yawThresholdInDeg);
-
-        if (positionOffsetMission->init(this))
-            movingMode = POSITION;
-    } else {
-        DERROR("moveByPositionOffset already started");
-    }
+    if(positionOffsetMission == nullptr)
+        positionOffsetMission = new PositionOffsetMission(this);
+    positionOffsetMission->move(offset, yawDesiredDeg,
+                                    posThresholdInM, yawThresholdInDeg);
+    movingMode = POSITION;
 }
 
 void FlightController::stopAircraft() {
-    this->movingMode = STOP;
-    if(positionOffsetMission != nullptr) {
-        positionOffsetMission->stopMission();
-    }
+    PackageManager::getInstance()->clear();
+    movingMode = STOP;
 }
 
 void FlightController::velocityAndYawRateCtrl(Vector3f *velocity, float32_t yaw) {

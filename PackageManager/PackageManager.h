@@ -7,30 +7,35 @@
 #ifndef MATRICE210_PACKAGEMANAGER_H
 #define MATRICE210_PACKAGEMANAGER_H
 
-#include <dji_vehicle.hpp>
+#include "pthread.h"
 
-#define MAX_NUMBER_OF_PACKAGE 5
+#include <dji_vehicle.hpp>
 
 using namespace DJI::OSDK;
 using namespace DJI::OSDK::Telemetry;
 
 class PackageManager {
+public:
+    const static int PACKAGE_UNAVAILABLE{-1};
 private:
     PackageManager();
     static PackageManager* instance;
-    bool packagesStatus[MAX_NUMBER_OF_PACKAGE];
     Vehicle* vehicle = nullptr;
     int timeout{1};
+    int packageCnt{0};          // next available package
     bool vehicleInstanced();
     bool validIndex(int index);
+    // Mutex
+    static pthread_mutex_t packageManager_mutex;
 public:
     static PackageManager* getInstance();
     void setVehicle(Vehicle* vehicle);
     bool verify();
-    // TODO Remove index !
-    bool subscribe(int index, TopicName *topics, int numTopic, uint16_t frequency, bool enableTimestamp);
+    int subscribe(TopicName *topics, int numTopic, uint16_t frequency, bool enableTimestamp);
     bool unsubscribe(int index);
+    void clear();
 
+    int allocatePackage();
 };
 
 #endif //MATRICE210_PACKAGEMANAGER_H

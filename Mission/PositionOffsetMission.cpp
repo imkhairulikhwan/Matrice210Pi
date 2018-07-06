@@ -9,41 +9,41 @@
 #include "../PackageManager/PackageManager.h"
 #include "../FlightController.h"
 
-pthread_mutex_t  PositionOffsetMission::missionRunning_mutex = PTHREAD_MUTEX_INITIALIZER;
-
-PositionOffsetMission::PositionOffsetMission(Vector3f *offset, float yawDesiredDeg,
-                                             float posThresholdInM, float yawThresholdInDeg) {
-    setOffset(offset, yawDesiredDeg * DEG2RAD);
-    setThreshold(posThresholdInM, yawThresholdInDeg * DEG2RAD);
+PositionOffsetMission::PositionOffsetMission(FlightController *flightController) {
+    this->flightController = flightController;
+    this->vehicle = flightController->getVehicle();
 }
 
-bool PositionOffsetMission::init(FlightController* fc) {
-    // Vehicle
-    this->flightController = fc;
-    this->vehicle = fc->getVehicle();
+bool PositionOffsetMission::move(Vector3f *offset, float yaw,
+                                 float posThreshold, float yawThreshold) {
+    DSTATUS("PositionOffsetMission move : x = % .2f m, y = % .2f m, z = % .2f m, % .2f deg",
+            offset->x, offset->y, offset->z, yaw);
+    setOffset(offset, yaw * DEG2RAD);
+    setThreshold(posThreshold, yawThreshold * DEG2RAD);
 
     // Telemetry: Verify the subscription
     if(!PackageManager::getInstance()->verify())
         return false;
 
-    /*/ Subscribe to package
-            index : 0
-            frequency : 50Hz
-            content : quaternion, fused lat/lon and altitude
-    //*/
-    pkgIndex = 0;
-    uint16_t frequency = 50;
-    TopicName topics[] = {
-            TOPIC_QUATERNION,
-            TOPIC_GPS_FUSED
-    };
-    int numTopic = sizeof(topics) / sizeof(topics[0]);
-    bool enableTimestamp = false;
+    if(!missionRunning) {
+        /*/ Subscribe to package
+                index : 0
+                frequency : 50Hz
+                content : quaternion, fused lat/lon and altitude
+        //*/
+        uint16_t frequency = 50;
+        TopicName topics[] = {
+                TOPIC_QUATERNION,
+                TOPIC_GPS_FUSED
+        };
+        int numTopic = sizeof(topics) / sizeof(topics[0]);
 
-    bool subscribed = PackageManager::getInstance()->subscribe(pkgIndex, topics, numTopic, frequency, enableTimestamp);
-    if(!subscribed)
-        return false;
-    
+        pkgIndex = PackageManager::getInstance()->subscribe(topics, numTopic, frequency,
+                                                                   false);
+        if (pkgIndex == PackageManager::PACKAGE_UNAVAILABLE)
+            return false;
+    }
+
     // Broadcast height is used since relative height through subscription arrived
     if (!startGlobalPositionBroadcast())
     {
@@ -54,16 +54,16 @@ bool PositionOffsetMission::init(FlightController* fc) {
     }
 
     // Wait for data to come in
-    missionRunning = true;
     delay_ms(1000);
+
+    moveToPosition();
+
     return true;
 }
-
 
 bool PositionOffsetMission::moveToPosition() {
     // Global position retrieved via subscription
     Telemetry::TypeMap<TOPIC_GPS_FUSED>::type currentSubscriptionGPS;
-    Telemetry::TypeMap<TOPIC_GPS_FUSED>::type originSubscriptionGPS;
     // Global position retrieved via broadcast
     Telemetry::GlobalPosition currentBroadcastGP;
     // Convert position offset from first position to local coordinates
@@ -78,28 +78,7 @@ bool PositionOffsetMission::moveToPosition() {
     // Get the broadcast GP since we need the height for position.z
     currentBroadcastGP = vehicle->broadcast->getGlobalPosition();
 
-    // Get initial offset. We will update this in a loop later.
-    double xOffsetRemaining = offset.x - localOffset.x;
-    double yOffsetRemaining = offset.y - localOffset.y;
-    double zOffsetRemaining = offset.z - (-localOffset.z);
-
-    //! Get Euler angle
-
-    // Quaternion retrieved via subscription
-    Telemetry::TypeMap<TOPIC_QUATERNION>::type subscriptionQ;
-    // Quaternion retrieved via broadcast
-    Telemetry::Quaternion broadcastQ;
-
-    subscriptionQ = vehicle->subscribe->getValue<TOPIC_QUATERNION>();
-    double yawInRad = FlightController::toEulerAngle((static_cast<void *>(&subscriptionQ))).z;
-
-    initMission();
-
-    Telemetry::Vector3f position;
-    // There is a deadband in position control
-    // the z cmd is absolute height
-    // while x and y are in relative
-    float zDeadband = 0.12;
+    resetMissionCounters();
 
     /*! Calculate the inputs to send the position controller. We implement basic
     *  receding setpoint position control and the setpoint is always 1 m away
@@ -107,100 +86,114 @@ bool PositionOffsetMission::moveToPosition() {
     *  From that point on, we send the remaining distance as the setpoint.
     */
     if (offset.x > 0)
-        position.x = (offset.x < speedFactor) ?
+        positionToMove.x = (offset.x < speedFactor) ?
                      offset.x : speedFactor;
     else if (offset.x < 0)
-        position.x = (offset.x > -1 * speedFactor) ?
+        positionToMove.x = (offset.x > -1 * speedFactor) ?
                      offset.x : -1 * speedFactor;
     else
-        position.x = 0;
+        positionToMove.x = 0;
 
     if (offset.y > 0)
-        position.y = (offset.y < speedFactor) ?
+        positionToMove.y = (offset.y < speedFactor) ?
                      offset.y : speedFactor;
     else if (offset.y < 0)
-        position.y = (offset.y > -1 * speedFactor) ?
+        positionToMove.y = (offset.y > -1 * speedFactor) ?
                      offset.y : -1 * speedFactor;
     else
-        position.y = 0;
+        positionToMove.y = 0;
 
-    position.z = currentBroadcastGP.height +
-                 offset.z; //Since subscription cannot give us a relative height, use broadcast.
+    // Since subscription cannot give us a relative height, use broadcast.
+    positionToMove.z = currentBroadcastGP.height + offset.z;
 
-    // Delay in ns
-    //! Main closed-loop receding setpoint position control
-    while (elapsedTime < missionTimeout && missionRunning) {
-        flightController->positionAndYawCtrl(&position, (float32_t) (yawDesired / DEG2RAD));
+    missionRunning = true;
+
+    // update() has now to be called continuously
+}
+
+bool PositionOffsetMission::update() {
+    if(!missionRunning)
+        return false;
+
+    bool destinationReached = false;
+    if(elapsedTime < missionTimeout) {
+        flightController->positionAndYawCtrl(&positionToMove, (float32_t) (targetYaw / DEG2RAD));
 
         delay_ms(getCycleTimeMs());
         elapsedTime += getCycleTimeMs();
 
-        //! Get current position in required coordinates and units
-        subscriptionQ = vehicle->subscribe->getValue<TOPIC_QUATERNION>();
-        yawInRad = FlightController::toEulerAngle((static_cast<void *>(&subscriptionQ))).z;
-        currentSubscriptionGPS = vehicle->subscribe->getValue<TOPIC_GPS_FUSED>();
+        // Get current position in required coordinates and units
+        Telemetry::TypeMap<TOPIC_QUATERNION>::type subscriptionQ
+                = vehicle->subscribe->getValue<TOPIC_QUATERNION>();
+        double currentYaw = FlightController::toEulerAngle((static_cast<void *>(&subscriptionQ))).z;
+        Telemetry::TypeMap<TOPIC_GPS_FUSED>::type currentSubscriptionGPS
+                = vehicle->subscribe->getValue<TOPIC_GPS_FUSED>();
+
+        Telemetry::Vector3f localOffset;
         FlightController::localOffsetFromGpsOffset(localOffset,
-                                 static_cast<void *>(&currentSubscriptionGPS),
-                                 static_cast<void *>(&originSubscriptionGPS));
+                                                   static_cast<void *>(&currentSubscriptionGPS),
+                                                   static_cast<void *>(&originSubscriptionGPS));
 
-        // Get the broadcast GP since we need the height for position.z
-        currentBroadcastGP = vehicle->broadcast->getGlobalPosition();
+        // See how much farther we have to go
+        double xOffsetRemaining = offset.x - localOffset.x;
+        double yOffsetRemaining = offset.y - localOffset.y;
+        double zOffsetRemaining = offset.z - (-localOffset.z);
 
-        //! See how much farther we have to go
-        xOffsetRemaining = offset.x - localOffset.x;
-        yOffsetRemaining = offset.y - localOffset.y;
-        zOffsetRemaining = offset.z - (-localOffset.z);
-
-        //! See if we need to modify the setpoint
+        // See if we need to modify the setpoint
         if (abs(xOffsetRemaining) < speedFactor)
-            position.x = (float) xOffsetRemaining;
+            positionToMove.x = (float) xOffsetRemaining;
 
         if (abs(yOffsetRemaining) < speedFactor)
-            position.y = (float) yOffsetRemaining;
+            positionToMove.y = (float) yOffsetRemaining;
 
         if (abs(xOffsetRemaining) < posThreshold &&
             abs(yOffsetRemaining) < posThreshold &&
             abs(zOffsetRemaining) < zDeadband &&
-            abs(yawInRad - yawDesired) < yawThreshold) {
-            //! 1. We are within bounds; start incrementing our in-bound counter
+            abs(currentYaw - targetYaw) < yawThreshold) {
+            // 1. We are within bounds; start incrementing our in-bound counter
             withinBoundsCnt += getCycleTimeMs();
         } else {
             if (withinBoundsCnt != 0) {
-                //! 2. Start incrementing an out-of-bounds counter
+                // 2. Start incrementing an out-of-bounds counter
                 outOfBoundsCnt += getCycleTimeMs();
             }
         }
-        //! 3. Reset withinBoundsCounter if necessary
+        // 3. Reset withinBoundsCounter if necessary
         if (outOfBoundsCnt > getOutOfBoundsTimeLimit()) {
             withinBoundsCnt = 0;
             outOfBoundsCnt = 0;
         }
-        //! 4. If within bounds, set flag and break
+        // 4. If within bounds, set flag and break
         if (withinBoundsCnt >= getWithinBoundsTimeRequirement()) {
-            break;
+            destinationReached = true;
         }
-    }
-
-    //! Set velocity to zero, to prevent any residual velocity from position command
-    while (brakeCounter < getWithinBoundsTimeRequirement()) {
-        vehicle->control->emergencyBrake();
-        delay_ms(getCycleTimeMs());
-        brakeCounter += getCycleTimeMs();
-    }
-
-    PackageManager::getInstance()->unsubscribe(pkgIndex);
-
-    if(!missionRunning) {
-        DERROR("Position offset mission stopped");
-        return false;
-    }
-
-    if (elapsedTime >= missionTimeout) {
+    } else {
+        stop();
         DERROR("Position offset mission timeout");
         return false;
-    } else {
+    }
+
+    if(destinationReached) {
+        stop();
         DSTATUS("Position offset mission done");
         return true;
+    }
+
+    return false;
+
+}
+
+void PositionOffsetMission::stop() {
+    if(missionRunning) {
+        while (brakeCnt < getWithinBoundsTimeRequirement()) {
+            vehicle->control->emergencyBrake();
+            delay_ms(getCycleTimeMs());
+            brakeCnt += getCycleTimeMs();
+        }
+
+        missionRunning = false;
+
+        PackageManager::getInstance()->unsubscribe(pkgIndex);
     }
 }
 
@@ -242,29 +235,20 @@ int PositionOffsetMission::getOutOfBoundsTimeLimit() {
 int PositionOffsetMission::getWithinBoundsTimeRequirement() {
    return  withinBoundsRequirement * getCycleTimeMs();
 }
-void PositionOffsetMission::initMission() {
+void PositionOffsetMission::resetMissionCounters() {
    elapsedTime = 0;
    withinBoundsCnt = 0;
    outOfBoundsCnt = 0;
-   brakeCounter = 0;
+   brakeCnt = 0;
 }
 void PositionOffsetMission::setOffset(Vector3f* o, double y) {
    offset.x = o->x;
    offset.y = o->y;
    offset.z = o->z;
-   yawDesired = y;
+   targetYaw = y;
 }
-void PositionOffsetMission::setThreshold(float pos, double yaw) {
-   posThreshold = pos;
-   yawThreshold = yaw;
-}
-
-void PositionOffsetMission::setMissionRunning(bool state) {
-   pthread_mutex_lock(&missionRunning_mutex);
-   missionRunning = state;
-   pthread_mutex_unlock(&missionRunning_mutex);
+void PositionOffsetMission::setThreshold(float posThreshold, double yawThreshold) {
+   this->posThreshold = posThreshold;
+   this->yawThreshold = yawThreshold;
 }
 
-void PositionOffsetMission::stopMission() {
-    setMissionRunning(false);
-}

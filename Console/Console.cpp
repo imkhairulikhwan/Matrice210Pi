@@ -6,6 +6,7 @@
 
 #include "Console.h"
 
+#include "../PackageManager/PackageManager.h"
 #include "../FlightController.h"
 
 Console::Console(FlightController* flightController) : flightController(flightController) {
@@ -69,6 +70,11 @@ void* Console::consoleThread(void* param) {
                 DSTATUS("Stop aircraft");
                 c->flightController->stopAircraft();
                 break;
+            case 'r': {
+                int packageNb = (int)c->getNumber("Package number :");
+                PackageManager::getInstance()->unsubscribe(packageNb);
+            }
+                break;
             case 's': {
                 cout << "Type command to send : " << endl;
                 string command;
@@ -94,6 +100,7 @@ void Console::displayMenu() {
     displayMenuLine('3', "moveByPositionOffset");
     displayMenuLine('4', "moveByVelocity");
     displayMenuLine('5', "Stop aircraft");
+    displayMenuLine('r', "Remove package");
     displayMenuLine('s', "Send custom command");
     cout << endl;
 }

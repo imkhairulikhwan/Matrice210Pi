@@ -32,9 +32,14 @@ private:
     Vehicle* vehicle{nullptr};
     // Offset values
     Vector3f offset{};              // Offset desired [m]
-    double yawDesired{0.0};         // yaw desired [rad]
+    double targetYaw{0.0};         // yaw desired [rad]
+    Telemetry::Vector3f positionToMove;
+    // There is a deadband in position control
+    // the z cmd is absolute height
+    // while x and y are in relative
+    float zDeadband{0.12};
     // Mission parameters
-    bool missionRunning{false};     // Mission running flag
+    bool missionRunning{false};     // TODO explain
     int missionTimeout{10000};      // Timeout to finish mission [ms]
     int controlFreq{50};            // Sent control frame frequency [Hz]
     int outOfBoundsLimit{10};       // TODO explain
@@ -46,26 +51,33 @@ private:
     int elapsedTime{0};             // Elapsed time since mission beginning
     int withinBoundsCnt{0};         // Within bounds counter
     int outOfBoundsCnt{0};          // Out of bounds counter
-    int brakeCounter{0};            // Brake counter
+    int brakeCnt{0};                // Brake counter
     // Subscription
+    Telemetry::TypeMap<TOPIC_GPS_FUSED>::type originSubscriptionGPS;
     int pkgIndex{0};                // Package index used by subscription
-    // Mutex
-    static pthread_mutex_t missionRunning_mutex;
 public:
-    PositionOffsetMission(Vector3f* offset, float yawDesiredDeg,
-                          float posThresholdInM, float yawThresholdInDeg);
-    bool init(FlightController* fc);
-    bool moveToPosition();
-    void stopMission();
+    explicit PositionOffsetMission(FlightController* flightController);
+    /**
+     * Move aircraft of desired offset in m and set yaw in deg
+     * @param offset            offset desired in m
+     * @param yaw               yaw desired in deg
+     * @param posThreshold      position threshold in m
+     * @param yawThreshold      yaw threshold in deg
+     * @return True if mission correctly initialized
+     */
+    bool move(Vector3f* offset, float yaw,
+                          float posThreshold, float yawThreshold);
+    bool update();
 private:
+    bool moveToPosition();
+    void stop();
     // Mission functions
     int getCycleTimeMs();
     int getOutOfBoundsTimeLimit();
     int getWithinBoundsTimeRequirement();
-    void initMission();
+    void resetMissionCounters();
     void setOffset(Vector3f* o, double y);
-    void setThreshold(float pos, double yaw);
-    void setMissionRunning(bool state);
+    void setThreshold(float posThreshold, double yawThreshold);
     bool startGlobalPositionBroadcast();
     };
 

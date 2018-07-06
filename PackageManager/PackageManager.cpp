@@ -6,13 +6,10 @@
 
 #include "PackageManager.h"
 
+pthread_mutex_t PackageManager::packageManager_mutex = PTHREAD_MUTEX_INITIALIZER;
 PackageManager* PackageManager::instance = nullptr;
 
-PackageManager::PackageManager() {
-    for (bool &packagesStatu : packagesStatus) {
-        packagesStatu = false;
-    }
-}
+PackageManager::PackageManager() = default;
 
 PackageManager *PackageManager::getInstance() {
     if(instance == nullptr)
@@ -28,6 +25,7 @@ bool PackageManager::verify() {
     ACK::ErrorCode ack;
     ack = vehicle->subscribe->verify(timeout);
     if (ACK::getError(ack) != ACK::SUCCESS)  {
+        DERROR("PackageManager verify error !");
         ACK::getErrorCodeMessage(ack, __func__);
         return false;
     }
@@ -35,26 +33,30 @@ bool PackageManager::verify() {
 }
 
 
-bool PackageManager::subscribe(int index, TopicName *topics, int numTopic, uint16_t frequency, bool enableTimestamp) {
-    if(!vehicleInstanced() || !validIndex(index))
+int PackageManager::subscribe(TopicName *topics, int numTopic, uint16_t frequency, bool enableTimestamp) {
+    if(!vehicleInstanced())
         return false;
 
+    int pkgIndex = allocatePackage();
+    if(pkgIndex == PACKAGE_UNAVAILABLE) {
+        DERROR("Cannot start package. All packages are used");
+        return false;
+    }
+
     bool pkgStatus = vehicle->subscribe->initPackageFromTopicList(
-            index, numTopic, topics,
+            pkgIndex, numTopic, topics,
             enableTimestamp, frequency);
     if (pkgStatus) {
-        packagesStatus[index] = true;
-
-        ACK::ErrorCode ack = vehicle->subscribe->startPackage(index, timeout);
+        ACK::ErrorCode ack = vehicle->subscribe->startPackage(pkgIndex, timeout);
         if (ACK::getError(ack) != ACK::SUCCESS)
         {
-            DERROR("Error starting package %u (%u Hz)", index, frequency);
+            DERROR("Error starting package %u (%u Hz)", pkgIndex, frequency);
             ACK::getErrorCodeMessage(ack, __func__);
-            unsubscribe(index);
+            unsubscribe(pkgIndex);
             return false;
         }
     } else {
-        DERROR("Error initializing package %u (%u Hz)", index, frequency);
+        DERROR("Error initializing package %u (%u Hz)", pkgIndex, frequency);
     }
     return pkgStatus;
 }
@@ -81,10 +83,35 @@ bool PackageManager::vehicleInstanced() {
 }
 
 bool PackageManager::validIndex(int index) {
-    if(index < 0 || index >= MAX_NUMBER_OF_PACKAGE) {
+    // Separate test for call with PACKAGE_UNAVAILABLE to avoid useless DERROR
+    if(index == PACKAGE_UNAVAILABLE)
+        return false;
+
+    if(index < 0 || index >= DataSubscription::MAX_NUMBER_OF_PACKAGE) {
         DERROR("Invalid index : [%d], must be in range 0 to %d.",
-               index, MAX_NUMBER_OF_PACKAGE);
+               index, DataSubscription::MAX_NUMBER_OF_PACKAGE-1);
         return false;
     }
     return true;
+}
+
+int PackageManager::allocatePackage() {
+    pthread_mutex_lock(&packageManager_mutex);
+    if(packageCnt < DataSubscription::MAX_NUMBER_OF_PACKAGE) {
+        packageCnt++;
+        return packageCnt-1;
+    }
+    pthread_mutex_unlock(&packageManager_mutex);
+    return PACKAGE_UNAVAILABLE;
+}
+
+void PackageManager::clear() {
+    pthread_mutex_lock(&packageManager_mutex);
+    // packageCtn contain nextAvailable package index
+    packageCnt--;
+    for (packageCnt; packageCnt >= 0; packageCnt--) {
+        unsubscribe(packageCnt);
+    }
+    packageCnt = 0;
+    pthread_mutex_unlock(&packageManager_mutex);
 }

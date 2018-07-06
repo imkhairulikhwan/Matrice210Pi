@@ -89,7 +89,11 @@ public:
 !*/
     static void localOffsetFromGpsOffset(Vector3f& deltaNed,
                                          void* target, void* origin);
-
+    /**
+     * toEulerAngle
+     * @param quaternionData quaternion
+     * @return Rad yaw value
+     */
     static Telemetry::Vector3f toEulerAngle(void* quaternionData);
 };
 
