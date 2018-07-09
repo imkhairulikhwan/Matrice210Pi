@@ -34,13 +34,13 @@ bool PackageManager::verify() {
 
 
 int PackageManager::subscribe(TopicName *topics, int numTopic, uint16_t frequency, bool enableTimestamp) {
-    if(!vehicleInstanced())
-        return false;
+    if(!isVehicleInstanced())
+        return PACKAGE_UNAVAILABLE;
 
     int pkgIndex = allocatePackage();
     if(pkgIndex == PACKAGE_UNAVAILABLE) {
         DERROR("Cannot start package. All packages are used");
-        return false;
+        return PACKAGE_UNAVAILABLE;
     }
 
     bool pkgStatus = vehicle->subscribe->initPackageFromTopicList(
@@ -53,7 +53,7 @@ int PackageManager::subscribe(TopicName *topics, int numTopic, uint16_t frequenc
             DERROR("Error starting package %u (%u Hz)", pkgIndex, frequency);
             ACK::getErrorCodeMessage(ack, __func__);
             unsubscribe(pkgIndex);
-            return false;
+            return PACKAGE_UNAVAILABLE;
         }
     } else {
         DERROR("Error initializing package %u (%u Hz)", pkgIndex, frequency);
@@ -62,7 +62,7 @@ int PackageManager::subscribe(TopicName *topics, int numTopic, uint16_t frequenc
 }
 
 bool PackageManager::unsubscribe(int index) {
-    if(!vehicleInstanced() || !validIndex(index))
+    if(!isVehicleInstanced() || !validIndex(index))
         return false;
 
     ACK::ErrorCode ack = vehicle->subscribe->removePackage(index, timeout);
@@ -71,12 +71,12 @@ bool PackageManager::unsubscribe(int index) {
         return false;
     }
 
-    return false;
+    return true;
 }
 
-bool PackageManager::vehicleInstanced() {
+bool PackageManager::isVehicleInstanced() {
     if(vehicle == nullptr) {
-        DERROR("PackageManager - Vehicle not instanced. Call setVehicle() !");
+        DERROR("PackageManager - Vehicle not instanced. Call setVehicle() first !");
         return false;
     }
     return true;
