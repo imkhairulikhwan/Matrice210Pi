@@ -23,8 +23,9 @@ using namespace std;
 using namespace DJI::OSDK;
 using namespace DJI::OSDK::Telemetry;
 
-class PositionOffsetMission;
+class PositionMission;
 class VelocityMission;
+class PositionOffsetMission;
 
 class FlightController {
 public:
@@ -45,9 +46,11 @@ private:
         WAIT,
         STOP,
         VELOCITY,
+        POSITION_OFFSET,
         POSITION
     } movingMode;
-    // Velocity and Position mission
+    // Missions
+    PositionMission* positionMission;
     PositionOffsetMission* positionOffsetMission;
     VelocityMission* velocityMission;
     // Mutex
@@ -60,13 +63,44 @@ public :
     // Mobile-On board communication
     void sendDataToMSDK(uint8_t* data, uint8_t length);
     // Movement control
+    /**
+     * Monitored take-off. Blocking call
+     * @param timeout
+     * @return true if success
+     */
     bool monitoredTakeoff(int timeout = 1);
+    /**
+     *  Monitored landing. Blocking call
+     * @param timeout
+     * @return true if success
+     */
     bool monitoredLanding(int timeout = 1);
-
-    void moveByPositionOffset(Vector3f *offset, float yawDesiredDeg,
-                              float posThresholdInM = 0.2,
-                              float yawThresholdInDeg = 1.0);
+    /**
+     * Control the position and yaw angle of the vehicle.
+     * Here to try DJI SDK positionAndYawCtrl() method
+     * To move aircraft of a desired offset please use moveByPositionOffset()
+     * @param offset [m]
+     * @param yaw [deg}
+     */
+    void moveByPosition(Vector3f *offset, float yaw);
+    /**
+     * Velocity Control. Allows user to set a velocity vector.
+     * The aircraft will move as described by vector until stopAircraft() call.
+     * @param velocity [deg/s]
+     * @param yaw [deg/s]
+     */
     void moveByVelocity(Vector3f *velocity, float yaw);
+    /**
+     * Position Control. Allows user to set an offset from current location.
+     * The aircraft will move to that position and stay there.
+     * @param offset [m]
+     * @param yaw [deg]
+     * @param posThreshold [m]
+     * @param yawThreshold [m]
+     */
+    void moveByPositionOffset(Vector3f *offset, float yaw,
+                              float posThreshold = 0.2,
+                              float yawThreshold = 1.0);
     void stopAircraft();
     // Emergency safe ObSdk call
     void positionAndYawCtrl(Vector3f* position, float32_t yaw);
@@ -80,6 +114,7 @@ public :
     Vehicle* getVehicle() { return vehicle; }
     movingMode_ getMovingMode() { return movingMode; }
     void setMovingMode(movingMode_ mode);
+
 
 // Static functions
 public:

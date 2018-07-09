@@ -13,27 +13,30 @@ Mobile::Mobile(FlightController *flightController) : flightController(flightCont
 }
 
 void Mobile::setup() {
-    // Register the callback for parsing mobile data
-    flightController->getVehicle()->moc->setFromMSDKCallback(parseFromMobileCallback, (void*)this);
+    // Mobile object is passed as parameter to grant access to FlightController
+    flightController->getVehicle()->moc->setFromMSDKCallback(mobileCallback, (void *) this);
 }
 
-void Mobile::parseFromMobileCallback(Vehicle *vehicle, RecvContainer recvFrame,
-                                                  UserData userData) {
-    // First, lets cast the userData to LinuxSetup*
+void Mobile::mobileCallback(Vehicle *vehicle, RecvContainer recvFrame,
+                            UserData userData) {
+    // Cast userData to Mobile object to have access to used FlightController
     auto *m = (Mobile *) userData;
 
     uint8_t formatFrameLength = OpenProtocol::PackageMin + OpenProtocol::CRCHead;
     uint16_t msgLength = recvFrame.recvInfo.len - formatFrameLength;
     uint8_t* data = recvFrame.recvData.raw_ack_array;
 
-
+    // TODO Better protocol choice, ensure data size
     if(data[0] == '#') {
         switch (data[1]) {
-            case '!':
+            case 'e':
                 m->getFlightController()->emergencyStop();
                 break;
-            case '#':
+            case 'r':
                 m->getFlightController()->emergencyRelease();
+                break;
+            case 's':
+                m->getFlightController()->stopAircraft();
                 break;
             default:
                 DERROR("MOC - Unknown command");
@@ -47,5 +50,5 @@ void Mobile::parseFromMobileCallback(Vehicle *vehicle, RecvContainer recvFrame,
         data[msgLength] = '\0';
         DSTATUS("MOC - String received : %s", recvFrame.recvData.raw_ack_array);
     }
-    vehicle->moc->sendDataToMSDK(data, (uint8_t)msgLength);
+    //vehicle->moc->sendDataToMSDK(data, (uint8_t)msgLength);
 }

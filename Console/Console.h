@@ -20,21 +20,53 @@ using namespace DJI::OSDK;
 
 class FlightController;
 
+/**
+ * Launch a thread to get char on console and control FlightController
+ * TODO replace switch-case with queue to assure priority to emergency stop
+ */
 class Console {
 private:
-    // Thread
+    // Thread attributes
     pthread_t consoleThreadID;
     pthread_attr_t consoleThreadAttr;
-    // Vehicle
+    // FlightController
     FlightController *flightController;
 public:
+    /**
+     * Create console object
+     * @param flightController FlightController to use
+     */
     explicit Console(FlightController* flightController);
+    /**
+     * Create, set name and launch console thread
+     */
     void launchThread();
 private:
+    /**
+     * Dedicated console thread.
+     * Get command typed by user and process them
+     * @param param Console object is passed as parameter to
+     * grant access to FlightController
+     * @return -
+     */
     static void* consoleThread(void* param);
+    /**
+     * Display available commands list
+     */
     void displayMenu();
-    void displayMenuLine(char command, const char* hint);
-    float32_t getNumber(const std::string &message);
+    /**
+     * Display available command line
+     * @param command Command char
+     * @param hint Command description, max hint length = 55 to assure
+     * alignment
+     */
+    void displayMenuLine(char command, const std::string &hint);
+    /**
+     * Read float number from console
+     * @param hint Description displayed to user
+     * @return Read number
+     */
+    float32_t getNumber(const std::string &hint);
 
 };
 

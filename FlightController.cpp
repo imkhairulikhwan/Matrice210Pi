@@ -7,8 +7,9 @@
 #include "FlightController.h"
 
 #include "PackageManager/PackageManager.h"
-#include "Mission/PositionOffsetMission.h"
+#include "Mission/PositionMission.h"
 #include "Mission/VelocityMission.h"
+#include "Mission/PositionOffsetMission.h"
 
 pthread_mutex_t FlightController::movingMode_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t FlightController::emergencyState_mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -51,9 +52,6 @@ void FlightController::setupVehicle(int argc, char** argv) {
 
 
 
-/**
- *  Monitored take-off. Return true if success
-*/
 bool FlightController::monitoredTakeoff(int timeout) {
     DSTATUS("Monitored takeoff launched");
     // Telemetry: Verify the subscription
@@ -280,17 +278,21 @@ void *FlightController::flightControllerThread(void *param) {
             case STOP:
                 DSTATUS("Aircraft stopped");
                 fc->getVehicle()->control->emergencyBrake();
-                // Delete position offset mission
+                // Delete position offset mission TODO Remove ?
                 if(fc->positionOffsetMission != nullptr) {
                     delete fc->positionOffsetMission;
                     fc->positionOffsetMission = nullptr;
                 }
                 fc->setMovingMode(WAIT);
                 break;
+            case POSITION:
+                fc->positionMission->update();
+                fc->setMovingMode(WAIT);
+                break;
             case VELOCITY:
                 fc->velocityMission->update();
                 break;
-            case POSITION:
+            case POSITION_OFFSET:
                 fc->positionOffsetMission->update();
                 break;
         }
@@ -298,9 +300,15 @@ void *FlightController::flightControllerThread(void *param) {
     return nullptr;
 }
 
-/*! Velocity Control. Allows user to set a velocity vector.
-    The aircraft will move as described by vector until stopVelocity() call.
-!*/
+void FlightController::moveByPosition(Vector3f *position, float yaw) {
+    // Mission parameters
+    if(positionMission == nullptr)
+        positionMission = new PositionMission(this);
+    positionMission->move(position, yaw);
+    movingMode = POSITION;
+
+}
+
 void FlightController::moveByVelocity(Vector3f *velocity, float yaw) {
     // Mission parameters
     if(velocityMission == nullptr)
@@ -310,18 +318,15 @@ void FlightController::moveByVelocity(Vector3f *velocity, float yaw) {
 }
 
 
-/*! Position Control. Allows user to set an offset from current location.
-    The aircraft will move to that position and stay there.
-!*/
-void FlightController::moveByPositionOffset(Vector3f* offset, float yawDesiredDeg,
-                                            float posThresholdInM, float yawThresholdInDeg)
+void FlightController::moveByPositionOffset(Vector3f* offset, float yaw,
+                                            float posThreshold, float yawThreshold)
 {
     // Mission parameters
     if(positionOffsetMission == nullptr)
         positionOffsetMission = new PositionOffsetMission(this);
-    positionOffsetMission->move(offset, yawDesiredDeg,
-                                    posThresholdInM, yawThresholdInDeg);
-    movingMode = POSITION;
+    positionOffsetMission->move(offset, yaw,
+                                    posThreshold, yawThreshold);
+    movingMode = POSITION_OFFSET;
 }
 
 void FlightController::stopAircraft() {
@@ -384,12 +389,10 @@ Telemetry::Vector3f FlightController::toEulerAngle(void* quaternionData) {
     return ans;
 }
 
-
-
 void FlightController::emergencyStop() {
+    vehicle->control->emergencyBrake();
     setEmergencyState(true);
     setMovingMode(STOP);
-    vehicle->control->emergencyBrake();
     DERROR("Emergency break set !");
 }
 

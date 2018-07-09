@@ -39,7 +39,6 @@ void* Console::consoleThread(void* param) {
         cin >> inputChar;
         // Get newline char
         cin.get();
-
         switch (inputChar) {
             case '1':
                 c->flightController->monitoredTakeoff();
@@ -49,41 +48,50 @@ void* Console::consoleThread(void* param) {
                 break;
             case '3': {
                 Telemetry::Vector3f position;
+                position.x = c->getNumber("x: ");
+                position.y = c->getNumber("y: ");
+                position.z = c->getNumber("z: ");
+                float32_t yaw = c->getNumber("yaw: ");
+                c->flightController->moveByPosition(&position, yaw);
+            }
+                break;
+            case '4': {
+                Telemetry::Vector3f position;
                 position.x = c->getNumber("xOffsetDesired: ");
                 position.y = c->getNumber("yOffsetDesired: ");
                 position.z = c->getNumber("zOffsetDesired: ");
                 float32_t yaw = c->getNumber("yawDesired: ");
                 c->flightController->moveByPositionOffset(&position, yaw);
-                break;
             }
-            case '4': {
+                break;
+            case '5': {
                 Telemetry::Vector3f velocity;
                 velocity.x = c->getNumber("Vx: ");
                 velocity.y = c->getNumber("Vy: ");
                 velocity.z = c->getNumber("Vz: ");
                 float32_t yaw = c->getNumber("yaw: ");
                 c->flightController->moveByVelocity(&velocity, yaw);
-                break;
             }
-            case '5':
-                DSTATUS("Stop aircraft");
-                c->flightController->stopAircraft();
                 break;
             case 'e':
                 c->flightController->emergencyStop();
                 break;
-            case 'r': {
-                int packageNb = (int)c->getNumber("Package number :");
-                PackageManager::getInstance()->unsubscribe(packageNb);
-            }
-                break;
-            case 's': {
+            case 'm': {
                 cout << "Type command to send : " << endl;
                 string command;
                 getline(cin, command);
                 DSTATUS("Send data to mobile : %s", command.c_str());
                 c->flightController->sendDataToMSDK((uint8_t *)command.c_str(), (uint8_t)command.length());
             }
+                break;
+            case 'r': {
+                int packageNb = (int)c->getNumber("Package number :");
+                PackageManager::getInstance()->unsubscribe(packageNb);
+            }
+                break;
+            case 's':
+                DSTATUS("Stop aircraft");
+                c->flightController->stopAircraft();
                 break;
 
             default:
@@ -93,24 +101,24 @@ void* Console::consoleThread(void* param) {
     }
 }
 
-
 void Console::displayMenu() {
     cout << endl;
     cout << "Available commands : ";
     displayMenuLine('1', "Monitored takeoff");
     displayMenuLine('2', "Monitored landing");
-    displayMenuLine('3', "moveByPositionOffset");
-    displayMenuLine('4', "moveByVelocity");
-    displayMenuLine('5', "Stop aircraft");
+    displayMenuLine('3', "moveByPosition");
+    displayMenuLine('4', "moveByPositionOffset");
+    displayMenuLine('5', "moveByVelocity");
     displayMenuLine('e', "Emergency stop");
+    displayMenuLine('m', "Send custom command");
     displayMenuLine('r', "Remove package");
-    displayMenuLine('s', "Send custom command");
+    displayMenuLine('s', "Stop aircraft");
     cout << endl;
 }
 
-void Console::displayMenuLine(const char command, const char* hint) {
+void Console::displayMenuLine(const char command, const std::string &hint) {
     const int lineLength = 55;
-    int length = strlen(hint);
+    int length = hint.length();
     if(length < lineLength) {
         cout << endl << "| [" << command << "] ";
         cout << hint;
@@ -121,11 +129,11 @@ void Console::displayMenuLine(const char command, const char* hint) {
     }
 }
 
-float32_t Console::getNumber(const std::string &message) {
+float32_t Console::getNumber(const std::string &hint) {
     float32_t number;
     while (true) {
         string input;
-        cout << message;
+        cout << hint;
         getline(cin, input);
 
         // This code converts from string to delayMs safely.

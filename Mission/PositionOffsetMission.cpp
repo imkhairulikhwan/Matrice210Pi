@@ -81,7 +81,7 @@ bool PositionOffsetMission::moveToPosition() {
     resetMissionCounters();
 
     /*! Calculate the inputs to send the position controller. We implement basic
-    *  receding setpoint position control and the setpoint is always 1 m away
+    *  receding setpoint position control and the setpoint is always 2 m away
     *  from the current position - until we get within a threshold of the goal.
     *  From that point on, we send the remaining distance as the setpoint.
     */

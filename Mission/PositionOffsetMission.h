@@ -59,10 +59,10 @@ public:
     explicit PositionOffsetMission(FlightController* flightController);
     /**
      * Move aircraft of desired offset in m and set yaw in deg
-     * @param offset            offset desired in m
-     * @param yaw               yaw desired in deg
-     * @param posThreshold      position threshold in m
-     * @param yawThreshold      yaw threshold in deg
+     * @param offset            offset desired [m]
+     * @param yaw               yaw desired [deg]
+     * @param posThreshold      position threshold [m]
+     * @param yawThreshold      yaw threshold [deg]
      * @return True if mission correctly initialized
      */
     bool move(Vector3f* offset, float yaw,
