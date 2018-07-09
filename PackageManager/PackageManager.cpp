@@ -58,7 +58,7 @@ int PackageManager::subscribe(TopicName *topics, int numTopic, uint16_t frequenc
     } else {
         DERROR("Error initializing package %u (%u Hz)", pkgIndex, frequency);
     }
-    return pkgStatus;
+    return pkgIndex;
 }
 
 bool PackageManager::unsubscribe(int index) {
@@ -99,6 +99,7 @@ int PackageManager::allocatePackage() {
     pthread_mutex_lock(&packageManager_mutex);
     if(packageCnt < DataSubscription::MAX_NUMBER_OF_PACKAGE) {
         packageCnt++;
+        pthread_mutex_unlock(&packageManager_mutex);
         return packageCnt-1;
     }
     pthread_mutex_unlock(&packageManager_mutex);

@@ -160,6 +160,7 @@ bool FlightController::monitoredTakeoff(int timeout) {
 
 
     // Cleanup
+    cout << "clear " << pkgIndex << endl;
     PackageManager::getInstance()->unsubscribe(pkgIndex);
 
     return true;
@@ -259,7 +260,7 @@ void FlightController::startFlightControllerThread() {
         if (ret != 0)
             DERROR("Fail to set thread name for %s !", threadName.c_str());
 
-        DSTATUS("%s running...", threadName.c_str());
+        DSTATUS("%s launched...", threadName.c_str());
     }
 }
 
@@ -324,8 +325,8 @@ void FlightController::moveByPositionOffset(Vector3f* offset, float yawDesiredDe
 }
 
 void FlightController::stopAircraft() {
-    PackageManager::getInstance()->clear();
     movingMode = STOP;
+    PackageManager::getInstance()->clear();
 }
 
 void FlightController::velocityAndYawRateCtrl(Vector3f *velocity, float32_t yaw) {

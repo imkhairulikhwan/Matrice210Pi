@@ -25,11 +25,10 @@ void Console::launchThread() {
     ret = pthread_setname_np(consoleThreadID, threadName.c_str());
     if (ret != 0)
         DERROR("Fail to set thread name for %s !", threadName.c_str());
-
-    DSTATUS("%s running...", threadName.c_str());
 }
 
 void* Console::consoleThread(void* param) {
+    DSTATUS("consoleThread running...");
     auto c = (Console*) param;
     // Display interactive prompt
     bool running = true;
@@ -70,6 +69,9 @@ void* Console::consoleThread(void* param) {
                 DSTATUS("Stop aircraft");
                 c->flightController->stopAircraft();
                 break;
+            case 'e':
+                c->flightController->emergencyStop();
+                break;
             case 'r': {
                 int packageNb = (int)c->getNumber("Package number :");
                 PackageManager::getInstance()->unsubscribe(packageNb);
@@ -100,6 +102,7 @@ void Console::displayMenu() {
     displayMenuLine('3', "moveByPositionOffset");
     displayMenuLine('4', "moveByVelocity");
     displayMenuLine('5', "Stop aircraft");
+    displayMenuLine('e', "Emergency stop");
     displayMenuLine('r', "Remove package");
     displayMenuLine('s', "Send custom command");
     cout << endl;
