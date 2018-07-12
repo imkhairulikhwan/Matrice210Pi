@@ -41,6 +41,11 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/libs)
 
 add_subdirectory(${ONBOARDSDK_SOURCE} ${PROJECT_BINARY_DIR}/bin/osdk-core)
 
+# TODO Remove : Used to auto-completion
+if (WIN32)
+    include_directories(PIGPIO)
+endif (WIN32)
+
 include_directories(${ONBOARDSDK_SOURCE}/api/inc)
 include_directories(${ONBOARDSDK_SOURCE}/utility/inc)
 include_directories(${ONBOARDSDK_SOURCE}/hal/inc)
@@ -63,8 +68,9 @@ add_executable(${PROJECT_NAME} ${SOURCE_FILES}
         Console/Console.cpp Console/Console.h
         Mission/PositionMission.cpp Mission/PositionMission.h
         Mission/PositionOffsetMission.cpp Mission/PositionOffsetMission.h
-        Mission/VelocityMission.cpp Mission/VelocityMission.h)
+        Mission/VelocityMission.cpp Mission/VelocityMission.h
+        I2C/I2C_Communication.cpp I2C/I2C_Communication.h)
 target_link_libraries(${PROJECT_NAME} djiosdk-core)
-#target_link_libraries(${PROJECT_NAME} pigpio)
-
-
+if(UNIX)
+    target_link_libraries(${PROJECT_NAME} pigpio)
+endif(UNIX)
