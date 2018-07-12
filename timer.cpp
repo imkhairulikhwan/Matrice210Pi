@@ -4,8 +4,8 @@
  *  @author Jonathan Michel
  */
 
-#include <pthread.h>
-#include "timer.h"
+ #include "timer.h"
+#include <unistd.h>
 
 long getTimeMs() {
     struct timeval tp;
@@ -15,7 +15,6 @@ long getTimeMs() {
     return ms;
 }
 
-void delay_ms(int durationMs) {
-    const struct timespec duration{0, durationMs * 1000000L};
-    nanosleep(&duration, NULL);
+void delay_ms(unsigned int durationMs) {
+    usleep(durationMs * 1000);
 }

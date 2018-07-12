@@ -40,7 +40,7 @@ bool PositionOffsetMission::move(Vector3f *offset, float yaw,
 
         pkgIndex = PackageManager::getInstance()->subscribe(topics, numTopic, frequency,
                                                                    false);
-        if (pkgIndex == PackageManager::PACKAGE_UNAVAILABLE)
+        if (pkgIndex < 0)
             return false;
     }
 

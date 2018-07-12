@@ -14,6 +14,7 @@
 #include "PackageManager/PackageManager.h"
 #include "Console/Console.h"
 #include "Mobile/Mobile.h"
+#include "Uart/Uart.h"
 
 bool running = true;
 
@@ -26,6 +27,9 @@ Mobile *mobileCommunication;
  */
 int main(int argc, char** argv)
 {
+    //Uart uart("/dev/ttyUSB0", 115200);
+    //uart.launchRxThread();
+
     // Initialize flight controller
     flightController = new FlightController();
     flightController->setupVehicle(argc, argv);
@@ -40,7 +44,7 @@ int main(int argc, char** argv)
     // Mobile-Onboard Communication
     mobileCommunication = new Mobile(flightController);
     mobileCommunication->setup();
-    //
+    //*/
 
     //
     while(running) {

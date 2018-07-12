@@ -11,7 +11,6 @@
 #include <pthread.h>
 #include <string>
 #include <sstream>
-#include <iostream>
 
 #include <dji_vehicle.hpp>
 

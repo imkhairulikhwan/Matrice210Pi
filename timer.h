@@ -10,6 +10,6 @@
 #include <sys/time.h>
 
 long getTimeMs();
-void delay_ms(int durationMs);
+void delay_ms(unsigned int durationMs);
 
 #endif //MATRICE210_TIMER_H

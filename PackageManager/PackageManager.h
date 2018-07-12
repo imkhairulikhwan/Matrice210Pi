@@ -41,7 +41,7 @@ using namespace DJI::OSDK::Telemetry;
 
     int pkgIndex = PackageManager::getInstance()->subscribe(topics,
         numTopics, frequency, enableTimestamp);
-    if(pkgIndex == PackageManager::PACKAGE_UNAVAILABLE) {
+    if(pkgIndex < 0) {
         DERROR("Monitored takeoff - Failed to start package");
         return false;
     }
@@ -51,7 +51,12 @@ using namespace DJI::OSDK::Telemetry;
 
 class PackageManager  {
 public:
-    const static int PACKAGE_UNAVAILABLE{-1};
+    enum RETURN_ERROR_CODE {
+        VEHICLE_NOT_INSTANCED = -4,
+        START_PACKAGE_FAILED,
+        INIT_PACKAGE_FAILED,
+        PACKAGE_UNAVAILABLE,
+    };
 private:
     static PackageManager* instance;
     Vehicle* vehicle = nullptr;
@@ -104,8 +109,8 @@ public:
      * @param numTopic Number of topics in topics list
      * @param frequency Package frequency
      * @param enableTimestamp Enable send of transmission package time
-     * @return PackageManager::PACKAGE_UNAVAILABLE if subscription failed
-     * Package index if success
+     * @return Negative value of PackageManager::RETURN_ERROR_CODE if subscription failed
+     * Positive package index if success
      * TODO Add others return error codes
      */
     int subscribe(TopicName *topics, int numTopic, uint16_t frequency, bool enableTimestamp);

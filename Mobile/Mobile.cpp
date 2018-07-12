@@ -38,6 +38,11 @@ void Mobile::mobileCallback(Vehicle *vehicle, RecvContainer recvFrame,
             case 's':
                 m->getFlightController()->stopAircraft();
                 break;
+            case 't':
+                m->getFlightController()->monitoredTakeoff();
+                break;
+            case 'l':
+                m->getFlightController()->monitoredLanding();
             default:
                 DERROR("MOC - Unknown command");
                 break;
@@ -48,7 +53,7 @@ void Mobile::mobileCallback(Vehicle *vehicle, RecvContainer recvFrame,
             msgLength = 99;
         }
         data[msgLength] = '\0';
-        DSTATUS("MOC - String received : %s", recvFrame.recvData.raw_ack_array);
+        DSTATUS("MOC - String received :) : %s", recvFrame.recvData.raw_ack_array);
     }
     //vehicle->moc->sendDataToMSDK(data, (uint8_t)msgLength);
 }

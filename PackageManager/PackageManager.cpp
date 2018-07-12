@@ -35,7 +35,7 @@ bool PackageManager::verify() {
 
 int PackageManager::subscribe(TopicName *topics, int numTopic, uint16_t frequency, bool enableTimestamp) {
     if(!isVehicleInstanced())
-        return PACKAGE_UNAVAILABLE;
+        return VEHICLE_NOT_INSTANCED;
 
     int pkgIndex = allocatePackage();
     if(pkgIndex == PACKAGE_UNAVAILABLE) {
@@ -53,10 +53,11 @@ int PackageManager::subscribe(TopicName *topics, int numTopic, uint16_t frequenc
             DERROR("Error starting package %u (%u Hz)", pkgIndex, frequency);
             ACK::getErrorCodeMessage(ack, __func__);
             unsubscribe(pkgIndex);
-            return PACKAGE_UNAVAILABLE;
+            return START_PACKAGE_FAILED;
         }
     } else {
         DERROR("Error initializing package %u (%u Hz)", pkgIndex, frequency);
+        return INIT_PACKAGE_FAILED;
     }
     return pkgIndex;
 }

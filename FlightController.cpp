@@ -71,7 +71,7 @@ bool FlightController::monitoredTakeoff(int timeout) {
     int  numTopics          = sizeof(topics) / sizeof(topics[0]);
 
     int pkgIndex = PackageManager::getInstance()->subscribe(topics, numTopics, frequency, false);
-    if(pkgIndex == PackageManager::PACKAGE_UNAVAILABLE) {
+    if(pkgIndex < 0) {
         DERROR("Monitored takeoff - Failed to start package");
         return false;
     }
@@ -185,7 +185,7 @@ bool FlightController::monitoredLanding(int timeout)
     };
     int  numTopics          = sizeof(topics) / sizeof(topics[0]);
     int pkgIndex = PackageManager::getInstance()->subscribe(topics, numTopics, frequency, false);
-    if(pkgIndex == PackageManager::PACKAGE_UNAVAILABLE) {
+    if(pkgIndex < 0) {
         DERROR("Monitored landing - Failed to start package");
         return false;
     }

@@ -51,20 +51,18 @@ set(HELPER_FUNCTIONS_DIR ${ONBOARDSDK_SOURCE}/../sample/linux/common)
 
 include_directories(${HELPER_FUNCTIONS_DIR})
 FILE(GLOB SOURCE_FILES *.hpp *.cpp
-        ${HELPER_FUNCTIONS_DIR}/dji_linux_environment.cpp
-        ${HELPER_FUNCTIONS_DIR}/dji_linux_helpers.cpp
-        )
+    ${HELPER_FUNCTIONS_DIR}/dji_linux_environment.cpp
+    ${HELPER_FUNCTIONS_DIR}/dji_linux_helpers.cpp
+)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES}
-        Mobile/Mobile.cpp Mobile/Mobile.h
-        timer.cpp timer.h
-        PackageManager/PackageManager.cpp PackageManager/PackageManager.h
-        FlightController.cpp FlightController.h
-        Console/Console.cpp Console/Console.h
-        Mission/PositionMission.cpp Mission/PositionMission.h
-        Mission/PositionOffsetMission.cpp Mission/PositionOffsetMission.h
-        Mission/VelocityMission.cpp Mission/VelocityMission.h)
+    Mobile/Mobile.cpp Mobile/Mobile.h
+    timer.cpp timer.h
+    PackageManager/PackageManager.cpp PackageManager/PackageManager.h
+    FlightController.cpp FlightController.h
+    Console/Console.cpp Console/Console.h
+    Mission/PositionMission.cpp Mission/PositionMission.h
+    Mission/PositionOffsetMission.cpp Mission/PositionOffsetMission.h
+    Mission/VelocityMission.cpp Mission/VelocityMission.h
+    Uart/Uart.cpp Uart/Uart.h)
 target_link_libraries(${PROJECT_NAME} djiosdk-core)
-#target_link_libraries(${PROJECT_NAME} pigpio)
-
-
