@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<config>
+    <source_groups>
+        <source_group_73a87f77-0929-4e4a-878c-8eff5a4ab26f>
+            <compiler_flags>
+                <compiler_flag>-fms-extensions</compiler_flag>
+                <compiler_flag>-fms-compatibility</compiler_flag>
+                <compiler_flag>-fms-compatibility-version=19</compiler_flag>
+            </compiler_flags>
+            <cross_compilation>
+                <target>
+                    <abi>unknown</abi>
+                    <arch>x86_64</arch>
+                    <sys>unknown</sys>
+                    <vendor>unknown</vendor>
+                </target>
+                <target_options_enabled>0</target_options_enabled>
+            </cross_compilation>
+            <header_search_paths>
+                <header_search_path>../../Onboard-SDK/osdk-core/api/inc</header_search_path>
+                <header_search_path>../../Onboard-SDK/osdk-core/hal/inc</header_search_path>
+                <header_search_path>../../Onboard-SDK/osdk-core/platform/default/inc</header_search_path>
+                <header_search_path>../../Onboard-SDK/osdk-core/platform/linux/inc</header_search_path>
+                <header_search_path>../../Onboard-SDK/osdk-core/platform/manifold/inc</header_search_path>
+                <header_search_path>../../Onboard-SDK/osdk-core/protocol/inc</header_search_path>
+                <header_search_path>../../Onboard-SDK/osdk-core/utility/inc</header_search_path>
+                <header_search_path>./</header_search_path>
+                <header_search_path>../../Onboard-SDK/osdk-core/platform/STM32/inc</header_search_path>
+                <header_search_path>../../Onboard-SDK/osdk-core/platform/qt/inc</header_search_path>
+                <header_search_path>C:/Qt/Qt5.6.0/5.6/mingw49_32/include/QtCore</header_search_path>
+                <header_search_path>C:/Qt/Qt5.6.0/5.6/mingw49_32/include/QtWidgets</header_search_path>
+                <header_search_path>../../Onboard-SDK/sample/linux/common</header_search_path>
+            </header_search_paths>
+            <name>C++ Source Group</name>
+            <source_extensions>
+                <source_extension>.cpp</source_extension>
+                <source_extension>.cxx</source_extension>
+                <source_extension>.cc</source_extension>
+                <source_extension>.c</source_extension>
+            </source_extensions>
+            <source_paths>
+                <source_path>./</source_path>
+                <source_path>../../Onboard-SDK/osdk-core</source_path>
+                <source_path>../../Onboard-SDK/sample/linux/common</source_path>
+            </source_paths>
+            <standard>c++17</standard>
+            <status>enabled</status>
+            <type>C++ Source Group</type>
+        </source_group_73a87f77-0929-4e4a-878c-8eff5a4ab26f>
+    </source_groups>
+    <version>6</version>
+</config>
