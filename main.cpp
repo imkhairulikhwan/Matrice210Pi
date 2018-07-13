@@ -27,8 +27,6 @@ Mobile *mobileCommunication;
  */
 int main(int argc, char** argv)
 {
-    //Uart uart("/dev/ttyUSB0", 115200);
-    //uart.launchRxThread();
 
     // Initialize flight controller
     flightController = new FlightController();
@@ -44,6 +42,11 @@ int main(int argc, char** argv)
     // Mobile-Onboard Communication
     mobileCommunication = new Mobile(flightController);
     mobileCommunication->setup();
+
+    // STM32 Communication thread
+    Uart uart("/dev/ttyUSB0", 115200);
+    uart.setFlightController(flightController);
+    uart.launchRxThread();
     //*/
 
     //

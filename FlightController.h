@@ -61,7 +61,7 @@ public :
     FlightController();
     void setupVehicle(int argc, char** argv);
     // Mobile-On board communication
-    void sendDataToMSDK(uint8_t* data, uint8_t length);
+    void sendDataToMSDK(uint8_t* data, size_t length);
     // Movement control
     /**
      * Monitored take-off. Blocking call

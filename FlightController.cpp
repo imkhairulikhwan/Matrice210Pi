@@ -401,7 +401,7 @@ void FlightController::emergencyRelease() {
     DERROR("Emergency break released !");
 }
 
-void FlightController::sendDataToMSDK(uint8_t *data, uint8_t length) {
+void FlightController::sendDataToMSDK(uint8_t *data, size_t length) {
     pthread_mutex_lock(&sendDataToMSDK_mutex);
     vehicle->moc->sendDataToMSDK(data, length);
     pthread_mutex_unlock(&sendDataToMSDK_mutex);

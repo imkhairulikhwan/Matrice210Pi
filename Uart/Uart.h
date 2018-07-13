@@ -17,20 +17,25 @@
 using namespace std;
 using namespace DJI::OSDK;
 
+class FlightController;
+
 class Uart {
 private:
     LinuxSerialDevice* serialDevice;
+    FlightController* flightController;
     // Thread attributes
     pthread_t uartRxThreadID;
     pthread_attr_t uartRxThreadAttr;
 public:
     Uart(const char* device, uint32_t baudrate);
     ~Uart();
-    void send(const uint8_t* buf, int len);
+    void send(const uint8_t* buf, size_t len);
     void launchRxThread();
+    void setFlightController(FlightController* flightController);
+
 private:
     static void* uartRxThread(void* param);
-    size_t read(uint8_t* buf, int len);
+    size_t read(uint8_t* buf, size_t len);
 };
 
 
