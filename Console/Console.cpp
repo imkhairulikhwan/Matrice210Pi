@@ -29,6 +29,7 @@ void Console::launchThread() {
 
 void* Console::consoleThread(void* param) {
     DSTATUS("consoleThread running...");
+    delay_ms(500);
     auto c = (Console*) param;
     // Display interactive prompt
     bool running = true;
@@ -84,10 +85,8 @@ void* Console::consoleThread(void* param) {
                 c->flightController->sendDataToMSDK((uint8_t *)command.c_str(), (uint8_t)command.length());
             }
                 break;
-            case 'r': {
-                int packageNb = (int)c->getNumber("Package number :");
-                PackageManager::getInstance()->unsubscribe(packageNb);
-            }
+            case 'r':
+                c->flightController->emergencyRelease();
                 break;
             case 's':
                 DSTATUS("Stop aircraft");
@@ -111,7 +110,7 @@ void Console::displayMenu() {
     displayMenuLine('5', "moveByVelocity");
     displayMenuLine('e', "Emergency stop");
     displayMenuLine('m', "Send custom command");
-    displayMenuLine('r', "Remove package");
+    displayMenuLine('r', "Release emergency stop");
     displayMenuLine('s', "Stop aircraft");
     cout << endl;
 }

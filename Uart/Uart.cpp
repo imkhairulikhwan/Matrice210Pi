@@ -42,6 +42,7 @@ size_t Uart::read(uint8_t *buf, size_t len) {
 }
 
 void *Uart::uartRxThread(void *param) {
+    DSTATUS("uartRxThread running...");
     auto uart = (Uart*)param;
     char rxBuffer[256];
     uint8_t rxChar;

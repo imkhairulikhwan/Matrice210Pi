@@ -398,7 +398,7 @@ void FlightController::emergencyStop() {
 
 void FlightController::emergencyRelease() {
     setEmergencyState(false);
-    DERROR("Emergency break released !");
+    DSTATUS("Emergency break released !");
 }
 
 void FlightController::sendDataToMSDK(uint8_t *data, size_t length) {

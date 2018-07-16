@@ -14,6 +14,7 @@ Mobile::Mobile(FlightController *flightController) : flightController(flightCont
 
 void Mobile::setup() {
     // Mobile object is passed as parameter to grant access to FlightController
+    DSTATUS("MOBSDK Setup");
     flightController->getVehicle()->moc->setFromMSDKCallback(mobileCallback, (void *) this);
 }
 

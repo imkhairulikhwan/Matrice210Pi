@@ -27,7 +27,6 @@ Mobile *mobileCommunication;
  */
 int main(int argc, char** argv)
 {
-
     // Initialize flight controller
     flightController = new FlightController();
     flightController->setupVehicle(argc, argv);
