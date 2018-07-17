@@ -72,9 +72,9 @@ private:
     bool moveToPosition();
     void stop();
     // Mission functions
-    int getCycleTimeMs();
-    int getOutOfBoundsTimeLimit();
-    int getWithinBoundsTimeRequirement();
+    unsigned int getCycleTimeMs();
+    unsigned int getOutOfBoundsTimeLimit();
+    unsigned int getWithinBoundsTimeRequirement();
     void resetMissionCounters();
     void setOffset(Vector3f* o, double y);
     void setThreshold(float posThreshold, double yawThreshold);

@@ -16,6 +16,9 @@
             <mapping deploy="/Matrice210/Onboard-SDK/osdk-core" local="$PROJECT_DIR$/../../Onboard-SDK/osdk-core" web="/" />
             <mapping deploy="/Matrice210/code/Matrice210" local="$PROJECT_DIR$" web="/" />
           </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/sourcetrail" />
+          </excludedPaths>
         </serverdata>
       </paths>
     </serverData>

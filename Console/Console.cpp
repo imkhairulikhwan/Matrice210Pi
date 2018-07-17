@@ -22,7 +22,6 @@ void Console::launchThread() {
 
 void* Console::consoleThread(void* param) {
     DSTATUS("consoleThread running...");
-    delay_ms(500);
     auto c = (Console*) param;
     // Display interactive prompt
     bool running = true;
@@ -94,6 +93,7 @@ void* Console::consoleThread(void* param) {
 }
 
 void Console::displayMenu() {
+    delay_ms(500);
     cout << endl;
     cout << "Available commands : ";
     displayMenuLine('1', "Monitored takeoff");

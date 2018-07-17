@@ -11,13 +11,13 @@
 
 PositionOffsetMission::PositionOffsetMission(FlightController *flightController) {
     this->flightController = flightController;
-    this->vehicle = flightController->getVehicle();
 }
 
 bool PositionOffsetMission::move(Vector3f *offset, float yaw,
                                  float posThreshold, float yawThreshold) {
     DSTATUS("PositionOffsetMission move : x = % .2f m, y = % .2f m, z = % .2f m, % .2f deg",
             offset->x, offset->y, offset->z, yaw);
+    vehicle = flightController->getVehicle();
     setOffset(offset, yaw * DEG2RAD);
     setThreshold(posThreshold, yawThreshold * DEG2RAD);
 
@@ -40,8 +40,10 @@ bool PositionOffsetMission::move(Vector3f *offset, float yaw,
 
         pkgIndex = PackageManager::getInstance()->subscribe(topics, numTopic, frequency,
                                                                    false);
-        if (pkgIndex < 0)
+        if (pkgIndex < 0) {
+            DERROR("PositionOffset mission aborted");
             return false;
+        }
     }
 
     // Broadcast height is used since relative height through subscription arrived
@@ -198,41 +200,40 @@ void PositionOffsetMission::stop() {
 }
 
 bool PositionOffsetMission::startGlobalPositionBroadcast() {
-        uint8_t freq[16];
-        // Channels definition for A3/N3/M600
-        freq[0]  = DataBroadcast::FREQ_HOLD; // Timestamp
-        freq[1]  = DataBroadcast::FREQ_HOLD; // Attitude Quaternions
-        freq[2]  = DataBroadcast::FREQ_HOLD; // Acceleration
-        freq[3]  = DataBroadcast::FREQ_HOLD; // Velocity (Ground Frame)
-        freq[4]  = DataBroadcast::FREQ_HOLD; // Angular Velocity (Body Frame)
-        freq[5]  = DataBroadcast::FREQ_50HZ; // Position - This is the only one we want to change
-        freq[6]  = DataBroadcast::FREQ_HOLD; // GPS Detailed Information
-        freq[7]  = DataBroadcast::FREQ_HOLD; // RTK Detailed Information
-        freq[8]  = DataBroadcast::FREQ_HOLD; // Magnetometer
-        freq[9]  = DataBroadcast::FREQ_HOLD; // RC Channels Data
-        freq[10] = DataBroadcast::FREQ_HOLD; //  Gimbal Data
-        freq[11] = DataBroadcast::FREQ_HOLD; //  Flight Status
-        freq[12] = DataBroadcast::FREQ_HOLD; //  Battery Level
-        freq[13] = DataBroadcast::FREQ_HOLD; //  Control Information
+    uint8_t freq[16];
+    // Channels definition for A3/N3/M600
+    freq[0]  = DataBroadcast::FREQ_HOLD; // Timestamp
+    freq[1]  = DataBroadcast::FREQ_HOLD; // Attitude Quaternions
+    freq[2]  = DataBroadcast::FREQ_HOLD; // Acceleration
+    freq[3]  = DataBroadcast::FREQ_HOLD; // Velocity (Ground Frame)
+    freq[4]  = DataBroadcast::FREQ_HOLD; // Angular Velocity (Body Frame)
+    freq[5]  = DataBroadcast::FREQ_50HZ; // Position - This is the only one we want to change
+    freq[6]  = DataBroadcast::FREQ_HOLD; // GPS Detailed Information
+    freq[7]  = DataBroadcast::FREQ_HOLD; // RTK Detailed Information
+    freq[8]  = DataBroadcast::FREQ_HOLD; // Magnetometer
+    freq[9]  = DataBroadcast::FREQ_HOLD; // RC Channels Data
+    freq[10] = DataBroadcast::FREQ_HOLD; //  Gimbal Data
+    freq[11] = DataBroadcast::FREQ_HOLD; //  Flight Status
+    freq[12] = DataBroadcast::FREQ_HOLD; //  Battery Level
+    freq[13] = DataBroadcast::FREQ_HOLD; //  Control Information
 
-       ACK::ErrorCode ack = vehicle->broadcast->setBroadcastFreq(freq, 1);
-       if (ACK::getError(ack)) {
-           ACK::getErrorCodeMessage(ack, __func__);
-           return false;
-       } else {
-           return true;
-       }
+    ACK::ErrorCode ack =  vehicle->broadcast->setBroadcastFreq(freq, 1);
+    if (ACK::getError(ack)) {
+        ACK::getErrorCodeMessage(ack, __func__);
+        return false;
+    }
+    return true;
 }
 
-int PositionOffsetMission::getCycleTimeMs() {
-   return 1000 / controlFreq;
+unsigned int PositionOffsetMission::getCycleTimeMs() {
+   return 1000 / (unsigned)controlFreq;
 }
 
-int PositionOffsetMission::getOutOfBoundsTimeLimit() {
+unsigned int PositionOffsetMission::getOutOfBoundsTimeLimit() {
    return outOfBoundsLimit * getCycleTimeMs();
 }
 
-int PositionOffsetMission::getWithinBoundsTimeRequirement() {
+unsigned int PositionOffsetMission::getWithinBoundsTimeRequirement() {
    return  withinBoundsRequirement * getCycleTimeMs();
 }
 void PositionOffsetMission::resetMissionCounters() {

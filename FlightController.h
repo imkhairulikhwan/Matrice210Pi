@@ -54,8 +54,6 @@ private:
     PositionOffsetMission* positionOffsetMission;
     VelocityMission* velocityMission;
     // Mutex
-    static pthread_mutex_t movingMode_mutex;
-    static pthread_mutex_t emergencyState_mutex;
     static pthread_mutex_t sendDataToMSDK_mutex;
 public :
     FlightController();
