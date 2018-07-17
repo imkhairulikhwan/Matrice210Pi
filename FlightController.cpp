@@ -10,6 +10,7 @@
 #include "Mission/PositionMission.h"
 #include "Mission/VelocityMission.h"
 #include "Mission/PositionOffsetMission.h"
+#include "ThreadManager/ThreadManager.h"
 
 pthread_mutex_t FlightController::movingMode_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t FlightController::emergencyState_mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -26,17 +27,23 @@ FlightController::FlightController() {
 
 void FlightController::setupVehicle(int argc, char** argv) {
     // Get vehicle
-    bool errorMsgDisplayed = false;
-    linuxEnvironment = new LinuxSetup(argc, argv);
-    do{
+    do {
+        // If linuxEnvironment is already set, an error occurred
+        // delete linuxEnvironment and retry after 1 second
+        if (linuxEnvironment != nullptr) {
+            delete linuxEnvironment;
+            delay_ms(1000);
+        }
+        linuxEnvironment = new LinuxSetup(argc, argv);
+
         vehicle = linuxEnvironment->getVehicle();
-        if(vehicle == nullptr && !errorMsgDisplayed) {
+        // Retry to get vehicle until it works
+        if(vehicle == nullptr) {
             DERROR("Vehicle not initialized, retrying...");
-            errorMsgDisplayed = true;
         }
     } while(vehicle == nullptr);
 
-    errorMsgDisplayed = false;
+    bool errorMsgDisplayed = false;
     // Obtain control authority
     ACK::ErrorCode ack;
     do {
@@ -47,7 +54,7 @@ void FlightController::setupVehicle(int argc, char** argv) {
         }
     }while(ACK::getError(ack) != ACK::SUCCESS);
 
-    startFlightControllerThread();
+    launchFlightControllerThread();
 }
 
 
@@ -80,6 +87,7 @@ bool FlightController::monitoredTakeoff(int timeout) {
     ACK::ErrorCode ack = vehicle->control->takeoff(timeout);
     if (ACK::getError(ack) != ACK::SUCCESS)
     {
+        DERROR("Start take off failed");
         ACK::getErrorCodeMessage(ack, __func__);
         PackageManager::getInstance()->unsubscribe(pkgIndex);
         return false;
@@ -193,6 +201,7 @@ bool FlightController::monitoredLanding(int timeout)
     // Start landing
     ACK::ErrorCode landingStatus = vehicle->control->land(timeout);
     if (ACK::getError(landingStatus) != ACK::SUCCESS) {
+        DERROR("Start landing failed");
         ACK::getErrorCodeMessage(landingStatus, __func__);
         return false;
     }
@@ -243,29 +252,18 @@ bool FlightController::monitoredLanding(int timeout)
     return true;
 }
 
-void FlightController::startFlightControllerThread() {
+void FlightController::launchFlightControllerThread() {
     if(!flightControllerThreadRunning) {
         flightControllerThreadRunning = true;
-        pthread_attr_init(&flightControllerThreadAttr);
-        pthread_attr_setdetachstate(&flightControllerThreadAttr, PTHREAD_CREATE_JOINABLE);
-        int ret = pthread_create(&flightControllerThreadID, nullptr, flightControllerThread, (void*)this);
-        string threadName = "flightControllerThread";
-
-        if (ret != 0)
-            DERROR("Fail to create thread for %s !", threadName.c_str());
-
-        ret = pthread_setname_np(flightControllerThreadID, threadName.c_str());
-        if (ret != 0)
-            DERROR("Fail to set thread name for %s !", threadName.c_str());
-
-        DSTATUS("%s launched...", threadName.c_str());
+        ThreadManager::start("flightCtrThread",
+                              &flightControllerThreadID, &flightControllerThreadAttr,
+                              flightControllerThread, (void*)this);
     }
 }
 
 void FlightController::stopFlightControllerThread() {
     flightControllerThreadRunning = false;
-    void* status;
-    pthread_join(flightControllerThreadID, &status);
+    ThreadManager::stop(&flightControllerThreadID);
 }
 
 void *FlightController::flightControllerThread(void *param) {
@@ -403,7 +401,7 @@ void FlightController::emergencyRelease() {
 
 void FlightController::sendDataToMSDK(uint8_t *data, size_t length) {
     pthread_mutex_lock(&sendDataToMSDK_mutex);
-    vehicle->moc->sendDataToMSDK(data, length);
+    vehicle->moc->sendDataToMSDK(data, (uint8_t)length);
     pthread_mutex_unlock(&sendDataToMSDK_mutex);
 }
 

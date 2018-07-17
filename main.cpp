@@ -10,8 +10,8 @@
 
 #include <dji_vehicle.hpp>
 
-#include "FlightController.h"
 #include "PackageManager/PackageManager.h"
+#include "FlightController.h"
 #include "Console/Console.h"
 #include "Mobile/Mobile.h"
 #include "Uart/Uart.h"
@@ -41,6 +41,7 @@ int main(int argc, char** argv)
     // Mobile-Onboard Communication
     mobileCommunication = new Mobile(flightController);
     mobileCommunication->setup();
+    //*/
 
     // STM32 Communication thread
     Uart uart("/dev/ttyUSB0", 115200);

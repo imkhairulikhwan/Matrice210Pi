@@ -8,6 +8,7 @@
 
 #include "Uart.h"
 
+#include "../ThreadManager/ThreadManager.h"
 #include "../FlightController.h"
 
 Uart::Uart(const char *device, uint32_t baudrate) {
@@ -20,17 +21,9 @@ Uart::~Uart() {
 }
 
 void Uart::launchRxThread() {
-    pthread_attr_init(&uartRxThreadAttr);
-    pthread_attr_setdetachstate(&uartRxThreadAttr, PTHREAD_CREATE_JOINABLE);
-    int ret  = pthread_create(&uartRxThreadID, nullptr, uartRxThread, (void*)this);
-    string threadName = "uartRxThread";
-
-    if (ret != 0)
-        DERROR("Fail to create thread for %s !", threadName.c_str());
-
-    ret = pthread_setname_np(uartRxThreadID, threadName.c_str());
-    if (ret != 0)
-        DERROR("Fail to set thread name for %s !", threadName.c_str());
+    ThreadManager::start("uartRxThread",
+                         &uartRxThreadID, &uartRxThreadAttr,
+                         uartRxThread, (void*)this);
 }
 
 void Uart::send(const uint8_t *buf, size_t len) {
@@ -48,6 +41,9 @@ void *Uart::uartRxThread(void *param) {
     uint8_t rxChar;
     int rxIndex = 0;
 
+    // TODO Improve protocol
+    // Current protocol implementation transmit ascii value of numbers
+    // Transmit 32 bits value with predefined frame format and length
     bool running = true;
     while(running) {
         // New char received

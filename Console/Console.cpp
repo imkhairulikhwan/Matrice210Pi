@@ -7,6 +7,7 @@
 #include "Console.h"
 
 #include "../PackageManager/PackageManager.h"
+#include "../ThreadManager/ThreadManager.h"
 #include "../FlightController.h"
 
 Console::Console(FlightController* flightController) : flightController(flightController) {
@@ -14,17 +15,9 @@ Console::Console(FlightController* flightController) : flightController(flightCo
 }
 
 void Console::launchThread() {
-    pthread_attr_init(&consoleThreadAttr);
-    pthread_attr_setdetachstate(&consoleThreadAttr, PTHREAD_CREATE_JOINABLE);
-    int ret  = pthread_create(&consoleThreadID, nullptr, consoleThread, (void*)this);
-    string threadName = "consoleThread";
-
-    if (ret != 0)
-        DERROR("Fail to create thread for %s !", threadName.c_str());
-
-    ret = pthread_setname_np(consoleThreadID, threadName.c_str());
-    if (ret != 0)
-        DERROR("Fail to set thread name for %s !", threadName.c_str());
+    ThreadManager::start("consoleThread",
+                         &consoleThreadID, &consoleThreadAttr,
+                         consoleThread, (void*)this);
 }
 
 void* Console::consoleThread(void* param) {

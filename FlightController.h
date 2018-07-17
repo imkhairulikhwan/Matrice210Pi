@@ -34,7 +34,7 @@ public:
     pthread_t flightControllerThreadID;
     pthread_attr_t flightControllerThreadAttr;
     static void* flightControllerThread(void* param);
-    void startFlightControllerThread();
+    void launchFlightControllerThread();
     void stopFlightControllerThread();
 private:
     // Aircraft
