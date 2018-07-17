@@ -9,7 +9,11 @@
 pthread_mutex_t PackageManager::packageManager_mutex = PTHREAD_MUTEX_INITIALIZER;
 PackageManager* PackageManager::instance = nullptr;
 
-PackageManager::PackageManager() = default;
+PackageManager::PackageManager() {
+    for (bool &i : packageAvailable) {
+        i = true;
+    }
+}
 
 PackageManager *PackageManager::getInstance() {
     if(instance == nullptr)
@@ -57,6 +61,7 @@ int PackageManager::subscribe(TopicName *topics, int numTopic, uint16_t frequenc
         }
     } else {
         DERROR("Error initializing package %u (%u Hz)", pkgIndex, frequency);
+        releasePackage(pkgIndex);
         return INIT_PACKAGE_FAILED;
     }
     return pkgIndex;
@@ -67,6 +72,7 @@ bool PackageManager::unsubscribe(int index) {
         return false;
 
     ACK::ErrorCode ack = vehicle->subscribe->removePackage(index, timeout);
+    releasePackage(index);
     if (ACK::getError(ack)) {
         DERROR("Error unsubscribing package %u", index);
         return false;
@@ -98,22 +104,32 @@ bool PackageManager::validIndex(int index) {
 
 int PackageManager::allocatePackage() {
     pthread_mutex_lock(&packageManager_mutex);
-    if(packageCnt < DataSubscription::MAX_NUMBER_OF_PACKAGE) {
-        packageCnt++;
-        pthread_mutex_unlock(&packageManager_mutex);
-        return packageCnt-1;
+    for(int i = 0; i < DataSubscription::MAX_NUMBER_OF_PACKAGE; i++) {
+        if (packageAvailable[i]) {
+            packageAvailable[i] = false;
+            pthread_mutex_unlock(&packageManager_mutex);
+            return i;
+        }
     }
     pthread_mutex_unlock(&packageManager_mutex);
     return PACKAGE_UNAVAILABLE;
 }
 
-void PackageManager::clear() {
-    pthread_mutex_lock(&packageManager_mutex);
-    // packageCtn contain nextAvailable package index
-    packageCnt--;
-    for (packageCnt; packageCnt >= 0; packageCnt--) {
-        unsubscribe(packageCnt);
+void PackageManager::releasePackage(int index) {
+    if(validIndex(index)) {
+        pthread_mutex_lock(&packageManager_mutex);
+        packageAvailable[index] = true;
+        pthread_mutex_unlock(&packageManager_mutex);
     }
-    packageCnt = 0;
-    pthread_mutex_unlock(&packageManager_mutex);
 }
+
+
+void PackageManager::clear() {
+    for(int i = 0; i < DataSubscription::MAX_NUMBER_OF_PACKAGE; i++) {
+        if(!packageAvailable[i]) {
+            DSTATUS("Clear package : %u", i);
+            unsubscribe(i);
+        }
+    }
+}
+

@@ -61,7 +61,7 @@ private:
     static PackageManager* instance;
     Vehicle* vehicle = nullptr;
     int timeout{1};             /*!< DJI subscription method call timeout */
-    int packageCnt{0};          /*!< Next available package */
+    bool packageAvailable[DataSubscription::MAX_NUMBER_OF_PACKAGE]; /*!< Available packages */
     /**
      *  PackageManager is a singleton
      */
@@ -85,6 +85,12 @@ private:
      * package number if a package was allocated
      */
     int allocatePackage();
+    /**
+     * Set package available for ne w allocation
+     * @param index Package index to set available
+     *
+     */
+    void releasePackage(int index);
     // Mutex
     static pthread_mutex_t packageManager_mutex;
 public:
@@ -111,7 +117,6 @@ public:
      * @param enableTimestamp Enable send of transmission package time
      * @return Negative value of PackageManager::RETURN_ERROR_CODE if subscription failed
      * Positive package index if success
-     * TODO Add others return error codes
      */
     int subscribe(TopicName *topics, int numTopic, uint16_t frequency, bool enableTimestamp);
     /**
@@ -121,7 +126,7 @@ public:
      */
     bool unsubscribe(int index);
     /**
-     * Unsubscribed to all subscribed packages
+     * Unsubscribe to all subscribed packages
      */
     void clear();
 };
