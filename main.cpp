@@ -10,11 +10,12 @@
 
 #include <dji_vehicle.hpp>
 
-#include "PackageManager/PackageManager.h"
 #include "FlightController.h"
-#include "Console/Console.h"
-#include "Mobile/Mobile.h"
-#include "Uart/Uart.h"
+#include "Action/Action.h"
+#include "Managers/PackageManager.h"
+#include "Communication/Console.h"
+#include "Communication/Mobile.h"
+#include "Communication/Uart.h"
 
 bool running = true;
 
@@ -51,7 +52,7 @@ int main(int argc, char** argv)
 
     //
     while(running) {
-
+        DSTATUS("Action queue : %u", Action::instance().process());
     }
     //*/
 

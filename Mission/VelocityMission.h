@@ -10,7 +10,7 @@
 
 #include <dji_vehicle.hpp>
 
-#include "../timer.h"
+#include "../util/timer.h"
 
 using namespace DJI;
 using namespace DJI::OSDK;

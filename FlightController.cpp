@@ -6,11 +6,11 @@
 
 #include "FlightController.h"
 
-#include "PackageManager/PackageManager.h"
+#include "Managers/PackageManager.h"
+#include "Managers/ThreadManager.h"
 #include "Mission/PositionMission.h"
 #include "Mission/VelocityMission.h"
 #include "Mission/PositionOffsetMission.h"
-#include "ThreadManager/ThreadManager.h"
 
 pthread_mutex_t FlightController::sendDataToMSDK_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t FlightController::emergencyState_mutex = PTHREAD_MUTEX_INITIALIZER;

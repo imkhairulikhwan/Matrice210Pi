@@ -8,8 +8,8 @@
 
 #include "Uart.h"
 
-#include "../ThreadManager/ThreadManager.h"
 #include "../FlightController.h"
+#include "../Managers/ThreadManager.h"
 
 Uart::Uart(const char *device, uint32_t baudrate) {
     serialDevice = new LinuxSerialDevice(device, baudrate);

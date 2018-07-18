@@ -18,7 +18,7 @@
 #include <dji_telemetry.hpp>
 
 // User includes
-#include "../timer.h"
+#include "../util/timer.h"
 
 class FlightController;
 

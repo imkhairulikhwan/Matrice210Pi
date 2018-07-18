@@ -17,7 +17,7 @@
 #include <dji_linux_helpers.hpp>
 
 // User
-#include "timer.h"
+#include "util/timer.h"
 
 using namespace std;
 using namespace DJI::OSDK;

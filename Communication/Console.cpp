@@ -6,9 +6,10 @@
 
 #include "Console.h"
 
-#include "../PackageManager/PackageManager.h"
-#include "../ThreadManager/ThreadManager.h"
 #include "../FlightController.h"
+#include "../Action/Action.h"
+#include "../Managers/PackageManager.h"
+#include "../Managers/ThreadManager.h"
 
 Console::Console(FlightController* flightController) : flightController(flightController) {
 
@@ -33,6 +34,9 @@ void* Console::consoleThread(void* param) {
         // Get newline char
         cin.get();
         switch (inputChar) {
+            case '0':
+                Action::instance().add(5);
+                break;
             case '1':
                 c->flightController->monitoredTakeoff();
                 break;

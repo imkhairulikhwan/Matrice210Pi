@@ -27,7 +27,7 @@ if(NOT ONBOARDSDK_SOURCE)
     set(ONBOARDSDK_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/../../Onboard-SDK/osdk-core")
 endif()
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread -g -O0")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread -lrt -g -O0")
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 
 set(DJIOSDK 0)
@@ -56,14 +56,15 @@ FILE(GLOB SOURCE_FILES *.hpp *.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES}
-    timer.cpp timer.h
-    ThreadManager/ThreadManager.cpp ThreadManager/ThreadManager.h
-    PackageManager/PackageManager.cpp PackageManager/PackageManager.h
-    FlightController.cpp FlightController.h
-    Console/Console.cpp Console/Console.h
-    Mobile/Mobile.cpp Mobile/Mobile.h
-    Uart/Uart.cpp Uart/Uart.h
-    Mission/PositionMission.cpp Mission/PositionMission.h
-    Mission/PositionOffsetMission.cpp Mission/PositionOffsetMission.h
-    Mission/VelocityMission.cpp Mission/VelocityMission.h )
+        util/timer.cpp util/timer.h
+        FlightController.cpp FlightController.h
+        Action/Action.cpp Action/Action.h
+        Managers/ThreadManager.cpp Managers/ThreadManager.h
+        Managers/PackageManager.cpp Managers/PackageManager.h
+        Communication/Console.cpp Communication/Console.h
+        Communication/Mobile.cpp Communication/Mobile.h
+        Communication/Uart.cpp Communication/Uart.h
+        Mission/PositionMission.cpp Mission/PositionMission.h
+        Mission/PositionOffsetMission.cpp Mission/PositionOffsetMission.h
+        Mission/VelocityMission.cpp Mission/VelocityMission.h)
 target_link_libraries(${PROJECT_NAME} djiosdk-core)
