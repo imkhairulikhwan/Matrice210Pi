@@ -55,6 +55,8 @@ private:
     VelocityMission* velocityMission;
     // Mutex
     static pthread_mutex_t sendDataToMSDK_mutex;
+    static pthread_mutex_t emergencyState_mutex;
+    static pthread_mutex_t movingMode_mutex;
 public :
     FlightController();
     void setupVehicle(int argc, char** argv);
@@ -106,7 +108,7 @@ public :
     // Emergency
     void emergencyStop();
     void emergencyRelease();
-    void setEmergencyState( bool state);
+    void setEmergencyState(bool state);
     bool isEmergencyState() { return emergencyState; }
     // Getters and setters functions // TODO Mutex !
     Vehicle* getVehicle() { return vehicle; }

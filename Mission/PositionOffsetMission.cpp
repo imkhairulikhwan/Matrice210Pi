@@ -22,7 +22,7 @@ bool PositionOffsetMission::move(Vector3f *offset, float yaw,
     setThreshold(posThreshold, yawThreshold * DEG2RAD);
 
     // Telemetry: Verify the subscription
-    if(!PackageManager::getInstance()->verify())
+    if(!PackageManager::instance().verify())
         return false;
 
     if(!missionRunning) {
@@ -38,7 +38,7 @@ bool PositionOffsetMission::move(Vector3f *offset, float yaw,
         };
         int numTopic = sizeof(topics) / sizeof(topics[0]);
 
-        pkgIndex = PackageManager::getInstance()->subscribe(topics, numTopic, frequency,
+        pkgIndex = PackageManager::instance().subscribe(topics, numTopic, frequency,
                                                                    false);
         if (pkgIndex < 0) {
             DERROR("PositionOffset mission aborted");
@@ -51,7 +51,7 @@ bool PositionOffsetMission::move(Vector3f *offset, float yaw,
     {
         DERROR("Failed to start global position broadcast");
         // Cleanup before return
-        PackageManager::getInstance()->unsubscribe(pkgIndex);
+        PackageManager::instance().unsubscribe(pkgIndex);
         return false;
     }
 
@@ -109,6 +109,7 @@ bool PositionOffsetMission::moveToPosition() {
     positionToMove.z = currentBroadcastGP.height + offset.z;
 
     missionRunning = true;
+    startTime = getTimeMs();
 
     // update() has now to be called continuously
 }
@@ -118,11 +119,9 @@ bool PositionOffsetMission::update() {
         return false;
 
     bool destinationReached = false;
+    long elapsedTime = getTimeMs() - startTime;
     if(elapsedTime < missionTimeout) {
         flightController->positionAndYawCtrl(&positionToMove, (float32_t) (targetYaw / DEG2RAD));
-
-        delay_ms(getCycleTimeMs());
-        elapsedTime += getCycleTimeMs();
 
         // Get current position in required coordinates and units
         Telemetry::TypeMap<TOPIC_QUATERNION>::type subscriptionQ
@@ -195,7 +194,7 @@ void PositionOffsetMission::stop() {
 
         missionRunning = false;
 
-        PackageManager::getInstance()->unsubscribe(pkgIndex);
+        PackageManager::instance().unsubscribe(pkgIndex);
     }
 }
 
@@ -237,7 +236,6 @@ unsigned int PositionOffsetMission::getWithinBoundsTimeRequirement() {
    return  withinBoundsRequirement * getCycleTimeMs();
 }
 void PositionOffsetMission::resetMissionCounters() {
-   elapsedTime = 0;
    withinBoundsCnt = 0;
    outOfBoundsCnt = 0;
    brakeCnt = 0;
@@ -252,4 +250,3 @@ void PositionOffsetMission::setThreshold(float posThreshold, double yawThreshold
    this->posThreshold = posThreshold;
    this->yawThreshold = yawThreshold;
 }
-

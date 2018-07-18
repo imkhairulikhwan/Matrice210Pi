@@ -14,6 +14,8 @@
 #include <dji_vehicle.hpp>
 #include <linux_serial_device.hpp>
 
+#define DEBUG_UART_FRAME
+
 using namespace std;
 using namespace DJI::OSDK;
 

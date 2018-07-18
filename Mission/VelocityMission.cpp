@@ -22,5 +22,4 @@ void VelocityMission::move(Vector3f *velocity, float yaw) {
 
 void VelocityMission::update() {
     flightController->velocityAndYawRateCtrl(&velocity, yaw);
-    delay_ms(20);
 }

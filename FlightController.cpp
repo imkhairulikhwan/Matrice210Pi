@@ -13,6 +13,8 @@
 #include "ThreadManager/ThreadManager.h"
 
 pthread_mutex_t FlightController::sendDataToMSDK_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t FlightController::emergencyState_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t FlightController::movingMode_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 FlightController::FlightController() {
     this->emergencyState = false;
@@ -63,7 +65,7 @@ void FlightController::setupVehicle(int argc, char **argv) {
 bool FlightController::monitoredTakeoff(int timeout) {
     DSTATUS("Monitored takeoff launched");
     // Telemetry: Verify the subscription
-    if (!PackageManager::getInstance()->verify())
+    if (!PackageManager::instance().verify())
         return false;
 
     /*/ Subscribe to package
@@ -78,7 +80,7 @@ bool FlightController::monitoredTakeoff(int timeout) {
     };
     int numTopics = sizeof(topics) / sizeof(topics[0]);
 
-    int pkgIndex = PackageManager::getInstance()->subscribe(topics, numTopics, frequency, false);
+    int pkgIndex = PackageManager::instance().subscribe(topics, numTopics, frequency, false);
     if (pkgIndex < 0) {
         DERROR("Monitored takeoff - Failed to start package");
         return false;
@@ -89,7 +91,7 @@ bool FlightController::monitoredTakeoff(int timeout) {
     if (ACK::getError(ack) != ACK::SUCCESS) {
         DERROR("Start take off failed");
         ACK::getErrorCodeMessage(ack, __func__);
-        PackageManager::getInstance()->unsubscribe(pkgIndex);
+        PackageManager::instance().unsubscribe(pkgIndex);
         return false;
     }
 
@@ -109,7 +111,7 @@ bool FlightController::monitoredTakeoff(int timeout) {
     if (motorsNotStarted == timeoutCycles) {
         cout << "Takeoff failed. Motors are not spinning." << endl;
         // Cleanup
-        PackageManager::getInstance()->unsubscribe(pkgIndex);
+        PackageManager::instance().unsubscribe(pkgIndex);
         return false;
     } else {
         cout << "Motors spinning...\n";
@@ -136,7 +138,7 @@ bool FlightController::monitoredTakeoff(int timeout) {
                 "motors are spinning."
              << endl;
         // Cleanup
-        PackageManager::getInstance()->unsubscribe(pkgIndex);
+        PackageManager::instance().unsubscribe(pkgIndex);
         return false;
     } else {
         cout << "Ascending...\n";
@@ -160,14 +162,14 @@ bool FlightController::monitoredTakeoff(int timeout) {
         cout
                 << "Takeoff finished, but the aircraft is in an unexpected mode. "
                    "Please connect DJI GO.\n";
-        PackageManager::getInstance()->unsubscribe(pkgIndex);
+        PackageManager::instance().unsubscribe(pkgIndex);
         return false;
     }
 
 
     // Cleanup
     cout << "clear " << pkgIndex << endl;
-    PackageManager::getInstance()->unsubscribe(pkgIndex);
+    PackageManager::instance().unsubscribe(pkgIndex);
 
     return true;
 }
@@ -177,7 +179,7 @@ bool FlightController::monitoredTakeoff(int timeout) {
 */
 bool FlightController::monitoredLanding(int timeout) {
     // Telemetry: Verify the subscription
-    if (!PackageManager::getInstance()->verify())
+    if (!PackageManager::instance().verify())
         return false;
 
     /*/ Subscribe to package
@@ -191,7 +193,7 @@ bool FlightController::monitoredLanding(int timeout) {
             TOPIC_STATUS_DISPLAYMODE
     };
     int numTopics = sizeof(topics) / sizeof(topics[0]);
-    int pkgIndex = PackageManager::getInstance()->subscribe(topics, numTopics, frequency, false);
+    int pkgIndex = PackageManager::instance().subscribe(topics, numTopics, frequency, false);
     if (pkgIndex < 0) {
         DERROR("Monitored landing - Failed to start package");
         return false;
@@ -219,7 +221,7 @@ bool FlightController::monitoredLanding(int timeout) {
     if (landingNotStarted == timeoutCycles) {
         cout << "Landing failed. Aircraft is still in the air." << endl;
         // Cleanup before return
-        PackageManager::getInstance()->unsubscribe(pkgIndex);
+        PackageManager::instance().unsubscribe(pkgIndex);
         return false;
     } else {
         cout << "Landing...\n";
@@ -241,12 +243,12 @@ bool FlightController::monitoredLanding(int timeout) {
     } else {
         cout << "Landing finished, but the aircraft is in an unexpected mode. "
                 "Please connect DJI GO.\n";
-        PackageManager::getInstance()->unsubscribe(pkgIndex);
+        PackageManager::instance().unsubscribe(pkgIndex);
         return false;
     }
 
     // Cleanup
-    PackageManager::getInstance()->unsubscribe(pkgIndex);
+    PackageManager::instance().unsubscribe(pkgIndex);
 
     return true;
 }
@@ -275,7 +277,7 @@ void *FlightController::flightControllerThread(void *param) {
             case STOP:
                 DSTATUS("Aircraft stopped");
                 // TODO Remove if packages need to be keep while aircraft is stopped
-                PackageManager::getInstance()->clear();
+                PackageManager::instance().clear();
                 fc->setMovingMode(WAIT);
                 break;
             case POSITION:
@@ -284,9 +286,11 @@ void *FlightController::flightControllerThread(void *param) {
                 break;
             case VELOCITY:
                 fc->velocityMission->update();
+                delay_ms(20);
                 break;
             case POSITION_OFFSET:
                 fc->positionOffsetMission->update();
+                delay_ms(fc->positionOffsetMission->getCycleTimeMs());
                 break;
         }
     }
@@ -353,12 +357,15 @@ void FlightController::sendDataToMSDK(uint8_t *data, size_t length) {
 }
 
 void FlightController::setMovingMode(FlightController::movingMode_ mode) {
+    pthread_mutex_lock(&movingMode_mutex);
     movingMode = mode;
+    pthread_mutex_unlock(&movingMode_mutex);
 }
 
 void FlightController::setEmergencyState(bool state) {
+    pthread_mutex_lock(&emergencyState_mutex);
     emergencyState = state;
-
+    pthread_mutex_unlock(&emergencyState_mutex);
 }
 
 /*! Very simple calculation of local NED offset between two pairs of GPS coordinates.

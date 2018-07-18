@@ -21,7 +21,6 @@
 #include "../timer.h"
 
 class FlightController;
-class PackageManager;
 
 using namespace DJI::OSDK;
 using namespace DJI::OSDK::Telemetry;
@@ -40,7 +39,7 @@ private:
     float zDeadband{0.12};
     // Mission parameters
     bool missionRunning{false};     // TODO explain
-    int missionTimeout{10000};      // Timeout to finish mission [ms]
+    long missionTimeout{10000};      // Timeout to finish mission [ms]
     int controlFreq{50};            // Sent control frame frequency [Hz]
     int outOfBoundsLimit{10};       // TODO explain
     int withinBoundsRequirement{50};// Requirement cycles to reach target
@@ -48,7 +47,7 @@ private:
     float posThreshold{0.2};        // Position threshold [m]
     double yawThreshold{1.0};       // Yaw threshold [rad]
     // Missions values
-    int elapsedTime{0};             // Elapsed time since mission beginning
+    long startTime{0};              // Mission start time [ms]
     int withinBoundsCnt{0};         // Within bounds counter
     int outOfBoundsCnt{0};          // Out of bounds counter
     int brakeCnt{0};                // Brake counter
@@ -68,11 +67,11 @@ public:
     bool move(Vector3f* offset, float yaw,
                           float posThreshold, float yawThreshold);
     bool update();
+    unsigned int getCycleTimeMs();
 private:
     bool moveToPosition();
     void stop();
     // Mission functions
-    unsigned int getCycleTimeMs();
     unsigned int getOutOfBoundsTimeLimit();
     unsigned int getWithinBoundsTimeRequirement();
     void resetMissionCounters();

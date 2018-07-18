@@ -32,7 +32,7 @@ int main(int argc, char** argv)
     flightController->setupVehicle(argc, argv);
 
     // Package manager
-    PackageManager::getInstance()->setVehicle(flightController->getVehicle());
+    PackageManager::instance().setVehicle(flightController->getVehicle());
 
     // Console thread
     console =  new Console(flightController);

@@ -7,18 +7,11 @@
 #include "PackageManager.h"
 
 pthread_mutex_t PackageManager::packageManager_mutex = PTHREAD_MUTEX_INITIALIZER;
-PackageManager* PackageManager::instance = nullptr;
 
 PackageManager::PackageManager() {
     for (bool &i : packageAvailable) {
         i = true;
     }
-}
-
-PackageManager *PackageManager::getInstance() {
-    if(instance == nullptr)
-        instance = new PackageManager();
-    return instance;
 }
 
 void PackageManager::setVehicle(Vehicle *vehicle) {

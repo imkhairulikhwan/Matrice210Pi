@@ -63,10 +63,14 @@ void *Uart::uartRxThread(void *param) {
                 int valuesInc = 0;
                 int length = rxIndex;
 
+#ifdef DEBUG_UART_FRAME
                 std::cout << std::endl;
+#endif
                 for(uint16_t i = 0; i < length; i++)
                 {
+#ifdef DEBUG_UART_FRAME
                     std::cout << rxBuffer[i];
+#endif
                     // '|' char indicate end of value
                     if(rxBuffer[i] == '|')
                     {
@@ -82,7 +86,9 @@ void *Uart::uartRxThread(void *param) {
                         valuesInc++;
                     }
                 }
+#ifdef DEBUG_UART_FRAME
                 std::cout << std::endl;
+#endif
                 // Last value
                 tabValues[valuesInc] = ' ';
                 data_f[countValue] = strtof(tabValues, nullptr);

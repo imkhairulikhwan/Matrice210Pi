@@ -39,7 +39,7 @@ using namespace DJI::OSDK::Telemetry;
     int  numTopics          = sizeof(topics) / sizeof(topics[0]);
     boolean enableTimestamp = false;
 
-    int pkgIndex = PackageManager::getInstance()->subscribe(topics,
+    int pkgIndex = PackageManager::instance().subscribe(topics,
         numTopics, frequency, enableTimestamp);
     if(pkgIndex < 0) {
         DERROR("Monitored takeoff - Failed to start package");
@@ -49,7 +49,7 @@ using namespace DJI::OSDK::Telemetry;
  *
  */
 
-class PackageManager  {
+class PackageManager : public Singleton<PackageManager> {
 public:
     enum RETURN_ERROR_CODE {
         VEHICLE_NOT_INSTANCED = -4,
@@ -58,14 +58,9 @@ public:
         PACKAGE_UNAVAILABLE,
     };
 private:
-    static PackageManager* instance;
     Vehicle* vehicle = nullptr;
     int timeout{1};             /*!< DJI subscription method call timeout */
     bool packageAvailable[DataSubscription::MAX_NUMBER_OF_PACKAGE]; /*!< Available packages */
-    /**
-     *  PackageManager is a singleton
-     */
-    PackageManager();
     /**
      * Verify if setVehicle() has been called
      * @return true is vehicle has been instanced
@@ -95,10 +90,9 @@ private:
     static pthread_mutex_t packageManager_mutex;
 public:
     /**
-     * Singleton call method
-     * @return pointer to PackageManager singleton
-     */
-    static PackageManager* getInstance();
+    *  PackageManager is a singleton
+    */
+    PackageManager();
     /**
      * Has to be called before usage to define vehicle to send package
      * @param vehicle Pointer to used vehicle
