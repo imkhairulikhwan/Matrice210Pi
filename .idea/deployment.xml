@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="M210PiZeroW">
+  <component name="PublishConfigData" autoUpload="Always" serverName="M210PiZeroW">
     <serverData>
       <paths name="M210Pi3">
         <serverdata>
@@ -15,6 +15,8 @@
           <mappings>
             <mapping deploy="/Matrice210/Onboard-SDK/osdk-core" local="$PROJECT_DIR$/../../Onboard-SDK/osdk-core" web="/" />
             <mapping deploy="/Matrice210/code/Matrice210" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/Matrice210/Onboard-SDK/sample/linux/common" local="$PROJECT_DIR$/../../Onboard-SDK/sample/linux/common/dji_linux_environment.cpp" web="/" />
+            <mapping deploy="/Matrice210/Onboard-SDK/sample/linux/common" local="$PROJECT_DIR$/../../Onboard-SDK/sample/linux/common/dji_linux_helpers.cpp" web="/" />
           </mappings>
           <excludedPaths>
             <excludedPath local="true" path="$PROJECT_DIR$/sourcetrail" />
@@ -23,5 +25,6 @@
         </serverdata>
       </paths>
     </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
   </component>
 </project>

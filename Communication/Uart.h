@@ -8,8 +8,6 @@
 #define MATRICE210_UART_H
 
 #include <pthread.h>
-#include <string>
-#include <sstream>
 
 #include <dji_vehicle.hpp>
 #include <linux_serial_device.hpp>
@@ -33,12 +31,10 @@ public:
     ~Uart();
     void send(const uint8_t* buf, size_t len);
     void launchRxThread();
-    void setFlightController(FlightController* flightController);
-
+    void setFlightController(FlightController* flightController) {this->flightController = flightController; }
 private:
     static void* uartRxThread(void* param);
     size_t read(uint8_t* buf, size_t len);
 };
-
 
 #endif //MATRICE210_UART_H

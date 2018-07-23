@@ -12,6 +12,7 @@
 
 #include "FlightController.h"
 #include "Action/Action.h"
+#include "Action/ActionData.h"
 #include "Managers/PackageManager.h"
 #include "Communication/Console.h"
 #include "Communication/Mobile.h"
@@ -34,6 +35,7 @@ int main(int argc, char** argv)
 
     // Package manager
     PackageManager::instance().setVehicle(flightController->getVehicle());
+    Action::instance().setFlightController(flightController);
 
     // Console thread
     console =  new Console(flightController);
@@ -50,11 +52,11 @@ int main(int argc, char** argv)
     uart.launchRxThread();
     //*/
 
-    //
     while(running) {
-        DSTATUS("Action queue : %u", Action::instance().process());
+        //
+        Action::instance().process();
+        //*/
     }
-    //*/
 
     return 0;
 }

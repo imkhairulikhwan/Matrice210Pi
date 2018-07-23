@@ -4,9 +4,11 @@
  *  @author Jonathan Michel
  */
 
-#include <iostream>
 
 #include "Uart.h"
+
+#include <string>
+#include <sstream>
 
 #include "../FlightController.h"
 #include "../Managers/ThreadManager.h"
@@ -116,8 +118,3 @@ void *Uart::uartRxThread(void *param) {
     }
     return nullptr;
 }
-
-void Uart::setFlightController(FlightController* flightController) {
-    this->flightController = flightController;
-}
-

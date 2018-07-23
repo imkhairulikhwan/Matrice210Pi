@@ -59,6 +59,7 @@ add_executable(${PROJECT_NAME} ${SOURCE_FILES}
         util/timer.cpp util/timer.h
         FlightController.cpp FlightController.h
         Action/Action.cpp Action/Action.h
+        Action/ActionData.cpp Action/ActionData.h
         Managers/ThreadManager.cpp Managers/ThreadManager.h
         Managers/PackageManager.cpp Managers/PackageManager.h
         Communication/Console.cpp Communication/Console.h

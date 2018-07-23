@@ -6,8 +6,11 @@
 
 #include "Console.h"
 
+#include <sstream>
+
 #include "../FlightController.h"
 #include "../Action/Action.h"
+#include "../Action/ActionData.h"
 #include "../Managers/PackageManager.h"
 #include "../Managers/ThreadManager.h"
 
@@ -33,15 +36,13 @@ void* Console::consoleThread(void* param) {
         cin >> inputChar;
         // Get newline char
         cin.get();
+        ActionData *actionData = nullptr;
         switch (inputChar) {
-            case '0':
-                Action::instance().add(5);
-                break;
             case '1':
-                c->flightController->monitoredTakeoff();
+                actionData = new ActionData(ActionData::monitoredTakeoff);
                 break;
             case '2':
-                c->flightController->monitoredLanding();
+                actionData = new ActionData(ActionData::monitoredLanding);
                 break;
             case '3': {
                 Telemetry::Vector3f position;
@@ -49,7 +50,10 @@ void* Console::consoleThread(void* param) {
                 position.y = c->getNumber("y: ");
                 position.z = c->getNumber("z: ");
                 float32_t yaw = c->getNumber("yaw: ");
-                c->flightController->moveByPosition(&position, yaw);
+                actionData = new ActionData(ActionData::moveByPosition,
+                                            sizeof(Telemetry::Vector3f) + sizeof(unsigned));
+                actionData->push(position);
+                actionData->push(yaw);
             }
                 break;
             case '4': {
@@ -58,7 +62,10 @@ void* Console::consoleThread(void* param) {
                 position.y = c->getNumber("yOffsetDesired: ");
                 position.z = c->getNumber("zOffsetDesired: ");
                 float32_t yaw = c->getNumber("yawDesired: ");
-                c->flightController->moveByPositionOffset(&position, yaw);
+                actionData = new ActionData(ActionData::moveByPositionOffset,
+                                            sizeof(Telemetry::Vector3f) + sizeof(unsigned));
+                actionData->push(position);
+                actionData->push(yaw);
             }
                 break;
             case '5': {
@@ -67,10 +74,14 @@ void* Console::consoleThread(void* param) {
                 velocity.y = c->getNumber("Vy: ");
                 velocity.z = c->getNumber("Vz: ");
                 float32_t yaw = c->getNumber("yaw: ");
-                c->flightController->moveByVelocity(&velocity, yaw);
+                actionData = new ActionData(ActionData::moveByVelocity,
+                                            sizeof(Telemetry::Vector3f) + sizeof(unsigned));
+                actionData->push(velocity);
+                actionData->push(yaw);
             }
                 break;
             case 'e':
+                // Emergency stop is called directly here to avoid delay
                 c->flightController->emergencyStop();
                 break;
             case 'm': {
@@ -82,17 +93,18 @@ void* Console::consoleThread(void* param) {
             }
                 break;
             case 'r':
-                c->flightController->emergencyRelease();
+                actionData = new ActionData(ActionData::emergencyRelease);
                 break;
             case 's':
-                DSTATUS("Stop aircraft");
-                c->flightController->stopAircraft();
+                actionData = new ActionData(ActionData::stopAircraft,
+                                            sizeof(Telemetry::Vector3f) + sizeof(unsigned));
                 break;
-
             default:
                 break;
 
         }
+        if(actionData != nullptr)
+            Action::instance().add(actionData);
     }
 }
 

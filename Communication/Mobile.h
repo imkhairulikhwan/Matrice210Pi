@@ -7,12 +7,13 @@
 #ifndef MATRICE210_MOBILECOMMUNICATION_H
 #define MATRICE210_MOBILECOMMUNICATION_H
 
-// Helpers
 #include <dji_vehicle.hpp>
 
 using namespace DJI::OSDK;
 
 class FlightController;
+
+#define COMMAND_CHAR '#'
 
 /**
  *  Configure Mobile-Onboard communication by setting

@@ -10,13 +10,10 @@
 
 #include <pthread.h>
 #include <string>
-#include <sstream>
-
 #include <dji_vehicle.hpp>
 
 using namespace std;
 using namespace DJI::OSDK;
-
 class FlightController;
 
 /**
@@ -59,15 +56,14 @@ private:
      * @param hint Command description, max hint length = 55 to assure
      * alignment
      */
-    void displayMenuLine(char command, const std::string &hint);
+    void displayMenuLine(char command, const string &hint);
     /**
      * Read float number from console
      * @param hint Description displayed to user
      * @return Read number
      */
-    float32_t getNumber(const std::string &hint);
+    float32_t getNumber(const string &hint);
 
 };
-
 
 #endif //MATRICE210_CONSOLE_H

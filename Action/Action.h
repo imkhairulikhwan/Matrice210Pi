@@ -8,29 +8,30 @@
 #define MATRICE210_ACTION_H
 
 #include <pthread.h>
-#include <csignal>
-#include <cerrno>
-#include <sys/time.h>
-#include <sys/stat.h>
 #include <mqueue.h>
-#include <fcntl.h>
 
 #include <dji_vehicle.hpp>
 
-#define MY_MQ_NAME "/my_mq"
+#define ACTION_QUEUE_NAME "/actionQueue"
 
 using namespace DJI::OSDK;
 
+class FlightController;
+class ActionData;
+
 class Action : public Singleton<Action>{
 private:
-    mq_attr my_mq_attr;
-    mqd_t my_mq;
+    mq_attr actionQueueAttr;
+    mqd_t actionQueue;
+    // Mutex
+    static pthread_mutex_t mutex;
+    FlightController* flightController;
 public:
     Action();
     ~Action();
-    void add(unsigned v);
-    unsigned process();
+    void setFlightController(FlightController* flightController) { this->flightController = flightController; }
+    void add(ActionData *actionData);
+    void process();
 };
-
 
 #endif //MATRICE210_ACTION_H

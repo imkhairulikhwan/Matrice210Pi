@@ -319,6 +319,7 @@ void FlightController::moveByPositionOffset(Vector3f *offset, float yaw,
 }
 
 void FlightController::stopAircraft() {
+    DSTATUS("Stop aircraft");
     // Stop aircraft
     getVehicle()->control->emergencyBrake();
     // Stop state machine sending moving commands
@@ -347,6 +348,7 @@ void FlightController::emergencyStop() {
 
 void FlightController::emergencyRelease() {
     setEmergencyState(false);
+    setMovingMode(STOP);
     DSTATUS("Emergency break released !");
 }
 
