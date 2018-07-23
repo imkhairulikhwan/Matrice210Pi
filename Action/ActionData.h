@@ -37,6 +37,7 @@ private:
     static pthread_mutex_t mutex;
 public:
     explicit ActionData(ActionId actionId, size_t size = 0);
+    ~ActionData();
     bool push(char c);
     bool push(unsigned u);
     bool push(float f);

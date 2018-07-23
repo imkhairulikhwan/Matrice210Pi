@@ -10,15 +10,8 @@
 #define C_EARTH (double)6378137.0
 #define DEG2RAD 0.01745329252       // pi/180
 
-// System includes
-#include <pthread.h>
-
 // DJI OSDK includes
 #include <dji_vehicle.hpp>
-#include <dji_telemetry.hpp>
-
-// User includes
-#include "../util/timer.h"
 
 class FlightController;
 

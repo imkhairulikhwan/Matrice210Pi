@@ -7,6 +7,7 @@
 
 #include "Uart.h"
 
+#include <iostream>
 #include <string>
 #include <sstream>
 

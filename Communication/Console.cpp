@@ -6,6 +6,7 @@
 
 #include "Console.h"
 
+#include <iostream>
 #include <sstream>
 
 #include "../FlightController.h"
@@ -13,6 +14,7 @@
 #include "../Action/ActionData.h"
 #include "../Managers/PackageManager.h"
 #include "../Managers/ThreadManager.h"
+#include "../util/timer.h"
 
 Console::Console(FlightController* flightController) : flightController(flightController) {
 

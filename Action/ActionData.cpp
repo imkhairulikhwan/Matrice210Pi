@@ -17,8 +17,15 @@ ActionData::ActionData(ActionId actionId, size_t size) {
     this->actionId = actionId;
     this->dataSize = size;
     this->dataPosCnt = 0;
+    this->data = nullptr;
     if(size > 0)
         data = new char[size];
+}
+
+
+ActionData::~ActionData() {
+    if(data != nullptr)
+        delete[] data;
 }
 
 bool ActionData::checkSize(size_t size) {

@@ -7,7 +7,8 @@
 #ifndef MATRICE210_PACKAGEMANAGER_H
 #define MATRICE210_PACKAGEMANAGER_H
 
-#include "pthread.h"
+
+#include <pthread.h>
 
 #include <dji_vehicle.hpp>
 

@@ -47,6 +47,7 @@ void Action::add(ActionData *actionData) {
     if(status == -1) {
         int errsv = errno;  // save error code
         DERROR("Action added to queue failed, error : %i", errsv);
+        delete actionData;
     } else {
         //DSTATUS("Action added to queue");
     }

@@ -7,10 +7,7 @@
 #ifndef MATRICE210_POSITIONMISSION_H
 #define MATRICE210_POSITIONMISSION_H
 
-
 #include <dji_vehicle.hpp>
-
-#include "../util/timer.h"
 
 using namespace DJI;
 using namespace DJI::OSDK;

@@ -11,8 +11,6 @@
 #include <pthread.h>
 #include <string>
 
-#include <dji_vehicle.hpp>
-
 using namespace std;
 
 class ThreadManager {

@@ -6,6 +6,12 @@
 
 #include "FlightController.h"
 
+#include <cmath>
+#include <iostream>
+
+#include "util/timer.h"
+#include <dji_linux_helpers.hpp>
+
 #include "Managers/PackageManager.h"
 #include "Managers/ThreadManager.h"
 #include "Mission/PositionMission.h"

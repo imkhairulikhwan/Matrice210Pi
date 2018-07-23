@@ -6,8 +6,13 @@
 
 #include "PositionOffsetMission.h"
 
+#include <cmath>
+
+#include <dji_telemetry.hpp>
+
 #include "../Managers/PackageManager.h"
 #include "../FlightController.h"
+#include "../util/timer.h"
 
 PositionOffsetMission::PositionOffsetMission(FlightController *flightController) {
     this->flightController = flightController;

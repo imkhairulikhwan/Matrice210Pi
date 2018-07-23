@@ -8,21 +8,16 @@
 #define MATRICE210_FLIGHTCONTROLLER_HPP
 
 // System includes
-#include <cmath>
-#include <iostream>
 #include <pthread.h>
 
 // DJI OSDK includes
 #include <dji_vehicle.hpp>
-#include <dji_linux_helpers.hpp>
-
-// User
-#include "util/timer.h"
 
 using namespace std;
 using namespace DJI::OSDK;
 using namespace DJI::OSDK::Telemetry;
 
+class LinuxSetup;
 class PositionMission;
 class VelocityMission;
 class PositionOffsetMission;

@@ -6,6 +6,7 @@
 #include "VelocityMission.h"
 
 #include "../FlightController.h"
+#include "../util/timer.h"
 
 VelocityMission::VelocityMission(FlightController *flightController) {
     this->flightController = flightController;

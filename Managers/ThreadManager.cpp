@@ -4,8 +4,10 @@
  *  @author Jonathan Michel
  */
 
-
 #include "ThreadManager.h"
+
+#include <dji_vehicle.hpp>
+
 #include "../util/timer.h"
 
 bool ThreadManager::start(string name, pthread_t *id, pthread_attr_t *attr, void *(*thread)(void *), void *arg) {

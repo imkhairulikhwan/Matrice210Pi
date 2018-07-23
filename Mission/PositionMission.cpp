@@ -7,6 +7,7 @@
 #include "PositionMission.h"
 
 #include "../FlightController.h"
+#include "../util/timer.h"
 
 PositionMission::PositionMission(FlightController *flightController) {
     this->flightController = flightController;
