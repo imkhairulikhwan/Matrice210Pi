@@ -24,14 +24,14 @@ class PositionOffsetMission;
 
 class FlightController {
 public:
+    void launchFlightControllerThread();
+    void stopFlightControllerThread();
+private:
     // Fight controller thread
     bool flightControllerThreadRunning;
     pthread_t flightControllerThreadID;
     pthread_attr_t flightControllerThreadAttr;
     static void* flightControllerThread(void* param);
-    void launchFlightControllerThread();
-    void stopFlightControllerThread();
-private:
     // Aircraft
     bool emergencyState;
     Vehicle* vehicle;
@@ -56,20 +56,20 @@ public :
     FlightController();
     void setupVehicle(int argc, char** argv);
     // Mobile-On board communication
-    void sendDataToMSDK(uint8_t* data, size_t length);
+    void sendDataToMSDK(const uint8_t* data, size_t length) const;
     // Movement control
     /**
      * Monitored take-off. Blocking call
      * @param timeout
      * @return true if success
      */
-    bool monitoredTakeoff(int timeout = 1);
+    bool monitoredTakeoff(int timeout = 1) const;
     /**
      *  Monitored landing. Blocking call
      * @param timeout
      * @return true if success
      */
-    bool monitoredLanding(int timeout = 1);
+    bool monitoredLanding(int timeout = 1) const;
     /**
      * Control the position and yaw angle of the vehicle.
      * Here to try DJI SDK positionAndYawCtrl() method
@@ -77,14 +77,14 @@ public :
      * @param offset [m]
      * @param yaw [deg}
      */
-    void moveByPosition(Vector3f *offset, float yaw);
+    void moveByPosition(const Vector3f *offset, float yaw);
     /**
      * Velocity Control. Allows user to set a velocity vector.
      * The aircraft will move as described by vector until stopAircraft() call.
      * @param velocity [deg/s]
      * @param yaw [deg/s]
      */
-    void moveByVelocity(Vector3f *velocity, float yaw);
+    void moveByVelocity(const Vector3f *velocity, float yaw);
     /**
      * Position Control. Allows user to set an offset from current location.
      * The aircraft will move to that position and stay there.
@@ -93,23 +93,22 @@ public :
      * @param posThreshold [m]
      * @param yawThreshold [m]
      */
-    void moveByPositionOffset(Vector3f *offset, float yaw,
+    void moveByPositionOffset(const Vector3f *offset, float yaw,
                               float posThreshold = 0.2,
                               float yawThreshold = 1.0);
     void stopAircraft();
     // Emergency safe ObSdk call
-    void positionAndYawCtrl(Vector3f* position, float32_t yaw);
-    void velocityAndYawRateCtrl(Vector3f *velocity, float32_t yaw);
+    void positionAndYawCtrl(const Vector3f* position, float yaw) const;
+    void velocityAndYawRateCtrl(const Vector3f *velocity, float yaw) const;
     // Emergency
     void emergencyStop();
     void emergencyRelease();
     void setEmergencyState(bool state);
-    bool isEmergencyState() { return emergencyState; }
-    // Getters and setters functions // TODO Mutex !
-    Vehicle* getVehicle() { return vehicle; }
-    movingMode_ getMovingMode() { return movingMode; }
+    bool isEmergencyState() const { return emergencyState; }
+    // Getters and setters functions
+    const Vehicle* getVehicle() const { return vehicle; }
+    movingMode_ getMovingMode() const { return movingMode; }
     void setMovingMode(movingMode_ mode);
-
 
 // Static functions
 public:
@@ -118,13 +117,14 @@ public:
  * Accurate when distances are small.
 !*/
     static void localOffsetFromGpsOffset(Vector3f& deltaNed,
-                                         void* target, void* origin);
+                                         const Telemetry::GPSFused *subscriptionTarget,
+                                         const Telemetry::GPSFused *subscriptionOrigin);
     /**
      * toEulerAngle
      * @param quaternionData quaternion
      * @return Rad yaw value
      */
-    static Telemetry::Vector3f toEulerAngle(void* quaternionData);
+    static Telemetry::Vector3f toEulerAngle(const Telemetry::Quaternion *quaternion);
 };
 
 #endif // MATRICE210_FLIGHTCONTROLLER_HPP

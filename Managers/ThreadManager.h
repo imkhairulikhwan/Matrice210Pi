@@ -17,7 +17,7 @@ class ThreadManager {
 
 public:
     static bool start(string name, pthread_t *tid, pthread_attr_t *attr, void *(*thread)(void *), void *arg);
-    static void stop(pthread_t *id);
+    static void stop(const pthread_t *id);
 };
 
 

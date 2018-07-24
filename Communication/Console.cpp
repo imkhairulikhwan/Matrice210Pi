@@ -28,7 +28,7 @@ void Console::launchThread() {
 
 void* Console::consoleThread(void* param) {
     DSTATUS("consoleThread running...");
-    auto c = (Console*) param;
+    auto c = static_cast<Console*>(param);
     // Display interactive prompt
     bool running = true;
     while(running) {
@@ -51,7 +51,7 @@ void* Console::consoleThread(void* param) {
                 position.x = c->getNumber("x: ");
                 position.y = c->getNumber("y: ");
                 position.z = c->getNumber("z: ");
-                float32_t yaw = c->getNumber("yaw: ");
+                float yaw = c->getNumber("yaw: ");
                 actionData = new ActionData(ActionData::moveByPosition,
                                             sizeof(Telemetry::Vector3f) + sizeof(unsigned));
                 actionData->push(position);
@@ -63,7 +63,7 @@ void* Console::consoleThread(void* param) {
                 position.x = c->getNumber("xOffsetDesired: ");
                 position.y = c->getNumber("yOffsetDesired: ");
                 position.z = c->getNumber("zOffsetDesired: ");
-                float32_t yaw = c->getNumber("yawDesired: ");
+                float yaw = c->getNumber("yawDesired: ");
                 actionData = new ActionData(ActionData::moveByPositionOffset,
                                             sizeof(Telemetry::Vector3f) + sizeof(unsigned));
                 actionData->push(position);
@@ -75,7 +75,7 @@ void* Console::consoleThread(void* param) {
                 velocity.x = c->getNumber("Vx: ");
                 velocity.y = c->getNumber("Vy: ");
                 velocity.z = c->getNumber("Vz: ");
-                float32_t yaw = c->getNumber("yaw: ");
+                float yaw = c->getNumber("yaw: ");
                 actionData = new ActionData(ActionData::moveByVelocity,
                                             sizeof(Telemetry::Vector3f) + sizeof(unsigned));
                 actionData->push(velocity);
@@ -110,7 +110,7 @@ void* Console::consoleThread(void* param) {
     }
 }
 
-void Console::displayMenu() {
+void Console::displayMenu() const {
     delay_ms(500);
     cout << endl;
     cout << "Available commands : ";
@@ -126,7 +126,7 @@ void Console::displayMenu() {
     cout << endl;
 }
 
-void Console::displayMenuLine(const char command, const std::string &hint) {
+void Console::displayMenuLine(char command, const std::string &hint) const{
     const int lineLength = 55;
     int length = hint.length();
     if(length < lineLength) {
@@ -139,8 +139,8 @@ void Console::displayMenuLine(const char command, const std::string &hint) {
     }
 }
 
-float32_t Console::getNumber(const std::string &hint) {
-    float32_t number;
+float Console::getNumber(const std::string &hint) const {
+    float number;
     while (true) {
         string input;
         cout << hint;

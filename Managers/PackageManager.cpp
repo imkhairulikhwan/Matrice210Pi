@@ -14,11 +14,11 @@ PackageManager::PackageManager() {
     }
 }
 
-void PackageManager::setVehicle(Vehicle *vehicle) {
+void PackageManager::setVehicle(const Vehicle *vehicle) {
     this->vehicle = vehicle;
 }
 
-bool PackageManager::verify() {
+bool PackageManager::verify() const {
     ACK::ErrorCode ack;
     ack = vehicle->subscribe->verify(timeout);
     if (ACK::getError(ack) != ACK::SUCCESS)  {
@@ -74,7 +74,7 @@ bool PackageManager::unsubscribe(int index) {
     return true;
 }
 
-bool PackageManager::isVehicleInstanced() {
+bool PackageManager::isVehicleInstanced() const {
     if(vehicle == nullptr) {
         DERROR("PackageManager - Vehicle not instanced. Call setVehicle() first !");
         return false;
@@ -82,7 +82,7 @@ bool PackageManager::isVehicleInstanced() {
     return true;
 }
 
-bool PackageManager::validIndex(int index) {
+bool PackageManager::validIndex(int index) const {
     // Separate test for call with PACKAGE_UNAVAILABLE to avoid useless DERROR
     if(index == PACKAGE_UNAVAILABLE)
         return false;

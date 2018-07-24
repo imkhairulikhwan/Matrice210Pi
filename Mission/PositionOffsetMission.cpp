@@ -14,11 +14,11 @@
 #include "../FlightController.h"
 #include "../util/timer.h"
 
-PositionOffsetMission::PositionOffsetMission(FlightController *flightController) {
+PositionOffsetMission::PositionOffsetMission(const FlightController *flightController) {
     this->flightController = flightController;
 }
 
-bool PositionOffsetMission::move(Vector3f *offset, float yaw,
+bool PositionOffsetMission::move(const Vector3f *offset, float yaw,
                                  float posThreshold, float yawThreshold) {
     DSTATUS("PositionOffsetMission move : x = % .2f m, y = % .2f m, z = % .2f m, % .2f deg",
             offset->x, offset->y, offset->z, yaw);
@@ -79,8 +79,8 @@ bool PositionOffsetMission::moveToPosition() {
     currentSubscriptionGPS = vehicle->subscribe->getValue<TOPIC_GPS_FUSED>();
     originSubscriptionGPS = currentSubscriptionGPS;
     FlightController::localOffsetFromGpsOffset(localOffset,
-                             static_cast<void *>(&currentSubscriptionGPS),
-                             static_cast<void *>(&originSubscriptionGPS));
+                             &currentSubscriptionGPS,
+                             &originSubscriptionGPS);
 
     // Get the broadcast GP since we need the height for position.z
     currentBroadcastGP = vehicle->broadcast->getGlobalPosition();
@@ -131,14 +131,14 @@ bool PositionOffsetMission::update() {
         // Get current position in required coordinates and units
         Telemetry::TypeMap<TOPIC_QUATERNION>::type subscriptionQ
                 = vehicle->subscribe->getValue<TOPIC_QUATERNION>();
-        double currentYaw = FlightController::toEulerAngle((static_cast<void *>(&subscriptionQ))).z;
+        double currentYaw = FlightController::toEulerAngle(&subscriptionQ).z;
         Telemetry::TypeMap<TOPIC_GPS_FUSED>::type currentSubscriptionGPS
                 = vehicle->subscribe->getValue<TOPIC_GPS_FUSED>();
 
         Telemetry::Vector3f localOffset;
         FlightController::localOffsetFromGpsOffset(localOffset,
-                                                   static_cast<void *>(&currentSubscriptionGPS),
-                                                   static_cast<void *>(&originSubscriptionGPS));
+                                                   &currentSubscriptionGPS,
+                                                   &originSubscriptionGPS);
 
         // See how much farther we have to go
         double xOffsetRemaining = offset.x - localOffset.x;
@@ -203,7 +203,7 @@ void PositionOffsetMission::stop() {
     }
 }
 
-bool PositionOffsetMission::startGlobalPositionBroadcast() {
+bool PositionOffsetMission::startGlobalPositionBroadcast() const {
     uint8_t freq[16];
     // Channels definition for A3/N3/M600
     freq[0]  = DataBroadcast::FREQ_HOLD; // Timestamp
@@ -229,15 +229,15 @@ bool PositionOffsetMission::startGlobalPositionBroadcast() {
     return true;
 }
 
-unsigned int PositionOffsetMission::getCycleTimeMs() {
+unsigned int PositionOffsetMission::getCycleTimeMs() const {
    return 1000 / (unsigned)controlFreq;
 }
 
-unsigned int PositionOffsetMission::getOutOfBoundsTimeLimit() {
+unsigned int PositionOffsetMission::getOutOfBoundsTimeLimit() const {
    return outOfBoundsLimit * getCycleTimeMs();
 }
 
-unsigned int PositionOffsetMission::getWithinBoundsTimeRequirement() {
+unsigned int PositionOffsetMission::getWithinBoundsTimeRequirement() const {
    return  withinBoundsRequirement * getCycleTimeMs();
 }
 void PositionOffsetMission::resetMissionCounters() {
@@ -245,7 +245,7 @@ void PositionOffsetMission::resetMissionCounters() {
    outOfBoundsCnt = 0;
    brakeCnt = 0;
 }
-void PositionOffsetMission::setOffset(Vector3f* o, double y) {
+void PositionOffsetMission::setOffset(const Vector3f* o, double y) {
    offset.x = o->x;
    offset.y = o->y;
    offset.z = o->z;

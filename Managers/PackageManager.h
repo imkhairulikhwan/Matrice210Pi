@@ -59,21 +59,21 @@ public:
         PACKAGE_UNAVAILABLE,
     };
 private:
-    Vehicle* vehicle = nullptr;
+    const Vehicle* vehicle = nullptr;
     int timeout{1};             /*!< DJI subscription method call timeout */
     bool packageAvailable[DataSubscription::MAX_NUMBER_OF_PACKAGE]; /*!< Available packages */
     /**
      * Verify if setVehicle() has been called
      * @return true is vehicle has been instanced
      */
-    bool isVehicleInstanced();
+    bool isVehicleInstanced() const;
     /**
      * Verify that index is a valid number
      * Range is 0 to DataSubscription::MAX_NUMBER_OF_PACKAGE -1
      * @param index Package index to verify
      * @return true if valid
      */
-    bool validIndex(int index);
+    bool validIndex(int index) const;
     /**
      * Verify that a package is available.
      * See DataSubscription::MAX_NUMBER_OF_PACKAGE
@@ -98,12 +98,12 @@ public:
      * Has to be called before usage to define vehicle to send package
      * @param vehicle Pointer to used vehicle
      */
-    void setVehicle(Vehicle* vehicle);
+    void setVehicle(const Vehicle* vehicle);
     /**
      * Verify version match
      * @return true if version match
      */
-    bool verify();
+    bool verify() const;
     /**
      * Try to allocate package. Setup members of package and start it
      * @param topics List of Topic Names to subscribe in the package

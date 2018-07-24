@@ -24,15 +24,14 @@ ActionData::ActionData(ActionId actionId, size_t size) {
 
 
 ActionData::~ActionData() {
-    if(data != nullptr)
-        delete[] data;
+    delete[] data;
 }
 
-bool ActionData::checkSize(size_t size) {
+bool ActionData::checkSize(size_t size) const{
     return (dataPosCnt + size <= this->dataSize);
 }
 
-bool ActionData::_push(char *c, size_t length) {
+bool ActionData::_push(const char *c, size_t length) {
     pthread_mutex_lock(&mutex);
     if(!checkSize(length)) {
         DERROR("Unable to push data");
@@ -57,7 +56,7 @@ bool ActionData::push(float f) {
     return _push((char *) &f, sizeof(float));
 }
 
-bool ActionData::push(Telemetry::Vector3f &v) {
+bool ActionData::push(const Telemetry::Vector3f &v) {
     return _push((char *) &v, sizeof(Telemetry::Vector3f));
 }
 
@@ -93,7 +92,7 @@ bool ActionData::popFloat(float &f) {
     pthread_mutex_lock(&mutex);
     size_t length = sizeof(float);
     if(dataPosCnt < length) {
-        DERROR("Unable to pop float32_t");
+        DERROR("Unable to pop float");
         pthread_mutex_unlock(&mutex);
         return false;
     }

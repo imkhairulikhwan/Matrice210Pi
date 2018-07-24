@@ -18,7 +18,6 @@ class FlightController;
 
 /**
  * Launch a thread to get char on console and control FlightController
- * TODO replace switch-case with queue to assure priority to emergency stop
  */
 class Console {
 private:
@@ -49,20 +48,20 @@ private:
     /**
      * Display available commands list
      */
-    void displayMenu();
+    void displayMenu() const;
     /**
      * Display available command line
      * @param command Command char
      * @param hint Command description, max hint length = 55 to assure
      * alignment
      */
-    void displayMenuLine(char command, const string &hint);
+    void displayMenuLine(char command, const string &hint) const;
     /**
      * Read float number from console
      * @param hint Description displayed to user
      * @return Read number
      */
-    float32_t getNumber(const string &hint);
+    float getNumber(const string &hint) const;
 
 };
 

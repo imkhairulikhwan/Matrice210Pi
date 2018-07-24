@@ -30,8 +30,8 @@ public:
     Action();
     ~Action();
     void setFlightController(FlightController* flightController) { this->flightController = flightController; }
-    void add(ActionData *actionData);
-    void process();
+    void add(const ActionData *actionData);
+    void process() const;
 };
 
 #endif //MATRICE210_ACTION_H

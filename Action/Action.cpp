@@ -36,7 +36,7 @@ Action::~Action() {
     mq_unlink(ACTION_QUEUE_NAME);
 }
 
-void Action::add(ActionData *actionData) {
+void Action::add(const ActionData *actionData) {
     pthread_mutex_lock(&mutex);
     static struct timespec sendTimeout;
     sendTimeout.tv_sec = 0;
@@ -54,7 +54,7 @@ void Action::add(ActionData *actionData) {
     pthread_mutex_unlock(&mutex);
 }
 
-void Action::process() {
+void Action::process() const {
     if(flightController == nullptr) {
         DERROR("Please call setFlightController() first");
         return;
@@ -74,7 +74,7 @@ void Action::process() {
                 break;
             case ActionData::moveByPosition: {
                 Telemetry::Vector3f position;
-                float32_t yaw;
+                float yaw;
                 action->popFloat(yaw);
                 action->popVector3f(position);
                 flightController->moveByPosition(&position, yaw);
@@ -82,7 +82,7 @@ void Action::process() {
                 break;
             case ActionData::moveByPositionOffset: {
                 Telemetry::Vector3f position;
-                float32_t yaw;
+                float yaw;
                 action->popFloat(yaw);
                 action->popVector3f(position);
                 flightController->moveByPositionOffset(&position, yaw);
@@ -90,7 +90,7 @@ void Action::process() {
                 break;
             case ActionData::moveByVelocity: {
                 Telemetry::Vector3f velocity;
-                float32_t yaw;
+                float yaw;
                 action->popFloat(yaw);
                 action->popVector3f(velocity);
                 flightController->moveByVelocity(&velocity, yaw);

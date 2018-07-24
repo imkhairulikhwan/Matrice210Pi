@@ -46,7 +46,7 @@ public:
      * Get used FlightController
      * @return FlightController pointer
      */
-    FlightController* getFlightController() {return flightController; }
+    FlightController* getFlightController() const { return flightController; }
 };
 
 #endif //MATRICE210_MOBILECOMMUNICATION_H

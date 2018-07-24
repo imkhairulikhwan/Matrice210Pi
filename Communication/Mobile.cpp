@@ -23,7 +23,7 @@ void Mobile::setup() {
 void Mobile::mobileCallback(Vehicle *vehicle, RecvContainer recvFrame,
                             UserData userData) {
     // Cast userData to Mobile object to have access to corresponding FlightController
-    auto *m = (Mobile *) userData;
+    auto *m = static_cast<Mobile *>(userData);
 
     uint8_t formatFrameLength = OpenProtocol::PackageMin + OpenProtocol::CRCHead;
     uint16_t msgLength = recvFrame.recvInfo.len - formatFrameLength;
@@ -48,6 +48,10 @@ void Mobile::mobileCallback(Vehicle *vehicle, RecvContainer recvFrame,
                     break;
                 case 'l':
                     actionData = new ActionData(ActionData::monitoredLanding);
+                    break;
+                case 'm':
+                    DSTATUS("mission !");
+                    break;
                 default:
                     DERROR("MOC - Unknown command");
                     break;

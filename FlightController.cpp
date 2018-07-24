@@ -68,7 +68,7 @@ void FlightController::setupVehicle(int argc, char **argv) {
 }
 
 
-bool FlightController::monitoredTakeoff(int timeout) {
+bool FlightController::monitoredTakeoff(int timeout) const {
     DSTATUS("Monitored takeoff launched");
     // Telemetry: Verify the subscription
     if (!PackageManager::instance().verify())
@@ -174,7 +174,6 @@ bool FlightController::monitoredTakeoff(int timeout) {
 
 
     // Cleanup
-    cout << "clear " << pkgIndex << endl;
     PackageManager::instance().unsubscribe(pkgIndex);
 
     return true;
@@ -183,7 +182,7 @@ bool FlightController::monitoredTakeoff(int timeout) {
 /**
  *  Monitored landing. Return true if success
 */
-bool FlightController::monitoredLanding(int timeout) {
+bool FlightController::monitoredLanding(int timeout) const {
     // Telemetry: Verify the subscription
     if (!PackageManager::instance().verify())
         return false;
@@ -303,21 +302,21 @@ void *FlightController::flightControllerThread(void *param) {
     return nullptr;
 }
 
-void FlightController::moveByPosition(Vector3f *position, float yaw) {
+void FlightController::moveByPosition(const Vector3f *position, float yaw) {
     // Mission parameters
     positionMission->move(position, yaw);
     movingMode = POSITION;
 
 }
 
-void FlightController::moveByVelocity(Vector3f *velocity, float yaw) {
+void FlightController::moveByVelocity(const Vector3f *velocity, float yaw) {
     // Mission parameters
     velocityMission->move(velocity, yaw);
     movingMode = VELOCITY;
 }
 
 
-void FlightController::moveByPositionOffset(Vector3f *offset, float yaw,
+void FlightController::moveByPositionOffset(const Vector3f *offset, float yaw,
                                             float posThreshold, float yawThreshold) {
     positionOffsetMission->move(offset, yaw,
                                 posThreshold, yawThreshold);
@@ -332,13 +331,13 @@ void FlightController::stopAircraft() {
     movingMode = STOP;
 }
 
-void FlightController::velocityAndYawRateCtrl(Vector3f *velocity, float32_t yaw) {
+void FlightController::velocityAndYawRateCtrl(const Vector3f *velocity, float yaw) const {
     if (!isEmergencyState()) {
         vehicle->control->velocityAndYawRateCtrl(velocity->x, velocity->y, velocity->z, yaw);
     }
 }
 
-void FlightController::positionAndYawCtrl(Vector3f *position, float32_t yaw) {
+void FlightController::positionAndYawCtrl(const Vector3f *position, float yaw) const {
     if (!isEmergencyState()) {
         vehicle->control->positionAndYawCtrl(position->x, position->y, position->z, yaw);
     }
@@ -358,9 +357,9 @@ void FlightController::emergencyRelease() {
     DSTATUS("Emergency break released !");
 }
 
-void FlightController::sendDataToMSDK(uint8_t *data, size_t length) {
+void FlightController::sendDataToMSDK(const uint8_t *data, size_t length) const {
     pthread_mutex_lock(&sendDataToMSDK_mutex);
-    vehicle->moc->sendDataToMSDK(data, (uint8_t) length);
+    vehicle->moc->sendDataToMSDK(const_cast<uint8_t*>(data), (uint8_t) length);
     pthread_mutex_unlock(&sendDataToMSDK_mutex);
 }
 
@@ -381,9 +380,8 @@ void FlightController::setEmergencyState(bool state) {
     Functions given by DJI Programming Guide
 !*/
 void FlightController::localOffsetFromGpsOffset(Telemetry::Vector3f &deltaNed,
-                                                void *target, void *origin) {
-    auto subscriptionTarget = (Telemetry::GPSFused *) target;
-    auto subscriptionOrigin = (Telemetry::GPSFused *) origin;
+                                                const Telemetry::GPSFused *subscriptionTarget,
+                                                const Telemetry::GPSFused *subscriptionOrigin) {
     double deltaLon = subscriptionTarget->longitude - subscriptionOrigin->longitude;
     double deltaLat = subscriptionTarget->latitude - subscriptionOrigin->latitude;
     deltaNed.x = (float32_t) (deltaLat * C_EARTH);
@@ -392,9 +390,8 @@ void FlightController::localOffsetFromGpsOffset(Telemetry::Vector3f &deltaNed,
     deltaNed.z = subscriptionTarget->altitude - subscriptionOrigin->altitude;
 }
 
-Telemetry::Vector3f FlightController::toEulerAngle(void *quaternionData) {
+Telemetry::Vector3f FlightController::toEulerAngle(const Telemetry::Quaternion *quaternion) {
     Telemetry::Vector3f ans;
-    auto quaternion = (Telemetry::Quaternion *) quaternionData;
 
     double q2sqr = quaternion->q2 * quaternion->q2;
     double t0 =

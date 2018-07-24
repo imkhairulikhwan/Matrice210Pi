@@ -14,8 +14,8 @@
 #include "../FlightController.h"
 #include "../Managers/ThreadManager.h"
 
-Uart::Uart(const char *device, uint32_t baudrate) {
-    serialDevice = new LinuxSerialDevice(device, baudrate);
+Uart::Uart(const char *device, uint32_t baudRate) {
+    serialDevice = new LinuxSerialDevice(device, baudRate);
     serialDevice->init();
 }
 
@@ -29,17 +29,17 @@ void Uart::launchRxThread() {
                          uartRxThread, (void*)this);
 }
 
-void Uart::send(const uint8_t *buf, size_t len) {
+void Uart::send(const uint8_t *buf, size_t len) const {
     serialDevice->send(buf, len);
 }
 
-size_t Uart::read(uint8_t *buf, size_t len) {
+size_t Uart::read(uint8_t *buf, size_t len) const{
     return serialDevice->readall(buf, len);
 }
 
 void *Uart::uartRxThread(void *param) {
     DSTATUS("uartRxThread running...");
-    auto uart = (Uart*)param;
+    auto uart = static_cast<Uart*>(param);
     char rxBuffer[256];
     uint8_t rxChar;
     int rxIndex = 0;

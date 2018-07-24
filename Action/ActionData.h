@@ -31,8 +31,8 @@ private:
     size_t dataPosCnt;
     size_t dataSize;
     ActionId actionId;
-    bool _push(char *c, size_t length);
-    bool checkSize(size_t size);
+    bool _push(const char *c, size_t length);
+    bool checkSize(size_t size) const;
     // Mutex
     static pthread_mutex_t mutex;
 public:
@@ -41,13 +41,13 @@ public:
     bool push(char c);
     bool push(unsigned u);
     bool push(float f);
-    bool push(Telemetry::Vector3f &v);
+    bool push(const Telemetry::Vector3f &v);
     bool popChar(char &c);
     bool popUnsigned(unsigned &u);
     bool popFloat(float &f);
     bool popVector3f(Telemetry::Vector3f &v);
     void setAction(ActionId actionId1) { this->actionId = actionId1; }
-    ActionId getActionId() {return actionId; }
+    ActionId getActionId() const { return actionId; }
 };
 
 #endif //MATRICE210_ACTIONDATA_H

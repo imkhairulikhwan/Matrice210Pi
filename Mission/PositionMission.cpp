@@ -9,11 +9,11 @@
 #include "../FlightController.h"
 #include "../util/timer.h"
 
-PositionMission::PositionMission(FlightController *flightController) {
+PositionMission::PositionMission(const FlightController *flightController) {
     this->flightController = flightController;
 }
 
-void PositionMission::move(Vector3f *position, float yaw) {
+void PositionMission::move(const Vector3f *position, float yaw) {
     DSTATUS("PositionMission move : x = % .2f m, y = % .2f m, z = % .2f m, % .2f deg",
         position->x, position->y, position->z, yaw);
     this->position.x = position->x;
@@ -22,6 +22,6 @@ void PositionMission::move(Vector3f *position, float yaw) {
     this->yaw = yaw;
 }
 
-void PositionMission::update() {
+void PositionMission::update() const {
     flightController->positionAndYawCtrl(&position, yaw);
 }

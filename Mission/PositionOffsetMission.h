@@ -20,8 +20,8 @@ using namespace DJI::OSDK::Telemetry;
 
 class PositionOffsetMission {
 private:
-    FlightController* flightController{nullptr};
-    Vehicle* vehicle{nullptr};
+    const FlightController* flightController{nullptr};
+    const Vehicle* vehicle{nullptr};
     // Offset values
     Vector3f offset{};              // Offset desired [m]
     double targetYaw{0.0};         // yaw desired [rad]
@@ -48,7 +48,7 @@ private:
     Telemetry::TypeMap<TOPIC_GPS_FUSED>::type originSubscriptionGPS;
     int pkgIndex{0};                // Package index used by subscription
 public:
-    explicit PositionOffsetMission(FlightController* flightController);
+    explicit PositionOffsetMission(const FlightController* flightController);
     /**
      * Move aircraft of desired offset in m and set yaw in deg
      * @param offset            offset desired [m]
@@ -57,20 +57,20 @@ public:
      * @param yawThreshold      yaw threshold [deg]
      * @return True if mission correctly initialized
      */
-    bool move(Vector3f* offset, float yaw,
+    bool move(const Vector3f* offset, float yaw,
                           float posThreshold, float yawThreshold);
     bool update();
-    unsigned int getCycleTimeMs();
+    unsigned int getCycleTimeMs() const;
 private:
     bool moveToPosition();
     void stop();
     // Mission functions
-    unsigned int getOutOfBoundsTimeLimit();
-    unsigned int getWithinBoundsTimeRequirement();
+    unsigned int getOutOfBoundsTimeLimit() const;
+    unsigned int getWithinBoundsTimeRequirement() const;
     void resetMissionCounters();
-    void setOffset(Vector3f* o, double y);
+    void setOffset(const Vector3f* o, double y);
     void setThreshold(float posThreshold, double yawThreshold);
-    bool startGlobalPositionBroadcast();
+    bool startGlobalPositionBroadcast() const ;
     };
 
 
