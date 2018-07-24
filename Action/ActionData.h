@@ -18,9 +18,7 @@ public:
     enum ActionId {
         monitoredTakeoff,
         monitoredLanding,
-        moveByPosition,
-        moveByPositionOffset,
-        moveByVelocity,
+        mission,
         sendDataToMSDK,
         stopAircraft,
         emergencyStop,
@@ -38,11 +36,15 @@ private:
 public:
     explicit ActionData(ActionId actionId, size_t size = 0);
     ~ActionData();
+    static void unitTest();
     bool push(char c);
+    bool push(int i);
     bool push(unsigned u);
     bool push(float f);
     bool push(const Telemetry::Vector3f &v);
+    bool push(const uint8_t* data, size_t length);
     bool popChar(char &c);
+    bool popInt(int &i);
     bool popUnsigned(unsigned &u);
     bool popFloat(float &f);
     bool popVector3f(Telemetry::Vector3f &v);

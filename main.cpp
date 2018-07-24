@@ -29,6 +29,9 @@ Mobile *mobileCommunication;
  */
 int main(int argc, char** argv)
 {
+    // Unit test for action data class
+    ActionData::unitTest();
+
     // Initialize flight controller
     flightController = new FlightController();
     flightController->setupVehicle(argc, argv);
