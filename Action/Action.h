@@ -26,6 +26,8 @@ private:
     // Mutex
     static pthread_mutex_t mutex;
     FlightController* flightController;
+    void velocityMission(ActionData *action) const;
+    void positionOffsetMission(ActionData *action) const;
 public:
     Action();
     ~Action();

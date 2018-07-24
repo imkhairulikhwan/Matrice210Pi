@@ -52,10 +52,14 @@ void* Console::consoleThread(void* param) {
                 position.y = c->getNumber("y: ");
                 position.z = c->getNumber("z: ");
                 float yaw = c->getNumber("yaw: ");
-                actionData = new ActionData(ActionData::moveByPosition,
-                                            sizeof(Telemetry::Vector3f) + sizeof(unsigned));
+                actionData = new ActionData(ActionData::mission,
+                                            sizeof(Telemetry::Vector3f) // position
+                                            + sizeof(unsigned)          // mission action
+                                            + 2 * sizeof(char));        // mission kind
                 actionData->push(position);
                 actionData->push(yaw);
+                actionData->push((char)1);    // action
+                actionData->push((char)2);    // mission kind
             }
                 break;
             case '4': {
@@ -64,10 +68,14 @@ void* Console::consoleThread(void* param) {
                 position.y = c->getNumber("yOffsetDesired: ");
                 position.z = c->getNumber("zOffsetDesired: ");
                 float yaw = c->getNumber("yawDesired: ");
-                actionData = new ActionData(ActionData::moveByPositionOffset,
-                                            sizeof(Telemetry::Vector3f) + sizeof(unsigned));
+                actionData = new ActionData(ActionData::mission,
+                                            sizeof(Telemetry::Vector3f) // position offset
+                                            + sizeof(unsigned)          // mission action
+                                            + 2 * sizeof(char));        // mission kind
                 actionData->push(position);
                 actionData->push(yaw);
+                actionData->push((char)1);    // action
+                actionData->push((char)3);    // mission kind
             }
                 break;
             case '5': {
@@ -76,10 +84,14 @@ void* Console::consoleThread(void* param) {
                 velocity.y = c->getNumber("Vy: ");
                 velocity.z = c->getNumber("Vz: ");
                 float yaw = c->getNumber("yaw: ");
-                actionData = new ActionData(ActionData::moveByVelocity,
-                                            sizeof(Telemetry::Vector3f) + sizeof(unsigned));
+                actionData = new ActionData(ActionData::mission,
+                                            sizeof(Telemetry::Vector3f) // velocity
+                                            + sizeof(unsigned)          // mission action
+                                            + 2 * sizeof(char));        // mission kind
                 actionData->push(velocity);
                 actionData->push(yaw);
+                actionData->push((char)1);    // action
+                actionData->push((char)1);    // mission kind
             }
                 break;
             case 'e':

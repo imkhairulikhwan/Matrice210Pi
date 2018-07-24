@@ -15,8 +15,8 @@
           <mappings>
             <mapping deploy="/Matrice210/Onboard-SDK/osdk-core" local="$PROJECT_DIR$/../../Onboard-SDK/osdk-core" web="/" />
             <mapping deploy="/Matrice210/code/Matrice210" local="$PROJECT_DIR$" web="/" />
-            <mapping deploy="/Matrice210/Onboard-SDK/sample/linux/common" local="$PROJECT_DIR$/../../Onboard-SDK/sample/linux/common/dji_linux_environment.cpp" web="/" />
-            <mapping deploy="/Matrice210/Onboard-SDK/sample/linux/common" local="$PROJECT_DIR$/../../Onboard-SDK/sample/linux/common/dji_linux_helpers.cpp" web="/" />
+            <mapping deploy="/Matrice210/Onboard-SDK/sample/linux/common/dji_linux_environment.cpp" local="$PROJECT_DIR$/../../Onboard-SDK/sample/linux/common/dji_linux_environment.cpp" web="/" />
+            <mapping deploy="/Matrice210/Onboard-SDK/sample/linux/common/dji_linux_helpers.cpp" local="$PROJECT_DIR$/../../Onboard-SDK/sample/linux/common/dji_linux_helpers.cpp" web="/" />
           </mappings>
           <excludedPaths>
             <excludedPath local="true" path="$PROJECT_DIR$/sourcetrail" />

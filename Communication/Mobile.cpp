@@ -31,7 +31,7 @@ void Mobile::mobileCallback(Vehicle *vehicle, RecvContainer recvFrame,
 
     ActionData* actionData = nullptr;
     if(data[0] == COMMAND_CHAR) {
-        if(msgLength == 2) {
+        if(msgLength >= 2) {
             switch (data[1]) {
                 case 'e':
                     // Emergency stop is called directly here to avoid delay
@@ -49,8 +49,16 @@ void Mobile::mobileCallback(Vehicle *vehicle, RecvContainer recvFrame,
                 case 'l':
                     actionData = new ActionData(ActionData::monitoredLanding);
                     break;
-                case 'm':
-                    DSTATUS("mission !");
+                case 'm':   // mission
+                    if(msgLength >= 4) { // 4 command bytes and unknown data length
+                        size_t dataLength =  msgLength - (size_t)2;
+                        actionData = new ActionData(ActionData::mission, dataLength);
+                        actionData->push(data+4, dataLength-2);
+                        actionData->push((char)data[3]);    // action
+                        actionData->push((char)data[2]);    // mission kind
+                    } else {
+                        DERROR("Mission data format error");
+                    }
                     break;
                 default:
                     DERROR("MOC - Unknown command");
@@ -67,6 +75,6 @@ void Mobile::mobileCallback(Vehicle *vehicle, RecvContainer recvFrame,
             msgLength = 99;
         }
         data[msgLength] = '\0';
-        DSTATUS("MOC - String received :) : %s", recvFrame.recvData.raw_ack_array);
+        DSTATUS("MOC - String received : %s", recvFrame.recvData.raw_ack_array);
     }
 }

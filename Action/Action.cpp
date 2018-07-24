@@ -72,28 +72,28 @@ void Action::process() const {
             case ActionData::monitoredLanding:
                 flightController->monitoredLanding();
                 break;
-            case ActionData::moveByPosition: {
-                Telemetry::Vector3f position;
-                float yaw;
-                action->popFloat(yaw);
-                action->popVector3f(position);
-                flightController->moveByPosition(&position, yaw);
-            }
-                break;
-            case ActionData::moveByPositionOffset: {
-                Telemetry::Vector3f position;
-                float yaw;
-                action->popFloat(yaw);
-                action->popVector3f(position);
-                flightController->moveByPositionOffset(&position, yaw);
-            }
-                break;
-            case ActionData::moveByVelocity: {
-                Telemetry::Vector3f velocity;
-                float yaw;
-                action->popFloat(yaw);
-                action->popVector3f(velocity);
-                flightController->moveByVelocity(&velocity, yaw);
+            case ActionData::mission: {
+                char mission;
+                // todo enum mission kind
+                if(action->popChar(mission)) {
+                    switch ((unsigned) mission){
+                        case 1: // Velocity mission
+                            velocityMission(action);
+                            break;
+                        case 2:
+                            // TODO
+                            DERROR("Position mission - To implement");
+                            break;
+                        case 3: // Position offset mission
+                            positionOffsetMission(action);
+                            break;
+                        default:
+                            DERROR("Mission - Unknown mission kind");
+                            break;
+                    }
+                } else {
+                    DERROR("Mission - Unable to determine mission kind");
+                }
             }
                 break;
             case ActionData::sendDataToMSDK:
@@ -112,5 +112,35 @@ void Action::process() const {
                 break;
         }
         delete action;
+    }
+}
+
+void Action::velocityMission(ActionData *action) const {
+    char task;
+    Vector3f v;
+    float yaw;
+    if(action->popChar(task)) {
+        if(task == 1) { // new mission
+            action->popFloat(yaw);
+            action->popVector3f(v);
+            flightController->moveByVelocity(&v, yaw);
+        }
+    } else {
+        DERROR("Unknown task");
+    }
+}
+
+void Action::positionOffsetMission(ActionData *action) const {
+    char task;
+    Vector3f v;
+    float yaw;
+    if(action->popChar(task)) {
+        if(task == 1) { // new mission
+            action->popFloat(yaw);
+            action->popVector3f(v);
+            flightController->moveByPositionOffset(&v, yaw);
+        }
+    } else {
+        DERROR("Unknown task");
     }
 }
