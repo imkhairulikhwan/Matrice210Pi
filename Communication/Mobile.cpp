@@ -6,7 +6,8 @@
 
 #include "Mobile.h"
 
-#include "../FlightController.h"
+#include "../Aircraft/FlightController.h"
+#include "../Aircraft/Watchdog.h"
 #include "../Action/Action.h"
 #include "../Action/ActionData.h"
 
@@ -38,21 +39,21 @@ void Mobile::mobileCallback(Vehicle *vehicle, RecvContainer recvFrame,
                     m->getFlightController()->emergencyStop();
                     break;
                 case 'r':
-                    actionData = new ActionData(ActionData::emergencyRelease);
+                    actionData = new ActionData(ActionData::ActionId::emergencyRelease);
                     break;
                 case 's':
-                    actionData = new ActionData(ActionData::stopAircraft);
+                    actionData = new ActionData(ActionData::ActionId::stopAircraft);
                     break;
                 case 't':
-                    actionData = new ActionData(ActionData::monitoredTakeoff);
+                    actionData = new ActionData(ActionData::ActionId::takeOff);
                     break;
                 case 'l':
-                    actionData = new ActionData(ActionData::monitoredLanding);
+                    actionData = new ActionData(ActionData::ActionId::landing);
                     break;
                 case 'm':   // mission
                     if(msgLength >= 4) { // 4 command bytes and unknown data length
                         size_t dataLength =  msgLength - (size_t)2;
-                        actionData = new ActionData(ActionData::mission, dataLength);
+                        actionData = new ActionData(ActionData::ActionId::mission, dataLength);
                         actionData->push(data+4, dataLength-2);
                         actionData->push((char)data[3]);    // action
                         actionData->push((char)data[2]);    // mission kind
@@ -60,14 +61,18 @@ void Mobile::mobileCallback(Vehicle *vehicle, RecvContainer recvFrame,
                         DERROR("Mission data format error");
                     }
                     break;
+                case 'w':
+                    actionData = new ActionData(ActionData::ActionId::watchdog);
+                    //m->getFlightController()->getWatchdog()->reset();
+                    break;
                 default:
-                    DERROR("MOC - Unknown command");
+                    DERROR("Unknown command");
                     break;
             }
             if(actionData != nullptr)
                 Action::instance().add(actionData);
         } else {
-            DERROR("MOC - Unknown command format");
+            DERROR("Unknown command format");
         }
     } else {
         // Data received displayed as string
@@ -75,6 +80,6 @@ void Mobile::mobileCallback(Vehicle *vehicle, RecvContainer recvFrame,
             msgLength = 99;
         }
         data[msgLength] = '\0';
-        DSTATUS("MOC - String received : %s", recvFrame.recvData.raw_ack_array);
+        DSTATUS("String received : %s", recvFrame.recvData.raw_ack_array);
     }
 }

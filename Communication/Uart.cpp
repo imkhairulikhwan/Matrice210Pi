@@ -11,7 +11,7 @@
 #include <string>
 #include <sstream>
 
-#include "../FlightController.h"
+#include "../Aircraft/FlightController.h"
 #include "../Managers/ThreadManager.h"
 
 Uart::Uart(const char *device, uint32_t baudRate) {
@@ -57,7 +57,7 @@ void *Uart::uartRxThread(void *param) {
             // '@' indicate end of transmission
             if(rxChar == '@') {
                 DSTATUS("Frame received : %u", rxIndex);
-                // TODO Launch in new thread
+                // TODO Launch in new thread ?
                 // Process data
                 long data_i[20];
                 float data_f[20];

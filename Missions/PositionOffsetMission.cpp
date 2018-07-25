@@ -11,10 +11,10 @@
 #include <dji_telemetry.hpp>
 
 #include "../Managers/PackageManager.h"
-#include "../FlightController.h"
+#include "../Aircraft/FlightController.h"
 #include "../util/timer.h"
 
-PositionOffsetMission::PositionOffsetMission(const FlightController *flightController) {
+PositionOffsetMission::PositionOffsetMission(FlightController *flightController) {
     this->flightController = flightController;
 }
 
@@ -49,6 +49,8 @@ bool PositionOffsetMission::move(const Vector3f *offset, float yaw,
             DERROR("PositionOffset mission aborted");
             return false;
         }
+
+        missionRunning = true;
     }
 
     // Broadcast height is used since relative height through subscription arrived
@@ -113,7 +115,6 @@ bool PositionOffsetMission::moveToPosition() {
     // Since subscription cannot give us a relative height, use broadcast.
     positionToMove.z = currentBroadcastGP.height + offset.z;
 
-    missionRunning = true;
     startTime = getTimeMs();
 
     // update() has now to be called continuously

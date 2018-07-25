@@ -29,6 +29,6 @@ bool ThreadManager::start(string name, pthread_t *id, pthread_attr_t *attr, void
 }
 
 void ThreadManager::stop(const pthread_t *id) {
-    // TODO Doesn't work, to bugfix
+    // TODO Doesn't work, to bugfix, unused now
     pthread_join(*id, nullptr);
 }

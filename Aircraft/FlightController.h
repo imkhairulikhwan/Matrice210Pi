@@ -17,7 +17,10 @@ using namespace std;
 using namespace DJI::OSDK;
 using namespace DJI::OSDK::Telemetry;
 
+class Watchdog;
+class Emergency;
 class LinuxSetup;
+class MonitoredMission;
 class PositionMission;
 class VelocityMission;
 class PositionOffsetMission;
@@ -33,9 +36,10 @@ private:
     pthread_attr_t flightControllerThreadAttr;
     static void* flightControllerThread(void* param);
     // Aircraft
-    bool emergencyState;
+    Emergency* emergency;
     Vehicle* vehicle;
     LinuxSetup* linuxEnvironment;
+    Watchdog* watchdog;
     // Moving modes
     enum movingMode_ {
         WAIT,
@@ -45,31 +49,22 @@ private:
         POSITION
     } movingMode;
     // Missions
+    MonitoredMission* monitoredMission;
     PositionMission* positionMission;
     PositionOffsetMission* positionOffsetMission;
     VelocityMission* velocityMission;
     // Mutex
     static pthread_mutex_t sendDataToMSDK_mutex;
-    static pthread_mutex_t emergencyState_mutex;
     static pthread_mutex_t movingMode_mutex;
 public :
     FlightController();
+    ~FlightController();
     void setupVehicle(int argc, char** argv);
     // Mobile-On board communication
     void sendDataToMSDK(const uint8_t* data, size_t length) const;
     // Movement control
-    /**
-     * Monitored take-off. Blocking call
-     * @param timeout
-     * @return true if success
-     */
-    bool monitoredTakeoff(int timeout = 1) const;
-    /**
-     *  Monitored landing. Blocking call
-     * @param timeout
-     * @return true if success
-     */
-    bool monitoredLanding(int timeout = 1) const;
+    bool takeoff();
+    bool landing();
     /**
      * Control the position and yaw angle of the vehicle.
      * Here to try DJI SDK positionAndYawCtrl() method
@@ -96,18 +91,18 @@ public :
     void moveByPositionOffset(const Vector3f *offset, float yaw,
                               float posThreshold = 0.2,
                               float yawThreshold = 1.0);
+    // Stop and emergency
     void stopAircraft();
-    // Emergency safe ObSdk call
-    void positionAndYawCtrl(const Vector3f* position, float yaw) const;
-    void velocityAndYawRateCtrl(const Vector3f *velocity, float yaw) const;
-    // Emergency
     void emergencyStop();
     void emergencyRelease();
-    void setEmergencyState(bool state);
-    bool isEmergencyState() const { return emergencyState; }
+    // Emergency safe ObSdk call
+    void positionAndYawCtrl(const Vector3f* position, float yaw);
+    void velocityAndYawRateCtrl(const Vector3f *velocity, float yaw);
+
     // Getters and setters functions
-    const Vehicle* getVehicle() const { return vehicle; }
+    Vehicle* getVehicle() const { return vehicle; }
     movingMode_ getMovingMode() const { return movingMode; }
+    Watchdog* getWatchdog() const { return watchdog; }
     void setMovingMode(movingMode_ mode);
 
 // Static functions

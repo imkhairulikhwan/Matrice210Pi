@@ -17,13 +17,13 @@ class FlightController;
 
 class VelocityMission {
 private:
-    const FlightController* flightController;
+    FlightController* flightController;
     Vector3f velocity;
     float yaw;
 public:
-    explicit VelocityMission(const FlightController *flightController);
+    explicit VelocityMission(FlightController *flightController);
     void move(const Vector3f *velocity, float yaw);
-    void update() const;
+    void update();
 };
 
 

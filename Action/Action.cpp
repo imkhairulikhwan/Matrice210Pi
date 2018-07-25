@@ -8,7 +8,8 @@
 #include "Action.h"
 
 #include "ActionData.h"
-#include "../FlightController.h"
+#include "../Aircraft/FlightController.h"
+#include "../Aircraft/Watchdog.h"
 
 pthread_mutex_t Action::mutex = PTHREAD_MUTEX_INITIALIZER;
 
@@ -64,27 +65,26 @@ void Action::process() const {
     // Blocking call
     int status = mq_receive(actionQueue, (char *)&action, sizeof(void *), NULL);
 
+    // queue had a message, safety verification
     if(status >= 0) {
         switch(action->getActionId()) {
-            case ActionData::monitoredTakeoff:
-                flightController->monitoredTakeoff();
+            case ActionData::ActionId::takeOff:
+                flightController->takeoff();
                 break;
-            case ActionData::monitoredLanding:
-                flightController->monitoredLanding();
+            case ActionData::ActionId::landing:
+                flightController->landing();
                 break;
-            case ActionData::mission: {
+            case ActionData::ActionId::mission: {
                 char mission;
-                // todo enum mission kind
                 if(action->popChar(mission)) {
                     switch ((unsigned) mission){
-                        case 1: // Velocity mission
+                        case M210_MissionType::VELOCITY:    // Velocity mission
                             velocityMission(action);
                             break;
-                        case 2:
-                            // TODO
-                            DERROR("Position mission - To implement");
+                        case M210_MissionType::POSITION :    // Position mission
+                            positionMission(action);
                             break;
-                        case 3: // Position offset mission
+                        case M210_MissionType::POSITION_OFFSET: // Position offset mission
                             positionOffsetMission(action);
                             break;
                         default:
@@ -92,24 +92,26 @@ void Action::process() const {
                             break;
                     }
                 } else {
-                    DERROR("Mission - Unable to determine mission kind");
+                    DERROR("Mission - Unable to determine mission type");
                 }
             }
                 break;
-            case ActionData::sendDataToMSDK:
+            case ActionData::ActionId::sendDataToMSDK:
                 break;
-            case ActionData::stopAircraft: {
+            case ActionData::ActionId::stopAircraft:
                 flightController->stopAircraft();
-            }
                 break;
-            case ActionData::emergencyStop:{
+            case ActionData::ActionId::emergencyStop:
                 flightController->emergencyStop();
-            }
                 break;
-            case ActionData::emergencyRelease:{
+            case ActionData::ActionId::emergencyRelease:
                 flightController->emergencyRelease();
-            }
                 break;
+            case ActionData::ActionId::watchdog:
+                flightController->getWatchdog()->reset();
+                break;
+            default:
+                DERROR("Unknown action");
         }
         delete action;
     }
@@ -120,13 +122,32 @@ void Action::velocityMission(ActionData *action) const {
     Vector3f v;
     float yaw;
     if(action->popChar(task)) {
-        if(task == 1) { // new mission
+        if(task == M210_MissionAction::START) { // start mission
             action->popFloat(yaw);
             action->popVector3f(v);
             flightController->moveByVelocity(&v, yaw);
+        } else {
+            DERROR("Unknown task");
         }
     } else {
-        DERROR("Unknown task");
+        DERROR("Unable to determine task");
+    }
+}
+
+void Action::positionMission(ActionData *action) const {
+    char task;
+    Vector3f v;
+    float yaw;
+    if(action->popChar(task)) {
+        if(task == M210_MissionAction::START) { // start mission
+            action->popFloat(yaw);
+            action->popVector3f(v);
+            flightController->moveByPosition(&v, yaw);
+        } else {
+            DERROR("Unknown task");
+        }
+    } else {
+        DERROR("Unable to determine task");
     }
 }
 
@@ -135,12 +156,14 @@ void Action::positionOffsetMission(ActionData *action) const {
     Vector3f v;
     float yaw;
     if(action->popChar(task)) {
-        if(task == 1) { // new mission
+        if(task == M210_MissionAction::START) { // start mission
             action->popFloat(yaw);
             action->popVector3f(v);
             flightController->moveByPositionOffset(&v, yaw);
+        } else {
+            DERROR("Unknown task");
         }
     } else {
-        DERROR("Unknown task");
+        DERROR("Unable to determine task");
     }
 }

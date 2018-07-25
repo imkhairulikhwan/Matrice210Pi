@@ -10,7 +10,7 @@
 
 #include <dji_vehicle.hpp>
 
-#include "FlightController.h"
+#include "Aircraft/FlightController.h"
 #include "Action/Action.h"
 #include "Action/ActionData.h"
 #include "Managers/PackageManager.h"

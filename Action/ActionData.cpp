@@ -11,7 +11,6 @@
 #include <cstddef>
 
 // TODO Find a way to do pop with RTTI (Templates)
-// TODO Pop in fifo instead of current filo !
 
 pthread_mutex_t ActionData::mutex = PTHREAD_MUTEX_INITIALIZER;
 

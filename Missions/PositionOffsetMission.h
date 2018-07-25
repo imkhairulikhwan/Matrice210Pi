@@ -20,8 +20,8 @@ using namespace DJI::OSDK::Telemetry;
 
 class PositionOffsetMission {
 private:
-    const FlightController* flightController{nullptr};
-    const Vehicle* vehicle{nullptr};
+    FlightController* flightController{nullptr};
+    Vehicle* vehicle{nullptr};
     // Offset values
     Vector3f offset{};              // Offset desired [m]
     double targetYaw{0.0};         // yaw desired [rad]
@@ -48,7 +48,7 @@ private:
     Telemetry::TypeMap<TOPIC_GPS_FUSED>::type originSubscriptionGPS;
     int pkgIndex{0};                // Package index used by subscription
 public:
-    explicit PositionOffsetMission(const FlightController* flightController);
+    explicit PositionOffsetMission(FlightController* flightController);
     /**
      * Move aircraft of desired offset in m and set yaw in deg
      * @param offset            offset desired [m]

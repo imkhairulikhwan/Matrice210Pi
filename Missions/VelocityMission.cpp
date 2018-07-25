@@ -5,10 +5,10 @@
  */
 #include "VelocityMission.h"
 
-#include "../FlightController.h"
+#include "../Aircraft/FlightController.h"
 #include "../util/timer.h"
 
-VelocityMission::VelocityMission(const FlightController *flightController) {
+VelocityMission::VelocityMission(FlightController *flightController) {
     this->flightController = flightController;
 }
 
@@ -21,6 +21,6 @@ void VelocityMission::move(const Vector3f *velocity, float yaw) {
     this->yaw = yaw;
 }
 
-void VelocityMission::update() const {
+void VelocityMission::update() {
     flightController->velocityAndYawRateCtrl(&velocity, yaw);
 }

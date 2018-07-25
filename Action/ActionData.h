@@ -16,13 +16,14 @@ using namespace DJI::OSDK;
 class ActionData {
 public:
     enum ActionId {
-        monitoredTakeoff,
-        monitoredLanding,
+        takeOff,
+        landing,
         mission,
         sendDataToMSDK,
         stopAircraft,
         emergencyStop,
-        emergencyRelease
+        emergencyRelease,
+        watchdog
     };
 private:
     char* data;

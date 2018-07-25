@@ -6,10 +6,10 @@
 
 #include "PositionMission.h"
 
-#include "../FlightController.h"
+#include "../Aircraft/FlightController.h"
 #include "../util/timer.h"
 
-PositionMission::PositionMission(const FlightController *flightController) {
+PositionMission::PositionMission(FlightController *flightController) {
     this->flightController = flightController;
 }
 
@@ -22,6 +22,6 @@ void PositionMission::move(const Vector3f *position, float yaw) {
     this->yaw = yaw;
 }
 
-void PositionMission::update() const {
+void PositionMission::update() {
     flightController->positionAndYawCtrl(&position, yaw);
 }

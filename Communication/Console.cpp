@@ -9,7 +9,7 @@
 #include <iostream>
 #include <sstream>
 
-#include "../FlightController.h"
+#include "../Aircraft/FlightController.h"
 #include "../Action/Action.h"
 #include "../Action/ActionData.h"
 #include "../Managers/PackageManager.h"
@@ -41,10 +41,10 @@ void* Console::consoleThread(void* param) {
         ActionData *actionData = nullptr;
         switch (inputChar) {
             case '1':
-                actionData = new ActionData(ActionData::monitoredTakeoff);
+                actionData = new ActionData(ActionData::takeOff);
                 break;
             case '2':
-                actionData = new ActionData(ActionData::monitoredLanding);
+                actionData = new ActionData(ActionData::landing);
                 break;
             case '3': {
                 Telemetry::Vector3f position;
