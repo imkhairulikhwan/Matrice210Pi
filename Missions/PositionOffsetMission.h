@@ -81,8 +81,6 @@ namespace M210 {
         void setOffset(const Vector3f *o, double y);
 
         void setThreshold(float posThreshold, double yawThreshold);
-
-        bool startGlobalPositionBroadcast() const;
     };
 }
 

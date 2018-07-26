@@ -33,10 +33,14 @@ void* Console::consoleThread(void* param) {
     auto c = static_cast<Console*>(param);
     // Display interactive prompt
     bool running = true;
+    bool displayMenu = true;
     while(running) {
-        c->displayMenu();
-        char inputChar;
+        // Display menu except last action disable it
+        if(displayMenu)
+            c->displayMenu();
+        displayMenu = true;
         // Get user choice
+        char inputChar;
         cin >> inputChar;
         // Get newline char
         cin.get();
@@ -96,17 +100,12 @@ void* Console::consoleThread(void* param) {
                 actionData->push((char)1);    // mission kind
             }
                 break;
-            case '6':
-                c->flightController->runWaypointMission(5);
+            case '6': {
+                unsigned u = (unsigned)c->getNumber("1pol 2res 3pau 4sto 5sav 6ret");
+                c->flightController->waypointMissionAction(u);
+                displayMenu = false;
+            }
                 break;
-            case '7':
-                c->flightController->resumeWaypointMission();
-                break;
-            case '8':
-                c->flightController->pauseWaypointMission();
-                break;
-            case '9':
-                c->flightController->stopWaypointMission();
                 break;
             case 'e':
                 // Emergency stop is called directly here to avoid delay
@@ -147,12 +146,10 @@ void Console::displayMenu() const {
     displayMenuLine('3', "moveByPosition");
     displayMenuLine('4', "moveByPositionOffset");
     displayMenuLine('5', "moveByVelocity");
-    displayMenuLine('6', "Run waypoint mission");
-    displayMenuLine('7', "Resume waypoint mission");
-    displayMenuLine('8', "Pause waypoint mission");
-    displayMenuLine('9', "Stop waypoint mission");
+    displayMenuLine('6', "Waypoint mission");
     displayMenuLine('e', "Emergency stop");
     displayMenuLine('m', "Send custom command");
+    displayMenuLine('p', "Get current position");
     displayMenuLine('r', "Release emergency stop");
     displayMenuLine('s', "Stop aircraft");
     cout << endl;

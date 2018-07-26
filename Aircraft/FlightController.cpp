@@ -163,20 +163,8 @@ void FlightController::moveByPositionOffset(const Vector3f *offset, float yaw,
     movingMode = POSITION_OFFSET;
 }
 
-void FlightController::runWaypointMission(uint8_t numWaypoints) {
-    waypointMission->run(numWaypoints);
-}
-
-void FlightController::pauseWaypointMission() {
-    waypointMission->pause();
-}
-
-void FlightController::resumeWaypointMission() {
-    waypointMission->resume();
-}
-
-void FlightController::stopWaypointMission() {
-    waypointMission->stop();
+void FlightController::waypointMissionAction(unsigned action) {
+    waypointMission->action(action);
 }
 
 void FlightController::stopAircraft() {
@@ -229,6 +217,32 @@ void FlightController::setMovingMode(FlightController::movingMode_ mode) {
     pthread_mutex_lock(&movingMode_mutex);
     movingMode = mode;
     pthread_mutex_unlock(&movingMode_mutex);
+}
+
+bool FlightController::startGlobalPositionBroadcast(Vehicle *vehicle) {
+    uint8_t freq[16];
+    // Channels definition for A3/N3/M600
+    freq[0]  = DataBroadcast::FREQ_HOLD; // Timestamp
+    freq[1]  = DataBroadcast::FREQ_HOLD; // Attitude Quaternions
+    freq[2]  = DataBroadcast::FREQ_HOLD; // Acceleration
+    freq[3]  = DataBroadcast::FREQ_HOLD; // Velocity (Ground Frame)
+    freq[4]  = DataBroadcast::FREQ_HOLD; // Angular Velocity (Body Frame)
+    freq[5]  = DataBroadcast::FREQ_50HZ; // Position - This is the only one we want to change
+    freq[6]  = DataBroadcast::FREQ_HOLD; // GPS Detailed Information
+    freq[7]  = DataBroadcast::FREQ_HOLD; // RTK Detailed Information
+    freq[8]  = DataBroadcast::FREQ_HOLD; // Magnetometer
+    freq[9]  = DataBroadcast::FREQ_HOLD; // RC Channels Data
+    freq[10] = DataBroadcast::FREQ_HOLD; //  Gimbal Data
+    freq[11] = DataBroadcast::FREQ_HOLD; //  Flight Status
+    freq[12] = DataBroadcast::FREQ_HOLD; //  Battery Level
+    freq[13] = DataBroadcast::FREQ_HOLD; //  Control Information
+
+    ACK::ErrorCode ack =  vehicle->broadcast->setBroadcastFreq(freq, 1);
+    if (ACK::getError(ack)) {
+        ACK::getErrorCodeMessage(ack, __func__);
+        return false;
+    }
+    return true;
 }
 
 /*! Very simple calculation of local NED offset between two pairs of GPS coordinates.

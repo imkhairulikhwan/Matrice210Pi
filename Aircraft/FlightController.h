@@ -107,11 +107,7 @@ namespace M210 {
                                   float posThreshold = 0.2,
                                   float yawThreshold = 1.0);
         // TODO Temporary tests, remove
-        void runWaypointMission(uint8_t numWaypoints);
-
-        void resumeWaypointMission();
-        void stopWaypointMission();
-        void pauseWaypointMission();
+        void waypointMissionAction(unsigned numWaypoints);
 
         // Stop and emergency
         void stopAircraft();
@@ -136,10 +132,12 @@ namespace M210 {
 
 // Static functions
     public:
-/*! Very simple calculation of local NED offset between
- *  two pairs of GPS coordinates.
- * Accurate when distances are small.
-!*/
+        // TODO Global broadcast manager implementation !
+        static bool startGlobalPositionBroadcast(Vehicle *vehicle);
+        /*! Very simple calculation of local NED offset between
+         *  two pairs of GPS coordinates.
+         * Accurate when distances are small.
+        !*/
         static void localOffsetFromGpsOffset(Vector3f &deltaNed,
                                              const Telemetry::GPSFused *subscriptionTarget,
                                              const Telemetry::GPSFused *subscriptionOrigin);
