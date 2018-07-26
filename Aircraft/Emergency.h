@@ -9,19 +9,23 @@
 
 #include <pthread.h>
 
-class Emergency {
-public:
-    const static bool displayError = true;
-private:
-    bool state;
-    bool messageDisplayed;
-    static pthread_mutex_t mutex;
-public:
-    Emergency();
-    void set();
-    void release();
-    bool isEnabled(bool displayError = false);
-};
+namespace M210 {
+    class Emergency {
+    public:
+        const static bool displayError = true;
+    private:
+        bool state;
+        bool messageDisplayed;
+        static pthread_mutex_t mutex;
+    public:
+        Emergency();
 
+        void set();
+
+        void release();
+
+        bool isEnabled(bool displayError = false);
+    };
+}
 
 #endif //MATRICE210_EMERGENCY_H

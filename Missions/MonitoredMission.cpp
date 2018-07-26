@@ -10,15 +10,14 @@
 #include "../Managers/PackageManager.h"
 #include "../util/timer.h"
 
+using namespace M210;
+
 MonitoredMission::MonitoredMission(FlightController *flightController) {
     this->flightController = flightController;
 }
 
 bool MonitoredMission::takeOff(int timeout) const {
     DSTATUS("Take-off launched");
-    // Telemetry: Verify the subscription
-    if (!PackageManager::instance().verify())
-        return false;
 
     /*/ Subscribe to package
             index : 0
@@ -118,10 +117,6 @@ bool MonitoredMission::takeOff(int timeout) const {
  *  Monitored landing. Return true if success
 */
 bool MonitoredMission::landing(int timeout) const {
-    // Telemetry: Verify the subscription
-    if (!PackageManager::instance().verify())
-        return false;
-
     /*/ Subscribe to package
             index : 0
             frequency : 10Hz

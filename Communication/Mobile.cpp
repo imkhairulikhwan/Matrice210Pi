@@ -11,6 +11,8 @@
 #include "../Action/Action.h"
 #include "../Action/ActionData.h"
 
+using namespace M210;
+
 Mobile::Mobile(FlightController *flightController) : flightController(flightController) {
 
 }
@@ -55,8 +57,8 @@ void Mobile::mobileCallback(Vehicle *vehicle, RecvContainer recvFrame,
                         size_t dataLength =  msgLength - (size_t)2;
                         actionData = new ActionData(ActionData::ActionId::mission, dataLength);
                         actionData->push(data+4, dataLength-2);
-                        actionData->push((char)data[3]);    // action
-                        actionData->push((char)data[2]);    // mission kind
+                        actionData->push((char)data[3]);    // mission action
+                        actionData->push((char)data[2]);    // mission type
                     } else {
                         DERROR("Mission data format error");
                     }

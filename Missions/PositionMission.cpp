@@ -9,6 +9,8 @@
 #include "../Aircraft/FlightController.h"
 #include "../util/timer.h"
 
+using namespace M210;
+
 PositionMission::PositionMission(FlightController *flightController) {
     this->flightController = flightController;
 }

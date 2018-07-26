@@ -10,6 +10,8 @@
 
 #include "../util/timer.h"
 
+using namespace M210;
+
 bool ThreadManager::start(string name, pthread_t *id, pthread_attr_t *attr, void *(*thread)(void *), void *arg) {
     pthread_attr_init(attr);
     pthread_attr_setdetachstate(attr, PTHREAD_CREATE_JOINABLE);

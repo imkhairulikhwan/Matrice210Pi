@@ -6,6 +6,8 @@
 
 #include "PackageManager.h"
 
+using namespace M210;
+
 pthread_mutex_t PackageManager::packageManager_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 PackageManager::PackageManager() {
@@ -22,7 +24,7 @@ bool PackageManager::verify() const {
     ACK::ErrorCode ack;
     ack = vehicle->subscribe->verify(timeout);
     if (ACK::getError(ack) != ACK::SUCCESS)  {
-        DERROR("PackageManager verify error !");
+        DERROR("Version match failed !");
         ACK::getErrorCodeMessage(ack, __func__);
         return false;
     }
@@ -33,6 +35,9 @@ bool PackageManager::verify() const {
 int PackageManager::subscribe(TopicName *topics, int numTopic, uint16_t frequency, bool enableTimestamp) {
     if(!isVehicleInstanced())
         return VEHICLE_NOT_INSTANCED;
+
+    if(!verify())
+        return VERIFY_FAILED;
 
     int pkgIndex = allocatePackage();
     if(pkgIndex == PACKAGE_UNAVAILABLE) {
@@ -60,23 +65,27 @@ int PackageManager::subscribe(TopicName *topics, int numTopic, uint16_t frequenc
     return pkgIndex;
 }
 
-bool PackageManager::unsubscribe(int index) {
-    if(!isVehicleInstanced() || !validIndex(index))
-        return false;
+int PackageManager::unsubscribe(int index) {
+    if(!isVehicleInstanced())
+        return VEHICLE_NOT_INSTANCED;
+
+    if(!validIndex(index))
+        return INVALID_INDEX;
+
 
     ACK::ErrorCode ack = vehicle->subscribe->removePackage(index, timeout);
     releasePackage(index);
     if (ACK::getError(ack)) {
         DERROR("Error unsubscribing package %u", index);
-        return false;
+        return UNSUBSCRIPTION_FAILED;
     }
 
-    return true;
+    return 0;
 }
 
 bool PackageManager::isVehicleInstanced() const {
     if(vehicle == nullptr) {
-        DERROR("PackageManager - Vehicle not instanced. Call setVehicle() first !");
+        DERROR("Vehicle not instanced. Call setVehicle() first !");
         return false;
     }
     return true;

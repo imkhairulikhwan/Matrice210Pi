@@ -20,6 +20,8 @@
 
 bool running = true;
 
+using namespace M210;
+
 FlightController *flightController;
 Console* console;
 Mobile *mobileCommunication;
@@ -31,6 +33,11 @@ int main(int argc, char** argv)
 {
     // Unit test for action data class
     ActionData::unitTest();
+    /* Todo add unit test for :
+     *      - ActionData queue
+     *      - Subscription
+     *      - MOC
+     */
 
     // Initialize flight controller
     flightController = new FlightController();

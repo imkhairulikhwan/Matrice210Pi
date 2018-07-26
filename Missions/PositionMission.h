@@ -13,18 +13,22 @@ using namespace DJI;
 using namespace DJI::OSDK;
 using namespace DJI::OSDK::Telemetry;
 
-class FlightController;
+namespace M210 {
+    class FlightController;
 
-class PositionMission {
-private:
-    FlightController* flightController;
-    Vector3f position;
-    float yaw;
-public:
-    explicit PositionMission(FlightController *flightController);
-    void move(const Vector3f *position, float yaw);
-    void update();
-};
+    class PositionMission {
+    private:
+        FlightController *flightController;
+        Vector3f position;
+        float yaw;
+    public:
+        explicit PositionMission(FlightController *flightController);
+
+        void move(const Vector3f *position, float yaw);
+
+        void update();
+    };
+}
 
 
 #endif //MATRICE210_POSITIONMISSION_H

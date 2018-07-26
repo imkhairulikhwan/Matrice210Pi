@@ -14,6 +14,8 @@
 #include "../Aircraft/FlightController.h"
 #include "../Managers/ThreadManager.h"
 
+using namespace M210;
+
 Uart::Uart(const char *device, uint32_t baudRate) {
     serialDevice = new LinuxSerialDevice(device, baudRate);
     serialDevice->init();

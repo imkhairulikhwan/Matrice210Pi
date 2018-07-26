@@ -6,9 +6,11 @@
 
 #include "ActionData.h"
 
-#include <assert.h>
+#include <cassert>
 #include <cstring>
 #include <cstddef>
+
+using namespace M210;
 
 // TODO Find a way to do pop with RTTI (Templates)
 
@@ -153,7 +155,7 @@ void ActionData::unitTest() {
     memcpy(ch+8, reinterpret_cast<char*>(&z), 4);
     memcpy(ch+12, reinterpret_cast<char*>(&yaw), 4);
 
-    ActionData ad(ActionData::stopAircraft, 17);
+    ActionData ad(M210::ActionData::stopAircraft, 17);
     ad.push((char)i);
     // Push float array
     // ad.push(reinterpret_cast<uint8_t*>(ch), 16);

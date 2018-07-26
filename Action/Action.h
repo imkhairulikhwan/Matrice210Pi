@@ -16,35 +16,45 @@
 
 using namespace DJI::OSDK;
 
-class FlightController;
-class ActionData;
+namespace M210 {
+    class FlightController;
+    class ActionData;
 
-class Action : public Singleton<Action>{
-public:
-    enum M210_MissionType {
-        VELOCITY = 1,
-        POSITION,
-        POSITION_OFFSET,
-        WAYPOINTS
+    class Action : public Singleton<Action> {
+    public:
+        enum MissionType {
+            VELOCITY = 1,
+            POSITION,
+            POSITION_OFFSET,
+            WAYPOINTS
+        };
+        enum MissionAction {
+            START = 1
+        };
+    private:
+        mq_attr actionQueueAttr;
+        mqd_t actionQueue;
+        // Mutex
+        static pthread_mutex_t mutex;
+        FlightController *flightController;
+
+        void positionMission(ActionData *action) const;
+
+        void velocityMission(ActionData *action) const;
+
+        void positionOffsetMission(ActionData *action) const;
+
+    public:
+        Action();
+
+        ~Action();
+
+        void setFlightController(FlightController *flightController) { this->flightController = flightController; }
+
+        void add(const ActionData *actionData);
+
+        void process() const;
     };
-    enum M210_MissionAction {
-        START = 1
-    };
-private:
-    mq_attr actionQueueAttr;
-    mqd_t actionQueue;
-    // Mutex
-    static pthread_mutex_t mutex;
-    FlightController* flightController;
-    void positionMission(ActionData *action) const;
-    void velocityMission(ActionData *action) const;
-    void positionOffsetMission(ActionData *action) const;
-public:
-    Action();
-    ~Action();
-    void setFlightController(FlightController* flightController) { this->flightController = flightController; }
-    void add(const ActionData *actionData);
-    void process() const;
-};
+}
 
 #endif //MATRICE210_ACTION_H

@@ -20,6 +20,9 @@
 #include "../Missions/PositionMission.h"
 #include "../Missions/VelocityMission.h"
 #include "../Missions/PositionOffsetMission.h"
+#include "../Missions/WaypointMission.h"
+
+using namespace M210;
 
 pthread_mutex_t FlightController::sendDataToMSDK_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t FlightController::movingMode_mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -32,10 +35,11 @@ FlightController::FlightController() {
     watchdog = new Watchdog(50);
     emergency = new Emergency();
     // Missions
-    monitoredMission = new MonitoredMission(this);
-    positionMission = new PositionMission(this);
-    velocityMission = new VelocityMission(this);
-    positionOffsetMission = new PositionOffsetMission(this);
+    monitoredMission = new M210::MonitoredMission(this);
+    positionMission = new M210::PositionMission(this);
+    velocityMission = new M210::VelocityMission(this);
+    positionOffsetMission = new M210::PositionOffsetMission(this);
+    waypointMission = new M210::WaypointMission(this);
 }
 
 
@@ -157,6 +161,22 @@ void FlightController::moveByPositionOffset(const Vector3f *offset, float yaw,
     positionOffsetMission->move(offset, yaw,
                                 posThreshold, yawThreshold);
     movingMode = POSITION_OFFSET;
+}
+
+void FlightController::runWaypointMission(uint8_t numWaypoints) {
+    waypointMission->run(numWaypoints);
+}
+
+void FlightController::pauseWaypointMission() {
+    waypointMission->pause();
+}
+
+void FlightController::resumeWaypointMission() {
+    waypointMission->resume();
+}
+
+void FlightController::stopWaypointMission() {
+    waypointMission->stop();
 }
 
 void FlightController::stopAircraft() {

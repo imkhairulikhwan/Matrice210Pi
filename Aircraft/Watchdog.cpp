@@ -8,6 +8,8 @@
 
 #include <dji_vehicle.hpp>
 
+using namespace M210;
+
 pthread_mutex_t Watchdog::mutex = PTHREAD_MUTEX_INITIALIZER;
 
 Watchdog::Watchdog(unsigned limit): limit(limit){

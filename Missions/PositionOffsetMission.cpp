@@ -14,6 +14,8 @@
 #include "../Aircraft/FlightController.h"
 #include "../util/timer.h"
 
+using namespace M210;
+
 PositionOffsetMission::PositionOffsetMission(FlightController *flightController) {
     this->flightController = flightController;
 }
@@ -25,10 +27,6 @@ bool PositionOffsetMission::move(const Vector3f *offset, float yaw,
     vehicle = flightController->getVehicle();
     setOffset(offset, yaw * DEG2RAD);
     setThreshold(posThreshold, yawThreshold * DEG2RAD);
-
-    // Telemetry: Verify the subscription
-    if(!PackageManager::instance().verify())
-        return false;
 
     if(!missionRunning) {
         /*/ Subscribe to package

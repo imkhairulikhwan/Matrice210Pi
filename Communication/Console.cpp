@@ -16,6 +16,8 @@
 #include "../Managers/ThreadManager.h"
 #include "../util/timer.h"
 
+using namespace M210;
+
 Console::Console(FlightController* flightController) : flightController(flightController) {
 
 }
@@ -94,6 +96,18 @@ void* Console::consoleThread(void* param) {
                 actionData->push((char)1);    // mission kind
             }
                 break;
+            case '6':
+                c->flightController->runWaypointMission(5);
+                break;
+            case '7':
+                c->flightController->resumeWaypointMission();
+                break;
+            case '8':
+                c->flightController->pauseWaypointMission();
+                break;
+            case '9':
+                c->flightController->stopWaypointMission();
+                break;
             case 'e':
                 // Emergency stop is called directly here to avoid delay
                 c->flightController->emergencyStop();
@@ -103,6 +117,7 @@ void* Console::consoleThread(void* param) {
                 string command;
                 getline(cin, command);
                 DSTATUS("Send data to mobile : %s", command.c_str());
+                // TODO Add to action queue
                 c->flightController->sendDataToMSDK((uint8_t *)command.c_str(), (uint8_t)command.length());
             }
                 break;
@@ -114,6 +129,7 @@ void* Console::consoleThread(void* param) {
                                             sizeof(Telemetry::Vector3f) + sizeof(unsigned));
                 break;
             default:
+                DERROR("Unknown command");
                 break;
 
         }
@@ -126,11 +142,15 @@ void Console::displayMenu() const {
     delay_ms(500);
     cout << endl;
     cout << "Available commands : ";
-    displayMenuLine('1', "Monitored takeoff");
-    displayMenuLine('2', "Monitored landing");
+    displayMenuLine('1', "Take-off");
+    displayMenuLine('2', "Landing");
     displayMenuLine('3', "moveByPosition");
     displayMenuLine('4', "moveByPositionOffset");
     displayMenuLine('5', "moveByVelocity");
+    displayMenuLine('6', "Run waypoint mission");
+    displayMenuLine('7', "Resume waypoint mission");
+    displayMenuLine('8', "Pause waypoint mission");
+    displayMenuLine('9', "Stop waypoint mission");
     displayMenuLine('e', "Emergency stop");
     displayMenuLine('m', "Send custom command");
     displayMenuLine('r', "Release emergency stop");

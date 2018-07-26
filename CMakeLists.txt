@@ -70,5 +70,6 @@ add_executable(${PROJECT_NAME} ${SOURCE_FILES}
         Missions/MonitoredMission.cpp Missions/MonitoredMission.h
         Missions/PositionMission.cpp Missions/PositionMission.h
         Missions/PositionOffsetMission.cpp Missions/PositionOffsetMission.h
-        Missions/VelocityMission.cpp Missions/VelocityMission.h)
+        Missions/VelocityMission.cpp Missions/VelocityMission.h
+        Missions/WaypointMission.cpp Missions/WaypointMission.h)
 target_link_libraries(${PROJECT_NAME} djiosdk-core)

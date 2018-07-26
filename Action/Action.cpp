@@ -11,6 +11,8 @@
 #include "../Aircraft/FlightController.h"
 #include "../Aircraft/Watchdog.h"
 
+using namespace M210;
+
 pthread_mutex_t Action::mutex = PTHREAD_MUTEX_INITIALIZER;
 
 Action::Action() {
@@ -78,13 +80,13 @@ void Action::process() const {
                 char mission;
                 if(action->popChar(mission)) {
                     switch ((unsigned) mission){
-                        case M210_MissionType::VELOCITY:    // Velocity mission
+                        case MissionType::VELOCITY:    // Velocity mission
                             velocityMission(action);
                             break;
-                        case M210_MissionType::POSITION :    // Position mission
+                        case MissionType::POSITION :    // Position mission
                             positionMission(action);
                             break;
-                        case M210_MissionType::POSITION_OFFSET: // Position offset mission
+                        case MissionType::POSITION_OFFSET: // Position offset mission
                             positionOffsetMission(action);
                             break;
                         default:
@@ -122,7 +124,7 @@ void Action::velocityMission(ActionData *action) const {
     Vector3f v;
     float yaw;
     if(action->popChar(task)) {
-        if(task == M210_MissionAction::START) { // start mission
+        if(task == MissionAction::START) { // start mission
             action->popFloat(yaw);
             action->popVector3f(v);
             flightController->moveByVelocity(&v, yaw);
@@ -139,7 +141,7 @@ void Action::positionMission(ActionData *action) const {
     Vector3f v;
     float yaw;
     if(action->popChar(task)) {
-        if(task == M210_MissionAction::START) { // start mission
+        if(task == MissionAction::START) { // start mission
             action->popFloat(yaw);
             action->popVector3f(v);
             flightController->moveByPosition(&v, yaw);
@@ -156,7 +158,7 @@ void Action::positionOffsetMission(ActionData *action) const {
     Vector3f v;
     float yaw;
     if(action->popChar(task)) {
-        if(task == M210_MissionAction::START) { // start mission
+        if(task == MissionAction::START) { // start mission
             action->popFloat(yaw);
             action->popVector3f(v);
             flightController->moveByPositionOffset(&v, yaw);

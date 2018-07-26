@@ -50,80 +50,94 @@ using namespace DJI::OSDK::Telemetry;
  *
  */
 
-class PackageManager : public Singleton<PackageManager> {
-public:
-    enum RETURN_ERROR_CODE {
-        VEHICLE_NOT_INSTANCED = -4,
-        START_PACKAGE_FAILED,
-        INIT_PACKAGE_FAILED,
-        PACKAGE_UNAVAILABLE,
-    };
-private:
-    const Vehicle* vehicle = nullptr;
-    int timeout{1};             /*!< DJI subscription method call timeout */
-    bool packageAvailable[DataSubscription::MAX_NUMBER_OF_PACKAGE]; /*!< Available packages */
-    /**
-     * Verify if setVehicle() has been called
-     * @return true is vehicle has been instanced
-     */
-    bool isVehicleInstanced() const;
-    /**
-     * Verify that index is a valid number
-     * Range is 0 to DataSubscription::MAX_NUMBER_OF_PACKAGE -1
-     * @param index Package index to verify
-     * @return true if valid
-     */
-    bool validIndex(int index) const;
-    /**
-     * Verify that a package is available.
-     * See DataSubscription::MAX_NUMBER_OF_PACKAGE
-     * @return PackageManager::PACKAGE_UNAVAILABLE if all packages are used
-     * package number if a package was allocated
-     */
-    int allocatePackage();
-    /**
-     * Set package available for ne w allocation
-     * @param index Package index to set available
-     *
-     */
-    void releasePackage(int index);
-    // Mutex
-    static pthread_mutex_t packageManager_mutex;
-public:
-    /**
-    *  PackageManager is a singleton
-    */
-    PackageManager();
-    /**
-     * Has to be called before usage to define vehicle to send package
-     * @param vehicle Pointer to used vehicle
-     */
-    void setVehicle(const Vehicle* vehicle);
-    /**
-     * Verify version match
-     * @return true if version match
-     */
-    bool verify() const;
-    /**
-     * Try to allocate package. Setup members of package and start it
-     * @param topics List of Topic Names to subscribe in the package
-     * @param numTopic Number of topics in topics list
-     * @param frequency Package frequency
-     * @param enableTimestamp Enable send of transmission package time
-     * @return Negative value of PackageManager::RETURN_ERROR_CODE if subscription failed
-     * Positive package index if success
-     */
-    int subscribe(TopicName *topics, int numTopic, uint16_t frequency, bool enableTimestamp);
-    /**
-     * Unsubscribe from indexed topic
-     * @param index Package index
-     * @return true if success, false if error
-     */
-    bool unsubscribe(int index);
-    /**
-     * Unsubscribe to all subscribed packages
-     */
-    void clear();
-};
+namespace M210 {
+    class PackageManager : public Singleton<PackageManager> {
+    public:
+        enum RETURN_ERROR_CODE {
+            VEHICLE_NOT_INSTANCED = -7,
+            VERIFY_FAILED,
+            INVALID_INDEX,
+            START_PACKAGE_FAILED,
+            INIT_PACKAGE_FAILED,
+            UNSUBSCRIPTION_FAILED,
+            PACKAGE_UNAVAILABLE     // -1
+        };
+    private:
+        const Vehicle *vehicle = nullptr;
+        int timeout{1};             /*!< DJI subscription method call timeout */
+        bool packageAvailable[DataSubscription::MAX_NUMBER_OF_PACKAGE]; /*!< Available packages */
+        /**
+         * Verify if setVehicle() has been called
+         * @return true is vehicle has been instanced
+         */
+        bool isVehicleInstanced() const;
 
+        /**
+         * Verify that index is a valid number
+         * Range is 0 to DataSubscription::MAX_NUMBER_OF_PACKAGE -1
+         * @param index Package index to verify
+         * @return true if valid
+         */
+        bool validIndex(int index) const;
+
+        /**
+         * Verify that a package is available.
+         * See DataSubscription::MAX_NUMBER_OF_PACKAGE
+         * @return PackageManager::PACKAGE_UNAVAILABLE if all packages are used
+         * package number if a package was allocated
+         */
+        int allocatePackage();
+
+        /**
+         * Set package available for ne w allocation
+         * @param index Package index to set available
+         *
+         */
+        void releasePackage(int index);
+
+        /**
+        * Verify version match
+        * @return true if version match
+        */
+        bool verify() const;
+
+        // Mutex
+        static pthread_mutex_t packageManager_mutex;
+    public:
+        /**
+        *  PackageManager is a singleton
+        */
+        PackageManager();
+
+        /**
+         * Has to be called before usage to define vehicle to send package
+         * @param vehicle Pointer to used vehicle
+         */
+        void setVehicle(const Vehicle *vehicle);
+
+        /**
+         * Try to allocate package. Setup members of package and start it
+         * @param topics List of Topic Names to subscribe in the package
+         * @param numTopic Number of topics in topics list
+         * @param frequency Package frequency
+         * @param enableTimestamp Enable send of transmission package time
+         * @return Negative value of PackageManager::RETURN_ERROR_CODE if subscription failed
+         * Positive package index if success
+         */
+        int subscribe(TopicName *topics, int numTopic, uint16_t frequency, bool enableTimestamp);
+
+        /**
+         * Unsubscribe from indexed topic
+         * @param index Package index
+         * @return Negative value of PackageManager::RETURN_ERROR_CODE if unsubscription failed
+         * 0 if success
+         */
+        int unsubscribe(int index);
+
+        /**
+         * Unsubscribe to all subscribed packages
+         */
+        void clear();
+    };
+}
 #endif //MATRICE210_PACKAGEMANAGER_H

@@ -9,18 +9,23 @@
 
 #include <pthread.h>
 
-class Watchdog {
-private:
-    const unsigned limit;
-    unsigned counter;
-    bool errorDisplayed;
-public:
-    explicit Watchdog(unsigned limit);
-    static pthread_mutex_t mutex;
-    void increment();
-    void reset();
-    bool isEnabled();
-};
+namespace M210 {
+    class Watchdog {
+    private:
+        const unsigned limit;
+        unsigned counter;
+        bool errorDisplayed;
+    public:
+        explicit Watchdog(unsigned limit);
 
+        static pthread_mutex_t mutex;
+
+        void increment();
+
+        void reset();
+
+        bool isEnabled();
+    };
+}
 
 #endif //MATRICE210_WATCHDOG_H

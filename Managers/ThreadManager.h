@@ -13,12 +13,12 @@
 
 using namespace std;
 
-class ThreadManager {
-
-public:
-    static bool start(string name, pthread_t *tid, pthread_attr_t *attr, void *(*thread)(void *), void *arg);
-    static void stop(const pthread_t *id);
-};
-
+namespace M210 {
+    class ThreadManager {
+    public:
+        static bool start(string name, pthread_t *tid, pthread_attr_t *attr, void *(*thread)(void *), void *arg);
+        static void stop(const pthread_t *id);
+    };
+}
 
 #endif //MATRICE210_THREADMANAGER_H
