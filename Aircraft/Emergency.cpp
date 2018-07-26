@@ -28,9 +28,9 @@ void Emergency::set() {
     pthread_mutex_unlock(&mutex);
 }
 
-bool Emergency::isEnabled() {
+bool Emergency::isEnabled(bool displayError) {
     if(state) {
-        if(!messageDisplayed) {
+        if(!messageDisplayed || displayError) {
             DERROR("Emergency break enabled");
             messageDisplayed = true;
         }

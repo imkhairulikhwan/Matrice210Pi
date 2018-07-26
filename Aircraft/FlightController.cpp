@@ -133,6 +133,8 @@ bool FlightController::landing() {
 }
 
 void FlightController::moveByPosition(const Vector3f *position, float yaw) {
+    if(emergency->isEnabled(Emergency::displayError))
+        return;
     // Mission parameters
     positionMission->move(position, yaw);
     movingMode = POSITION;
@@ -140,6 +142,8 @@ void FlightController::moveByPosition(const Vector3f *position, float yaw) {
 }
 
 void FlightController::moveByVelocity(const Vector3f *velocity, float yaw) {
+    if(emergency->isEnabled(Emergency::displayError))
+        return;
     // Mission parameters
     velocityMission->move(velocity, yaw);
     movingMode = VELOCITY;
@@ -148,6 +152,8 @@ void FlightController::moveByVelocity(const Vector3f *velocity, float yaw) {
 
 void FlightController::moveByPositionOffset(const Vector3f *offset, float yaw,
                                             float posThreshold, float yawThreshold) {
+    if(emergency->isEnabled(Emergency::displayError))
+        return;
     positionOffsetMission->move(offset, yaw,
                                 posThreshold, yawThreshold);
     movingMode = POSITION_OFFSET;

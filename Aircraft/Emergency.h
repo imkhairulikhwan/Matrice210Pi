@@ -10,6 +10,8 @@
 #include <pthread.h>
 
 class Emergency {
+public:
+    const static bool displayError = true;
 private:
     bool state;
     bool messageDisplayed;
@@ -18,7 +20,7 @@ public:
     Emergency();
     void set();
     void release();
-    bool isEnabled();
+    bool isEnabled(bool displayError = false);
 };
 
 

@@ -28,7 +28,7 @@ class PositionOffsetMission;
 class FlightController {
 public:
     void launchFlightControllerThread();
-    void stopFlightControllerThread();
+    void stopFlightControllerThread();      // unused
 private:
     // Fight controller thread
     bool flightControllerThreadRunning;
