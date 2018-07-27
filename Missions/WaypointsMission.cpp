@@ -4,7 +4,7 @@
  *  @author Jonathan Michel
  */
 
-#include "WaypointMission.h"
+#include "WaypointsMission.h"
 
 #include <iostream>
 #include <cmath>
@@ -15,8 +15,8 @@
 #include "../Aircraft/FlightController.h"
 #include "../Managers/PackageManager.h"
 #include "../Action/Action.h"
-
 #include "../util/timer.h"
+#include "../util/Log.h"
 
 using namespace M210;
 
@@ -24,26 +24,40 @@ M210::WaypointMission::WaypointMission(FlightController *flightController) {
     this->flightController = flightController;
     setWaypointSettingsDefaults(&waypointsSettings);
     index = 0;
-    missionInitialized = false;
 }
 
 bool M210::WaypointMission::start() {
-    if(isMissionInitialited()) {
-        DSTATUS("Initializing Waypoints Mission : %u waypoints", index);
-        flightController->getVehicle()->missionManager->printInfo();
-
-        uploadWaypoints();
-
-        ACK::ErrorCode ack = flightController->getVehicle()->missionManager->wpMission->start(1);
-        if (ACK::getError(ack)) {
-            DERROR("Start waypoint mission failed");
-            ACK::getErrorCodeMessage(ack, __func__);
-            return false;
-        }
-        DERROR("Start waypoint mission successfully");
-        return true;
+    LSTATUS("Start Waypoints Mission : %u waypoints", index);
+    ACK::ErrorCode initAck = flightController->getVehicle()->missionManager->init(
+            DJI_MISSION_TYPE::WAYPOINT, 1, &waypointsSettings);
+    if (ACK::getError(initAck)) {
+        LERROR("Mission initialization failed");
+        ACK::getErrorCodeMessage(initAck, __func__);
     }
-    return false;
+
+    flightController->getVehicle()->missionManager->printInfo();
+
+    // Upload waypoints
+    for (auto &wp : waypointsList) {
+        LSTATUS("Upload Waypoint (Lon Lat Att): %f \t%f \t%f ", wp.latitude,
+                wp.longitude, wp.altitude);
+        ACK::WayPointIndex wpDataACK =
+                flightController->getVehicle()->missionManager->wpMission->uploadIndexData(&wp, 1);
+        if (ACK::getError(wpDataACK.ack)) {
+            LERROR("Waypoint upload failed");
+            ACK::getErrorCodeMessage(wpDataACK.ack, __func__);
+        }
+    }
+
+    // Start mission
+    ACK::ErrorCode ack = flightController->getVehicle()->missionManager->wpMission->start(1);
+    if (ACK::getError(ack)) {
+        LERROR("Start waypoints mission failed");
+        ACK::getErrorCodeMessage(ack, __func__);
+        return false;
+    }
+    LSTATUS("Start waypoints mission successfully");
+    return true;
 }
 
 
@@ -52,13 +66,13 @@ void M210::WaypointMission::reset() {
     index = 0;
     waypointsList.clear();
     setWaypointSettingsDefaults(&waypointsSettings);
-    missionInitialized = false;
+    LSTATUS("Waypoints mission reset");
 }
 
 void M210::WaypointMission::currentPosition(GlobalPosition &position) {
     // TODO Nothing to do here !
     if (!FlightController::startGlobalPositionBroadcast(flightController->getVehicle())) {
-        DERROR("getCurrentPosition aborted");
+        LERROR("getCurrentPosition aborted");
         return;
     }
 
@@ -71,9 +85,6 @@ void M210::WaypointMission::currentPosition(GlobalPosition &position) {
     position.latitude = globalPosition.latitude;
     position.altitude = globalPosition.altitude;
     position.height = globalPosition.height;
-
-    DSTATUS("Current position (Lon Lat Att Hei): %f \t%f \t%f \t%f", globalPosition.longitude,
-            globalPosition.latitude, globalPosition.altitude, globalPosition.height);
 }
 
 void M210::WaypointMission::add() {
@@ -91,22 +102,9 @@ void M210::WaypointMission::add() {
         wp.altitude = position.height;
         waypointsList.push_back(wp);
 
-        DSTATUS("Waypoint added : %u", index);
+        LSTATUS("Waypoint %u added (Lon Lat Hei): %f \t%f \t%f \t%f", index, wp.longitude,
+                wp.latitude, wp.altitude);
         index++;
-    }
-}
-
-void M210::WaypointMission::uploadWaypoints()
-{
-    if(isMissionInitialited()) {
-        for (auto &wp : waypointsList) {
-            DSTATUS("Waypoint uploaded (Lon Lat Att): %f \t%f \t%f ", wp.latitude,
-                    wp.longitude, wp.altitude);
-            ACK::WayPointIndex wpDataACK =
-                    flightController->getVehicle()->missionManager->wpMission->uploadIndexData(&wp, 1);
-            if (ACK::getError(wpDataACK.ack))
-                ACK::getErrorCodeMessage(wpDataACK.ack, __func__);
-        }
     }
 }
 
@@ -145,41 +143,34 @@ void M210::WaypointMission::setWaypointSettingsDefaults(WayPointInitSettings *fd
 bool M210::WaypointMission::stop() {
     ACK::ErrorCode ack = flightController->getVehicle()->missionManager->wpMission->stop(1);
     if (ACK::getError(ack)) {
-        DERROR("Stop waypoint mission failed");
+        LERROR("Stop waypoints mission failed");
         ACK::getErrorCodeMessage(ack, __func__);
         return false;
     }
-    DSTATUS("Stopping waypoint Mission");
+    LSTATUS("Stopping waypoints mission");
     return true;
 }
 
 bool M210::WaypointMission::pause() {
     ACK::ErrorCode ack = flightController->getVehicle()->missionManager->wpMission->pause(1);
     if (ACK::getError(ack)) {
-        DERROR("Pause waypoint mission failed");
+        LERROR("Pause waypoints mission failed");
         ACK::getErrorCodeMessage(ack, __func__);
         return false;
     }
-    DSTATUS("Pause Waypoint Mission");
+    LSTATUS("Pause Waypoints mission");
     return true;
 }
 
 bool M210::WaypointMission::resume() {
     ACK::ErrorCode ack = flightController->getVehicle()->missionManager->wpMission->resume(1);
     if (ACK::getError(ack)) {
-        DERROR("Resume waypoint mission failed");
+        LERROR("Resume waypoints mission failed");
         ACK::getErrorCodeMessage(ack, __func__);
         return false;
     }
-    DSTATUS("Resume Waypoint Mission");
+    LSTATUS("Resume waypoints Mission");
     return true;
-}
-
-bool M210::WaypointMission::isMissionInitialited() {
-    if(!missionInitialized) {
-        init();
-    }
-    return missionInitialized;
 }
 
 void M210::WaypointMission::action(unsigned int task) {
@@ -194,17 +185,6 @@ void M210::WaypointMission::action(unsigned int task) {
             start();
             break;
         default:
-            DERROR("Unknown action");
-    }
-}
-
-void M210::WaypointMission::init() {
-    ACK::ErrorCode initAck = flightController->getVehicle()->missionManager->init(
-            DJI_MISSION_TYPE::WAYPOINT, 1, &waypointsSettings);
-    if (ACK::getError(initAck)) {
-        DERROR("Mission initialized failed");
-        ACK::getErrorCodeMessage(initAck, __func__);
-    } else {
-        missionInitialized = true;
+            LERROR("Unknown action");
     }
 }

@@ -8,6 +8,7 @@
 
 #include <dji_vehicle.hpp>
 
+#include "../util/Log.h"
 #include "../util/timer.h"
 
 using namespace M210;

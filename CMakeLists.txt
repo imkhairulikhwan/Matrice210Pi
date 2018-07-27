@@ -57,6 +57,7 @@ FILE(GLOB SOURCE_FILES *.hpp *.cpp
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES}
         util/timer.cpp util/timer.h
+        util/Log.cpp util/Log.h
         Aircraft/FlightController.cpp Aircraft/FlightController.h
         Aircraft/Emergency.cpp Aircraft/Emergency.h
         Aircraft/Watchdog.cpp Aircraft/Watchdog.h
@@ -71,5 +72,5 @@ add_executable(${PROJECT_NAME} ${SOURCE_FILES}
         Missions/PositionMission.cpp Missions/PositionMission.h
         Missions/PositionOffsetMission.cpp Missions/PositionOffsetMission.h
         Missions/VelocityMission.cpp Missions/VelocityMission.h
-        Missions/WaypointMission.cpp Missions/WaypointMission.h)
+        Missions/WaypointsMission.cpp Missions/WaypointsMission.h)
 target_link_libraries(${PROJECT_NAME} djiosdk-core)

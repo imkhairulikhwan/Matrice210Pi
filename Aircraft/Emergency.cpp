@@ -8,6 +8,8 @@
 
 #include "dji_vehicle.hpp"
 
+#include "../util/Log.h"
+
 using namespace M210;
 
 pthread_mutex_t Emergency::mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -33,7 +35,7 @@ void Emergency::set() {
 bool Emergency::isEnabled(bool displayError) {
     if(state) {
         if(!messageDisplayed || displayError) {
-            DERROR("Emergency break enabled");
+            LERROR("Emergency break enabled");
             messageDisplayed = true;
         }
         return true;

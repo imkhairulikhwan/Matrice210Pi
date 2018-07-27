@@ -4,8 +4,8 @@
  *  @author Jonathan Michel
  */
 
-#ifndef MATRICE210_WAYPOINTMISSION_H
-#define MATRICE210_WAYPOINTMISSION_H
+#ifndef MATRICE210_WAYPOINTSMISSION_H
+#define MATRICE210_WAYPOINTSMISSION_H
 
 #include <vector>
 
@@ -27,15 +27,11 @@ namespace M210 {
         WayPointInitSettings waypointsSettings;
         uint8_t index;
 
-        bool missionInitialized;
-        bool isMissionInitialited();
-        void init();
         // Default struct constructors
         void setWaypointDefaults(WayPointSettings *wp);
         void setWaypointSettingsDefaults(WayPointInitSettings *fdata);
         //
         void currentPosition(GlobalPosition &position);
-        void uploadWaypoints();
     public:
         explicit WaypointMission(FlightController* flightController);
 
@@ -53,4 +49,4 @@ namespace M210 {
 }
 
 
-#endif //MATRICE210_WAYPOINTMISSION_H
+#endif //MATRICE210_WAYPOINTSMISSION_H

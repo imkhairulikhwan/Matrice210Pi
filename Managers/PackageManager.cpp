@@ -6,6 +6,8 @@
 
 #include "PackageManager.h"
 
+#include "../util/Log.h"
+
 using namespace M210;
 
 pthread_mutex_t PackageManager::packageManager_mutex = PTHREAD_MUTEX_INITIALIZER;

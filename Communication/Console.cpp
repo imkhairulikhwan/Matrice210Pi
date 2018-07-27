@@ -14,6 +14,7 @@
 #include "../Action/ActionData.h"
 #include "../Managers/PackageManager.h"
 #include "../Managers/ThreadManager.h"
+#include "../util/Log.h"
 #include "../util/timer.h"
 
 using namespace M210;
@@ -110,7 +111,7 @@ void* Console::consoleThread(void* param) {
                 getline(cin, command);
                 DSTATUS("Send data to mobile : %s", command.c_str());
                 // TODO Add to action queue
-                c->flightController->sendDataToMSDK((uint8_t *)command.c_str(), (uint8_t)command.length());
+                c->flightController->sendDataToMSDK(reinterpret_cast<const uint8_t *>(command.c_str()), (uint8_t)command.length());
             }
                 break;
             case 'r':

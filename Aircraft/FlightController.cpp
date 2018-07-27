@@ -9,18 +9,19 @@
 #include <cmath>
 #include <iostream>
 
-#include "../util/timer.h"
 #include <dji_linux_helpers.hpp>
 
 #include "Emergency.h"
 #include "Watchdog.h"
+#include "../util/Log.h"
+#include "../util/timer.h"
 #include "../Managers/PackageManager.h"
 #include "../Managers/ThreadManager.h"
 #include "../Missions/MonitoredMission.h"
 #include "../Missions/PositionMission.h"
 #include "../Missions/VelocityMission.h"
 #include "../Missions/PositionOffsetMission.h"
-#include "../Missions/WaypointMission.h"
+#include "../Missions/WaypointsMission.h"
 
 using namespace M210;
 
@@ -106,7 +107,7 @@ void *FlightController::flightControllerThread(void *param) {
 
                 break;
             case STOP:
-                DSTATUS("Aircraft stopped");
+                LSTATUS("Aircraft stopped");
                 // TODO Remove if packages need to be keep while aircraft is stopped
                 PackageManager::instance().clear();
                 fc->setMovingMode(WAIT);
@@ -164,7 +165,7 @@ void FlightController::moveByPositionOffset(const Vector3f *offset, float yaw,
 }
 
 void FlightController::stopAircraft() {
-    DSTATUS("Stop aircraft");
+    LSTATUS("Stop aircraft");
     // Stop aircraft
     vehicle->control->emergencyBrake();
     // Stop state machine sending moving commands
@@ -194,13 +195,13 @@ void FlightController::emergencyStop() {
     emergency->set();
     vehicle->control->emergencyBrake();
     setMovingMode(STOP);
-    DERROR("Emergency break set !");
+    LERROR("Emergency break set !");
 }
 
 void FlightController::emergencyRelease() {
     emergency->release();
     setMovingMode(STOP);
-    DSTATUS("Emergency break released !");
+    LSTATUS("Emergency break released !");
 }
 
 void FlightController::sendDataToMSDK(const uint8_t *data, size_t length) const {

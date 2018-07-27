@@ -6,6 +6,7 @@
 
 #include "Mobile.h"
 
+#include "../util/Log.h"
 #include "../Aircraft/FlightController.h"
 #include "../Aircraft/Watchdog.h"
 #include "../Action/Action.h"
@@ -60,7 +61,7 @@ void Mobile::mobileCallback(Vehicle *vehicle, RecvContainer recvFrame,
                         actionData->push((char)data[3]);    // mission action
                         actionData->push((char)data[2]);    // mission type
                     } else {
-                        DERROR("Mission data format error");
+                        LERROR("Mission data format error");
                     }
                     break;
                 case 'w':
@@ -68,13 +69,13 @@ void Mobile::mobileCallback(Vehicle *vehicle, RecvContainer recvFrame,
                     //m->getFlightController()->getWatchdog()->reset();
                     break;
                 default:
-                    DERROR("Unknown command");
+                    LERROR("Unknown command");
                     break;
             }
             if(actionData != nullptr)
                 Action::instance().add(actionData);
         } else {
-            DERROR("Unknown command format");
+            LERROR("Unknown command format");
         }
     } else {
         // Data received displayed as string

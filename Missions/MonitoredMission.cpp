@@ -8,6 +8,7 @@
 
 #include "../Aircraft/FlightController.h"
 #include "../Managers/PackageManager.h"
+#include "../util/Log.h"
 #include "../util/timer.h"
 
 using namespace M210;
@@ -17,7 +18,7 @@ MonitoredMission::MonitoredMission(FlightController *flightController) {
 }
 
 bool MonitoredMission::takeOff(int timeout) const {
-    DSTATUS("Take-off launched");
+    LSTATUS("Take-off launched");
 
     /*/ Subscribe to package
             index : 0
@@ -33,14 +34,14 @@ bool MonitoredMission::takeOff(int timeout) const {
 
     int pkgIndex = PackageManager::instance().subscribe(topics, numTopics, frequency, false);
     if (pkgIndex < 0) {
-        DERROR("Take-off - Failed to start package");
+        LERROR("Take-off - Failed to start package");
         return false;
     }
 
     // Start takeoff
     ACK::ErrorCode ack = flightController->getVehicle()->control->takeoff(timeout);
     if (ACK::getError(ack) != ACK::SUCCESS) {
-        DERROR("Start take-off failed");
+        LERROR("Start take-off failed");
         ACK::getErrorCodeMessage(ack, __func__);
         PackageManager::instance().unsubscribe(pkgIndex);
         return false;
@@ -60,7 +61,7 @@ bool MonitoredMission::takeOff(int timeout) const {
     }
 
     if (motorsNotStarted == timeoutCycles) {
-        DERROR("Take-off failed. Motors are not spinning");
+        LERROR("Take-off failed. Motors are not spinning");
         // Cleanup
         PackageManager::instance().unsubscribe(pkgIndex);
         return false;
@@ -82,7 +83,7 @@ bool MonitoredMission::takeOff(int timeout) const {
     }
 
     if (stillOnGround == timeoutCycles) {
-        DERROR("Takeoff failed. Aircraft is still on the ground, but the motors are spinning");
+        LERROR("Takeoff failed. Aircraft is still on the ground, but the motors are spinning");
         // Cleanup
         PackageManager::instance().unsubscribe(pkgIndex);
         return false;
@@ -100,9 +101,9 @@ bool MonitoredMission::takeOff(int timeout) const {
         VehicleStatus::DisplayMode::MODE_P_GPS ||
         flightController->getVehicle()->subscribe->getValue<TOPIC_STATUS_DISPLAYMODE>() !=
         VehicleStatus::DisplayMode::MODE_ATTITUDE) {
-        DSTATUS("Successful takeoff!");
+        LSTATUS("Successful takeoff!");
     } else {
-        DERROR("Takeoff finished, but the aircraft is in an unexpected mode. Please connect DJI GO");
+        LERROR("Takeoff finished, but the aircraft is in an unexpected mode. Please connect DJI GO");
         PackageManager::instance().unsubscribe(pkgIndex);
         return false;
     }
@@ -130,14 +131,14 @@ bool MonitoredMission::landing(int timeout) const {
     int numTopics = sizeof(topics) / sizeof(topics[0]);
     int pkgIndex = PackageManager::instance().subscribe(topics, numTopics, frequency, false);
     if (pkgIndex < 0) {
-        DERROR("Landing - Failed to start package");
+        LERROR("Landing - Failed to start package");
         return false;
     }
 
     // Start landing
     ACK::ErrorCode landingStatus = flightController->getVehicle()->control->land(timeout);
     if (ACK::getError(landingStatus) != ACK::SUCCESS) {
-        DERROR("Start landing failed");
+        LERROR("Start landing failed");
         ACK::getErrorCodeMessage(landingStatus, __func__);
         return false;
     }
@@ -154,7 +155,7 @@ bool MonitoredMission::landing(int timeout) const {
     }
 
     if (landingNotStarted == timeoutCycles) {
-        DERROR("Landing failed. Aircraft is still in the air");
+        LERROR("Landing failed. Aircraft is still in the air");
         // Cleanup before return
         PackageManager::instance().unsubscribe(pkgIndex);
         return false;
@@ -172,9 +173,9 @@ bool MonitoredMission::landing(int timeout) const {
         VehicleStatus::DisplayMode::MODE_P_GPS ||
         flightController->getVehicle()->subscribe->getValue<TOPIC_STATUS_DISPLAYMODE>() !=
         VehicleStatus::DisplayMode::MODE_ATTITUDE) {
-        DSTATUS("Successful landing!");
+        LSTATUS("Successful landing!");
     } else {
-        DERROR("Landing finished, but the aircraft is in an unexpected mode. Please connect DJI GO");
+        LERROR("Landing finished, but the aircraft is in an unexpected mode. Please connect DJI GO");
         PackageManager::instance().unsubscribe(pkgIndex);
         return false;
     }

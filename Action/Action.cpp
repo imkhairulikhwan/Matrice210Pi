@@ -10,6 +10,7 @@
 #include "ActionData.h"
 #include "../Aircraft/FlightController.h"
 #include "../Aircraft/Watchdog.h"
+#include "../util/Log.h"
 
 using namespace M210;
 
@@ -93,11 +94,11 @@ void Action::process() const {
                             waypointsMission(action);
                             break;
                         default:
-                            DERROR("Mission - Unknown mission kind");
+                            LERROR("Mission - Unknown mission kind");
                             break;
                     }
                 } else {
-                    DERROR("Mission - Unable to determine mission type");
+                    LERROR("Mission - Unable to determine mission type");
                 }
             }
                 break;
@@ -116,7 +117,7 @@ void Action::process() const {
                 flightController->getWatchdog()->reset();
                 break;
             default:
-                DERROR("Unknown action");
+                LERROR("Mission - Unknown action");
         }
         delete action;
     }
@@ -132,10 +133,10 @@ void Action::velocityMission(ActionData *action) const {
             action->popVector3f(v);
             flightController->moveByVelocity(&v, yaw);
         } else {
-            DERROR("Unknown task");
+            LERROR("velocityMission - Unknown task");
         }
     } else {
-        DERROR("Unable to determine task");
+        LERROR("velocityMission - Unable to determine task");
     }
 }
 
@@ -149,10 +150,10 @@ void Action::positionMission(ActionData *action) const {
             action->popVector3f(v);
             flightController->moveByPosition(&v, yaw);
         } else {
-            DERROR("Unknown task");
+            LERROR("positionMission - Unknown task");
         }
     } else {
-        DERROR("Unable to determine task");
+        LERROR("positionMission - Unable to determine task");
     }
 }
 
@@ -166,10 +167,10 @@ void Action::positionOffsetMission(ActionData *action) const {
             action->popVector3f(v);
             flightController->moveByPositionOffset(&v, yaw);
         } else {
-            DERROR("Unknown task");
+            LERROR("positionOffsetMission - Unknown task");
         }
     } else {
-        DERROR("Unable to determine task");
+        LERROR("positionOffsetMission - Unable to determine task");
     }
 }
 
@@ -178,6 +179,6 @@ void Action::waypointsMission(ActionData *action) const {
     if(action->popChar(task)) {
         flightController->waypointsMissionAction((unsigned) task);
     } else {
-        DERROR("Unable to determine task");
+        LERROR("waypointsMission - Unable to determine task");
     }
 }

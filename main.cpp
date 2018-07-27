@@ -17,6 +17,7 @@
 #include "Communication/Console.h"
 #include "Communication/Mobile.h"
 #include "Communication/Uart.h"
+#include "util/Log.h"
 
 bool running = true;
 
@@ -42,10 +43,11 @@ int main(int argc, char** argv)
     // Initialize flight controller
     flightController = new FlightController();
     flightController->setupVehicle(argc, argv);
-
+    
     // Package manager
-    PackageManager::instance().setVehicle(flightController->getVehicle());
-    Action::instance().setFlightController(flightController);
+    M210::Log::instance().setFlightController(flightController);
+    M210::PackageManager::instance().setVehicle(flightController->getVehicle());
+    M210::Action::instance().setFlightController(flightController);
 
     // Console thread
     console =  new Console(flightController);

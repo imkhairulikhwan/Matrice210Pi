@@ -13,6 +13,7 @@
 #include "../Managers/PackageManager.h"
 #include "../Aircraft/FlightController.h"
 #include "../util/timer.h"
+#include "../util/Log.h"
 
 using namespace M210;
 
@@ -22,7 +23,7 @@ PositionOffsetMission::PositionOffsetMission(FlightController *flightController)
 
 bool PositionOffsetMission::move(const Vector3f *offset, float yaw,
                                  float posThreshold, float yawThreshold) {
-    DSTATUS("PositionOffsetMission move : x = % .2f m, y = % .2f m, z = % .2f m, % .2f deg",
+    LSTATUS("PositionOffsetMission move : x = % .2f m, y = % .2f m, z = % .2f m, % .2f deg",
             offset->x, offset->y, offset->z, yaw);
     vehicle = flightController->getVehicle();
     setOffset(offset, yaw * DEG2RAD);
@@ -44,7 +45,7 @@ bool PositionOffsetMission::move(const Vector3f *offset, float yaw,
         pkgIndex = PackageManager::instance().subscribe(topics, numTopic, frequency,
                                                                    false);
         if (pkgIndex < 0) {
-            DERROR("PositionOffset mission aborted");
+            LERROR("PositionOffset mission aborted");
             return false;
         }
 
@@ -54,7 +55,7 @@ bool PositionOffsetMission::move(const Vector3f *offset, float yaw,
     // Broadcast height is used since relative height through subscription arrived
     if (!FlightController::startGlobalPositionBroadcast(vehicle))
     {
-        DERROR("Failed to start global position broadcast");
+        LERROR("Failed to start global position broadcast");
         // Cleanup before return
         PackageManager::instance().unsubscribe(pkgIndex);
         return false;
@@ -174,13 +175,13 @@ bool PositionOffsetMission::update() {
         }
     } else {
         stop();
-        DERROR("Position offset mission timeout");
+        LERROR("Position offset mission timeout");
         return false;
     }
 
     if(destinationReached) {
         stop();
-        DSTATUS("Position offset mission done");
+        LSTATUS("Position offset mission done");
         return true;
     }
 

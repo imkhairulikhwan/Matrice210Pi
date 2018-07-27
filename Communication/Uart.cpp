@@ -11,6 +11,7 @@
 #include <string>
 #include <sstream>
 
+#include "../util/Log.h"
 #include "../Aircraft/FlightController.h"
 #include "../Managers/ThreadManager.h"
 
@@ -40,7 +41,7 @@ size_t Uart::read(uint8_t *buf, size_t len) const{
 }
 
 void *Uart::uartRxThread(void *param) {
-    DSTATUS("uartRxThread running...");
+    LSTATUS("uartRxThread running...");
     auto uart = static_cast<Uart*>(param);
     char rxBuffer[256];
     uint8_t rxChar;
@@ -58,7 +59,7 @@ void *Uart::uartRxThread(void *param) {
             rxIndex++;
             // '@' indicate end of transmission
             if(rxChar == '@') {
-                DSTATUS("Frame received : %u", rxIndex);
+                LSTATUS("Frame received : %u", rxIndex);
                 // TODO Launch in new thread ?
                 // Process data
                 long data_i[20];
@@ -110,7 +111,7 @@ void *Uart::uartRxThread(void *param) {
                     }
                         break;
                     default:
-                        DERROR("Unknown data received : %u", data_i[0]);
+                        LERROR("Unknown data received : %u", data_i[0]);
                         break;
                 }
 
