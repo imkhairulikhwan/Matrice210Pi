@@ -89,6 +89,9 @@ void Action::process() const {
                         case MissionType::POSITION_OFFSET: // Position offset mission
                             positionOffsetMission(action);
                             break;
+                        case MissionType::WAYPOINTS:        // Waypoints mission
+                            waypointsMission(action);
+                            break;
                         default:
                             DERROR("Mission - Unknown mission kind");
                             break;
@@ -165,6 +168,15 @@ void Action::positionOffsetMission(ActionData *action) const {
         } else {
             DERROR("Unknown task");
         }
+    } else {
+        DERROR("Unable to determine task");
+    }
+}
+
+void Action::waypointsMission(ActionData *action) const {
+    char task;
+    if(action->popChar(task)) {
+        flightController->waypointsMissionAction((unsigned) task);
     } else {
         DERROR("Unable to determine task");
     }

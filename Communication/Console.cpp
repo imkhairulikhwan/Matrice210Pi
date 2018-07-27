@@ -100,13 +100,6 @@ void* Console::consoleThread(void* param) {
                 actionData->push((char)1);    // mission kind
             }
                 break;
-            case '6': {
-                unsigned u = (unsigned)c->getNumber("1pol 2res 3pau 4sto 5sav 6ret");
-                c->flightController->waypointMissionAction(u);
-                displayMenu = false;
-            }
-                break;
-                break;
             case 'e':
                 // Emergency stop is called directly here to avoid delay
                 c->flightController->emergencyStop();
@@ -146,10 +139,8 @@ void Console::displayMenu() const {
     displayMenuLine('3', "moveByPosition");
     displayMenuLine('4', "moveByPositionOffset");
     displayMenuLine('5', "moveByVelocity");
-    displayMenuLine('6', "Waypoint mission");
     displayMenuLine('e', "Emergency stop");
     displayMenuLine('m', "Send custom command");
-    displayMenuLine('p', "Get current position");
     displayMenuLine('r', "Release emergency stop");
     displayMenuLine('s', "Stop aircraft");
     cout << endl;

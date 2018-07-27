@@ -106,8 +106,8 @@ namespace M210 {
         void moveByPositionOffset(const Vector3f *offset, float yaw,
                                   float posThreshold = 0.2,
                                   float yawThreshold = 1.0);
-        // TODO Temporary tests, remove
-        void waypointMissionAction(unsigned numWaypoints);
+        // Todo replace
+        void waypointsMissionAction(unsigned task);
 
         // Stop and emergency
         void stopAircraft();

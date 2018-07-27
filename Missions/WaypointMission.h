@@ -15,38 +15,40 @@ using namespace std;
 using namespace DJI::OSDK;
 using namespace DJI::OSDK::Telemetry;
 
+#define MAX_WAYPOINTS 8
+
 namespace M210 {
     class FlightController;
 
     class WaypointMission {
     private:
         FlightController* flightController;
-        GlobalPosition savedPosition;
+        vector<DJI::OSDK::WayPointSettings> waypointsList;
+        WayPointInitSettings waypointsSettings;
+        uint8_t index;
 
-        bool polygonExample(uint8_t numWaypoints);
-        bool start();
-        bool stop();
-        bool pause();
-        bool resume();
+        bool missionInitialized;
+        bool isMissionInitialited();
+        void init();
+        // Default struct constructors
         void setWaypointDefaults(WayPointSettings *wp);
-
-        void setWaypointInitDefaults(WayPointInitSettings *fdata);
-
-        vector<WayPointSettings> createWaypoints( int numWaypoints,
-                                                  float64_t distanceIncrement, float start_alt);
-
-        vector<WayPointSettings> generateWaypointsPolygon( WayPointSettings *start_data,
-                                                           float64_t increment, int num_wp);
-
-        void uploadWaypoints(vector<WayPointSettings> &wp_list);
+        void setWaypointSettingsDefaults(WayPointInitSettings *fdata);
+        //
+        void currentPosition(GlobalPosition &position);
+        void uploadWaypoints();
     public:
         explicit WaypointMission(FlightController* flightController);
-        void action(unsigned id);
-        // Tests
-        void currentPosition(GlobalPosition &position);
-        void returnToSavedPosition();
 
-        void saveCurrentPosition();
+        // Mission
+        void add();
+        bool start();
+        void reset();
+        // TODO implement in MOC
+        bool pause();
+        bool resume();
+        bool stop();
+        // TODO better !
+        void action(unsigned int task);
     };
 }
 

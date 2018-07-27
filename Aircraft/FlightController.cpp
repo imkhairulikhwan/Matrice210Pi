@@ -163,10 +163,6 @@ void FlightController::moveByPositionOffset(const Vector3f *offset, float yaw,
     movingMode = POSITION_OFFSET;
 }
 
-void FlightController::waypointMissionAction(unsigned action) {
-    waypointMission->action(action);
-}
-
 void FlightController::stopAircraft() {
     DSTATUS("Stop aircraft");
     // Stop aircraft
@@ -283,4 +279,8 @@ Telemetry::Vector3f FlightController::toEulerAngle(const Telemetry::Quaternion *
     ans.z = (float32_t) atan2(t1, t0);  // yaw
 
     return ans;
+}
+
+void FlightController::waypointsMissionAction(unsigned task) {
+    waypointMission->action(task);
 }

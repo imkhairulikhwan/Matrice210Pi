@@ -29,7 +29,9 @@ namespace M210 {
             WAYPOINTS
         };
         enum MissionAction {
-            START = 1
+            START = 1,
+            ADD,
+            RESET
         };
     private:
         mq_attr actionQueueAttr;
@@ -43,6 +45,8 @@ namespace M210 {
         void velocityMission(ActionData *action) const;
 
         void positionOffsetMission(ActionData *action) const;
+
+        void waypointsMission(ActionData *action) const;
 
     public:
         Action();
