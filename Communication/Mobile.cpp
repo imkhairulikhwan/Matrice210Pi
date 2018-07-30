@@ -6,12 +6,15 @@
 
 #include "Mobile.h"
 
+#include <string>
+
 #include "../util/Log.h"
 #include "../Aircraft/FlightController.h"
 #include "../Aircraft/Watchdog.h"
 #include "../Action/Action.h"
 #include "../Action/ActionData.h"
 
+using namespace std;
 using namespace M210;
 
 Mobile::Mobile(FlightController *flightController) : flightController(flightController) {
@@ -66,7 +69,6 @@ void Mobile::mobileCallback(Vehicle *vehicle, RecvContainer recvFrame,
                     break;
                 case 'w':
                     actionData = new ActionData(ActionData::ActionId::watchdog);
-                    //m->getFlightController()->getWatchdog()->reset();
                     break;
                 default:
                     LERROR("Unknown command");
@@ -84,5 +86,14 @@ void Mobile::mobileCallback(Vehicle *vehicle, RecvContainer recvFrame,
         }
         data[msgLength] = '\0';
         DSTATUS("String received : %s", recvFrame.recvData.raw_ack_array);
+
+        // Hello world response for fun
+        string msg = string(reinterpret_cast<char*>(data));
+        string hw = "Hello world from Android";
+        if(msg == hw) {
+            actionData = new ActionData(ActionData::ActionId::helloWorld);
+            Action::instance().add(actionData);
+        }
+
     }
 }

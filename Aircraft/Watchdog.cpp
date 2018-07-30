@@ -8,6 +8,8 @@
 
 #include <dji_vehicle.hpp>
 
+#include "../util/Log.h"
+
 using namespace M210;
 
 pthread_mutex_t Watchdog::mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -40,7 +42,9 @@ bool Watchdog::isEnabled() {
     // Display error once
     pthread_mutex_lock(&mutex);
     if(!errorDisplayed) {
-        DERROR("Watchdog enabled, please relaunch Android app");
+        // Supposed to use DERROR, if watchdog is enabled it means that Android App is
+        // disconnected. But sometimes watchdog appears during app use. LERROR for debug
+        LERROR("Watchdog enabled, please relaunch Android app");
         errorDisplayed = true;
     }
     pthread_mutex_unlock(&mutex);

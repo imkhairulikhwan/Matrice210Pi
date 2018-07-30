@@ -115,6 +115,12 @@ void Action::process() const {
                 break;
             case ActionData::ActionId::watchdog:
                 flightController->getWatchdog()->reset();
+                flightController->sendDataToMSDK(reinterpret_cast<const uint8_t *>("#w"), 2);
+                break;
+            case ActionData::ActionId ::helloWorld: {
+                char hw[] = "Hello world from Pi";
+                flightController->sendDataToMSDK(reinterpret_cast<const uint8_t *>(hw), strlen(hw));
+            }
                 break;
             default:
                 LERROR("Mission - Unknown action");

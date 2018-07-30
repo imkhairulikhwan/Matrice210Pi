@@ -24,7 +24,8 @@ namespace M210 {
             stopAircraft,
             emergencyStop,
             emergencyRelease,
-            watchdog
+            watchdog,
+            helloWorld
         };
     private:
         char *data;
