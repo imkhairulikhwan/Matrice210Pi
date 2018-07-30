@@ -33,6 +33,7 @@ bool M210::WaypointMission::start() {
     if (ACK::getError(initAck)) {
         LERROR("Mission initialization failed");
         ACK::getErrorCodeMessage(initAck, __func__);
+        return false;
     }
 
     flightController->getVehicle()->missionManager->printInfo();
@@ -46,6 +47,7 @@ bool M210::WaypointMission::start() {
         if (ACK::getError(wpDataACK.ack)) {
             LERROR("Waypoint upload failed");
             ACK::getErrorCodeMessage(wpDataACK.ack, __func__);
+            return false;
         }
     }
 
@@ -127,8 +129,8 @@ void M210::WaypointMission::setWaypointDefaults(WayPointSettings* wp)
 
 void M210::WaypointMission::setWaypointSettingsDefaults(WayPointInitSettings *fdata)
 {
-    fdata->maxVelocity    = 10;
-    fdata->idleVelocity   = 5;
+    fdata->maxVelocity    = 6;
+    fdata->idleVelocity   = 4;
     fdata->finishAction   = 0;
     fdata->executiveTimes = 1;
     fdata->yawMode        = 0;
@@ -141,35 +143,41 @@ void M210::WaypointMission::setWaypointSettingsDefaults(WayPointInitSettings *fd
 }
 
 bool M210::WaypointMission::stop() {
+    if(!isMissionInitialized())
+        return false;
     ACK::ErrorCode ack = flightController->getVehicle()->missionManager->wpMission->stop(1);
     if (ACK::getError(ack)) {
         LERROR("Stop waypoints mission failed");
         ACK::getErrorCodeMessage(ack, __func__);
         return false;
     }
-    LSTATUS("Stopping waypoints mission");
+    LSTATUS("Waypoints mission stopped");
     return true;
 }
 
 bool M210::WaypointMission::pause() {
+    if(!isMissionInitialized())
+        return false;
     ACK::ErrorCode ack = flightController->getVehicle()->missionManager->wpMission->pause(1);
     if (ACK::getError(ack)) {
         LERROR("Pause waypoints mission failed");
         ACK::getErrorCodeMessage(ack, __func__);
         return false;
     }
-    LSTATUS("Pause Waypoints mission");
+    LSTATUS("Waypoints mission paused");
     return true;
 }
 
 bool M210::WaypointMission::resume() {
+    if(!isMissionInitialized())
+        return false;
     ACK::ErrorCode ack = flightController->getVehicle()->missionManager->wpMission->resume(1);
     if (ACK::getError(ack)) {
         LERROR("Resume waypoints mission failed");
         ACK::getErrorCodeMessage(ack, __func__);
         return false;
     }
-    LSTATUS("Resume waypoints Mission");
+    LSTATUS("Waypoints mission resumed");
     return true;
 }
 
@@ -184,7 +192,23 @@ void M210::WaypointMission::action(unsigned int task) {
         case Action::MissionAction::START:
             start();
             break;
+        case Action::MissionAction::STOP:
+            stop();
+            break;
+        case Action::MissionAction::PAUSE:
+            pause();
+            break;
+        case Action::MissionAction::RESUME:
+            resume();
+            break;
         default:
             LERROR("Unknown action");
     }
+}
+
+bool M210::WaypointMission::isMissionInitialized() {
+    if(flightController->getVehicle()->missionManager->wpMission != nullptr)
+        return true;
+    LERROR("Waypoints mission not started");
+    return false;
 }

@@ -31,7 +31,10 @@ namespace M210 {
         enum MissionAction {
             START = 1,
             ADD,
-            RESET
+            RESET,
+            STOP,
+            PAUSE,
+            RESUME
         };
     private:
         mq_attr actionQueueAttr;

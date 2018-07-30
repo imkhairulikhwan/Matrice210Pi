@@ -22,6 +22,7 @@
 #include "../Missions/VelocityMission.h"
 #include "../Missions/PositionOffsetMission.h"
 #include "../Missions/WaypointsMission.h"
+#include "../Action/Action.h"
 
 using namespace M210;
 
@@ -125,6 +126,7 @@ void *FlightController::flightControllerThread(void *param) {
                 delay_ms(fc->positionOffsetMission->getCycleTimeMs());
                 break;
         }
+        fc->watchdog->update();
     }
     return nullptr;
 }
@@ -191,10 +193,14 @@ void FlightController::positionAndYawCtrl(const Vector3f *position, float yaw) {
 }
 
 void FlightController::emergencyStop() {
-    // First of all set emergency state (to stop sending moving order) and stop aircraft
+    // First of all set emergency state (to stop sending moving order)
     emergency->set();
+    // Stop aircraft
     vehicle->control->emergencyBrake();
+    // Set FlightController thread in stop mode
     setMovingMode(STOP);
+    // Stop waypoints mission
+    waypointMission->action(Action::MissionAction::STOP);
     LERROR("Emergency break set !");
 }
 

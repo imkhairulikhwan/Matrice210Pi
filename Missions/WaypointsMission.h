@@ -45,6 +45,8 @@ namespace M210 {
         bool stop();
         // TODO better !
         void action(unsigned int task);
+
+        bool isMissionInitialized();
     };
 }
 
