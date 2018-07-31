@@ -15,13 +15,13 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fdbea2dc-1dac-46da-b7f3-5776329e16ab" name="Default" comment="Mutex waypoints mission, sh launch script">
-      <change afterPath="$PROJECT_DIR$/Linux/startMatrice210.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Linux/stopMatrice210.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="fdbea2dc-1dac-46da-b7f3-5776329e16ab" name="Default" comment="Add program argument to">
+      <change beforePath="$PROJECT_DIR$/Linux/makeMatrice210.sh" beforeDir="false" afterPath="$PROJECT_DIR$/Linux/makeMatrice210.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux/matrice210.service" beforeDir="false" afterPath="$PROJECT_DIR$/Linux/matrice210.service" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux/runMatrice210.sh" beforeDir="false" afterPath="$PROJECT_DIR$/Linux/runMatrice210.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux/startMatrice210.sh" beforeDir="false" afterPath="$PROJECT_DIR$/Linux/startMatrice210.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux/stopMatrice210.sh" beforeDir="false" afterPath="$PROJECT_DIR$/Linux/stopMatrice210.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sh/makeMatrice210.sh" beforeDir="false" afterPath="$PROJECT_DIR$/Linux/makeMatrice210.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sh/runMatrice210.sh" beforeDir="false" afterPath="$PROJECT_DIR$/Linux/runMatrice210.sh" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -36,16 +36,16 @@
         <counts>
           <entry key="cpp" value="337" />
           <entry key="h" value="3" />
-          <entry key="service" value="321" />
-          <entry key="sh" value="177" />
-          <entry key="txt" value="43" />
+          <entry key="service" value="380" />
+          <entry key="sh" value="348" />
+          <entry key="txt" value="171" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Bash" value="177" />
+          <entry key="Bash" value="348" />
           <entry key="ObjectiveC" value="340" />
-          <entry key="PLAIN_TEXT" value="364" />
+          <entry key="PLAIN_TEXT" value="551" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -53,13 +53,13 @@
           <entry key="cpp" value="20" />
           <entry key="h" value="5" />
           <entry key="service" value="1" />
-          <entry key="sh" value="7" />
+          <entry key="sh" value="18" />
           <entry key="txt" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Bash" value="5" />
+          <entry key="Bash" value="16" />
           <entry key="ObjectiveC" value="25" />
           <entry key="PLAIN_TEXT" value="4" />
         </counts>
@@ -102,29 +102,20 @@
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Linux/runMatrice210.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="17">
+              <caret line="1" column="32" selection-start-line="1" selection-start-column="32" selection-end-line="1" selection-end-column="32" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Linux/stopMatrice210.sh">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="36" lean-forward="true" selection-start-line="2" selection-start-column="36" selection-end-line="2" selection-end-column="36" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Linux/matrice210.service">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" column="48" selection-start-line="4" selection-start-column="48" selection-end-line="4" selection-end-column="48" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Linux/startMatrice210.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="30" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
+            <state relative-caret-position="85">
+              <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
             </state>
           </provider>
         </entry>
@@ -216,11 +207,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Mission/MonitoredMission.h" />
-        <option value="$PROJECT_DIR$/Mission/MonitoredMission.cpp" />
-        <option value="$PROJECT_DIR$/Missions/M210MonitoredMission.h" />
-        <option value="$PROJECT_DIR$/Aircraft/Emergency.h" />
-        <option value="$PROJECT_DIR$/util/timer.h" />
         <option value="$PROJECT_DIR$/util/timer.cpp" />
         <option value="$PROJECT_DIR$/Communication/Console.h" />
         <option value="$PROJECT_DIR$/Communication/Mobile.h" />
@@ -266,7 +252,12 @@
         <option value="$PROJECT_DIR$/Action/Action.cpp" />
         <option value="$PROJECT_DIR$/sh/stopMatrice210.sh" />
         <option value="$PROJECT_DIR$/sh/startMatrice210.sh" />
+        <option value="$PROJECT_DIR$/Linux/matrice210.service" />
         <option value="$PROJECT_DIR$/Linux/startMatrice210.sh" />
+        <option value="$PROJECT_DIR$/Linux/stopMatrice210.sh" />
+        <option value="&lt;c5c5c62d-3018-4dd6-beab-fde2237e49ee&gt;/Matrice210/code/Matrice210/Linux/makeMatrice210.sh" />
+        <option value="$PROJECT_DIR$/Linux/makeMatrice210.sh" />
+        <option value="$PROJECT_DIR$/Linux/runMatrice210.sh" />
       </list>
     </option>
   </component>
@@ -309,6 +300,12 @@
               <item name="Matrice210" type="47feb1d3:ProjectViewModuleNode" />
               <item name="Matrice210Pi" type="462c0819:PsiDirectoryNode" />
               <item name="Action" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="matrice210" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Matrice210" type="47feb1d3:ProjectViewModuleNode" />
+              <item name="Matrice210Pi" type="462c0819:PsiDirectoryNode" />
+              <item name="Linux" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="matrice210" type="b2602c69:ProjectViewProjectNode" />
@@ -421,7 +418,7 @@
       <workItem from="1532588560546" duration="22081000" />
       <workItem from="1532676769265" duration="18049000" />
       <workItem from="1532933961608" duration="13882000" />
-      <workItem from="1533035083615" duration="5685000" />
+      <workItem from="1533035083615" duration="6797000" />
     </task>
     <task id="LOCAL-00001" summary="Flight control implementation, mobile and timers dedicated files">
       <created>1530609127680</created>
@@ -612,11 +609,18 @@
       <option name="project" value="LOCAL" />
       <updated>1533035297135</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="Linux services file and bash script to handle it">
+      <created>1533043228344</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1533043228345</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="390533000" />
+    <option name="totallyTimeSpent" value="391645000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -631,7 +635,7 @@
     <frame x="-8" y="-8" width="1696" height="1036" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4989154" visible="true" weight="0.21271394" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4989154" visible="true" weight="0.21271394" />
       <window_info id="Structure" order="1" sideWeight="0.5010846" side_tool="true" weight="0.20416667" />
       <window_info id="Favorites" order="2" sideWeight="0.50161815" side_tool="true" weight="0.20416667" />
       <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
@@ -674,7 +678,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Bugfix deadlock PackageManager, add console Emergency stop" />
     <MESSAGE value="Bugfix PackageManager : subscription return value" />
     <MESSAGE value="PositionMission implementation" />
     <MESSAGE value="I2C Test : Pi is master, STM32 is slave" />
@@ -699,7 +702,8 @@
     <MESSAGE value="Waypoint mission path recorder implementation" />
     <MESSAGE value="Down watchdog implementation, android app knows if ob computer is launched" />
     <MESSAGE value="Mutex waypoints mission, sh launch script" />
-    <option name="LAST_COMMIT_MESSAGE" value="Mutex waypoints mission, sh launch script" />
+    <MESSAGE value="Linux services file and bash script to handle it" />
+    <option name="LAST_COMMIT_MESSAGE" value="Linux services file and bash script to handle it" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/../../Onboard-SDK/osdk-core/api/src/dji_subscription.cpp">
@@ -1023,20 +1027,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Linux/makeMatrice210.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Linux/runMatrice210.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="26" selection-start-line="9" selection-start-column="26" selection-end-line="9" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="464">
@@ -1044,6 +1034,13 @@
           <folding>
             <element signature="e#91#110#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Linux/matrice210.service">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="26" selection-start-line="4" selection-start-column="26" selection-end-line="4" selection-end-column="68" />
         </state>
       </provider>
     </entry>
@@ -1057,24 +1054,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Linux/startMatrice210.sh">
+    <entry file="file://$PROJECT_DIR$/Linux/makeMatrice210.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="30" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
+        <state relative-caret-position="51">
+          <caret line="3" column="5" lean-forward="true" selection-start-line="3" selection-start-column="5" selection-end-line="3" selection-end-column="5" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Linux/matrice210.service">
+    <entry file="file://$PROJECT_DIR$/Linux/runMatrice210.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="48" selection-start-line="4" selection-start-column="48" selection-end-line="4" selection-end-column="48" />
+        <state relative-caret-position="17">
+          <caret line="1" column="32" selection-start-line="1" selection-start-column="32" selection-end-line="1" selection-end-column="32" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Linux/stopMatrice210.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
-          <caret line="2" column="36" lean-forward="true" selection-start-line="2" selection-start-column="36" selection-end-line="2" selection-end-column="36" />
+          <caret line="2" column="62" selection-start-line="2" selection-start-column="62" selection-end-line="2" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Linux/startMatrice210.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
         </state>
       </provider>
     </entry>

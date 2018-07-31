@@ -50,8 +50,11 @@ int main(int argc, char** argv)
     M210::Action::instance().setFlightController(flightController);
 
     // Console thread
-    console =  new Console(flightController);
-    console->launchThread();
+    // If program was called with 1 as argument
+    if(argc == 2 && strtol(argv[1], nullptr, 10)) {
+        console =  new Console(flightController);
+        console->launchThread();
+    }
 
     // Mobile-Onboard Communication
     mobileCommunication = new Mobile(flightController);
