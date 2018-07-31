@@ -7,6 +7,7 @@
 #ifndef MATRICE210_WAYPOINTSMISSION_H
 #define MATRICE210_WAYPOINTSMISSION_H
 
+#include <pthread.h>
 #include <vector>
 
 #include "dji_vehicle.hpp"
@@ -15,7 +16,7 @@ using namespace std;
 using namespace DJI::OSDK;
 using namespace DJI::OSDK::Telemetry;
 
-#define MAX_WAYPOINTS 8
+#define MAX_WAYPOINTS 15
 
 namespace M210 {
     class FlightController;
@@ -26,27 +27,24 @@ namespace M210 {
         vector<DJI::OSDK::WayPointSettings> waypointsList;
         WayPointInitSettings waypointsSettings;
         uint8_t index;
-
+        // Mutex to protect index and waypointsList
+        static pthread_mutex_t mutex;
         // Default struct constructors
         void setWaypointDefaults(WayPointSettings *wp);
         void setWaypointSettingsDefaults(WayPointInitSettings *fdata);
+        bool isMissionInitialized();
         //
         void currentPosition(GlobalPosition &position);
-    public:
-        explicit WaypointMission(FlightController* flightController);
-
-        // Mission
+        // Mission functions
         void add();
         bool start();
         void reset();
-        // TODO implement in MOC
         bool pause();
         bool resume();
         bool stop();
-        // TODO better !
+    public:
+        explicit WaypointMission(FlightController* flightController);
         void action(unsigned int task);
-
-        bool isMissionInitialized();
     };
 }
 

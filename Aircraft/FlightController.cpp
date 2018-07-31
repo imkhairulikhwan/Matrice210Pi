@@ -33,9 +33,9 @@ FlightController::FlightController() {
     linuxEnvironment = nullptr;
     vehicle = nullptr;
     flightControllerThreadRunning = false;
-    movingMode = STOP;
-    watchdog = new Watchdog(50);
+    watchdog = new Watchdog(1000);
     emergency = new Emergency();
+    setMovingMode(STOP);
     // Missions
     monitoredMission = new M210::MonitoredMission(this);
     positionMission = new M210::PositionMission(this);
@@ -108,8 +108,8 @@ void *FlightController::flightControllerThread(void *param) {
 
                 break;
             case STOP:
-                LSTATUS("Aircraft stopped");
                 // TODO Remove if packages need to be keep while aircraft is stopped
+                fc->stopAircraft();
                 PackageManager::instance().clear();
                 fc->setMovingMode(WAIT);
                 break;
@@ -126,7 +126,6 @@ void *FlightController::flightControllerThread(void *param) {
                 delay_ms(fc->positionOffsetMission->getCycleTimeMs());
                 break;
         }
-        fc->watchdog->update();
     }
     return nullptr;
 }
@@ -144,7 +143,7 @@ void FlightController::moveByPosition(const Vector3f *position, float yaw) {
         return;
     // Mission parameters
     positionMission->move(position, yaw);
-    movingMode = POSITION;
+    setMovingMode(POSITION);
 
 }
 
@@ -153,7 +152,7 @@ void FlightController::moveByVelocity(const Vector3f *velocity, float yaw) {
         return;
     // Mission parameters
     velocityMission->move(velocity, yaw);
-    movingMode = VELOCITY;
+    setMovingMode(VELOCITY);
 }
 
 
@@ -163,15 +162,17 @@ void FlightController::moveByPositionOffset(const Vector3f *offset, float yaw,
         return;
     positionOffsetMission->move(offset, yaw,
                                 posThreshold, yawThreshold);
-    movingMode = POSITION_OFFSET;
+    setMovingMode(POSITION_OFFSET);
 }
 
 void FlightController::stopAircraft() {
-    LSTATUS("Stop aircraft");
+    LSTATUS("Aircraft stopped");
     // Stop aircraft
     vehicle->control->emergencyBrake();
+    // Stop waypoints mission
+    waypointMission->action(Action::MissionAction::STOP);
     // Stop state machine sending moving commands
-    movingMode = STOP;
+    setMovingMode(STOP);
 }
 
 void FlightController::velocityAndYawRateCtrl(const Vector3f *velocity, float yaw) {

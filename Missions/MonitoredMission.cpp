@@ -38,7 +38,7 @@ bool MonitoredMission::takeOff(int timeout) const {
         return false;
     }
 
-    // Start takeoff
+    // Start take-off
     ACK::ErrorCode ack = flightController->getVehicle()->control->takeoff(timeout);
     if (ACK::getError(ack) != ACK::SUCCESS) {
         LERROR("Start take-off failed");
@@ -83,13 +83,13 @@ bool MonitoredMission::takeOff(int timeout) const {
     }
 
     if (stillOnGround == timeoutCycles) {
-        LERROR("Takeoff failed. Aircraft is still on the ground, but the motors are spinning");
+        LERROR("Take-off failed. Aircraft is still on the ground, but the motors are spinning");
         // Cleanup
         PackageManager::instance().unsubscribe(pkgIndex);
         return false;
     }
 
-    // Final check: Finished takeoff
+    // Final check: Finished take-off
     while (flightController->getVehicle()->subscribe->getValue<TOPIC_STATUS_DISPLAYMODE>() ==
            VehicleStatus::DisplayMode::MODE_ASSISTED_TAKEOFF ||
            flightController->getVehicle()->subscribe->getValue<TOPIC_STATUS_DISPLAYMODE>() ==
@@ -101,9 +101,9 @@ bool MonitoredMission::takeOff(int timeout) const {
         VehicleStatus::DisplayMode::MODE_P_GPS ||
         flightController->getVehicle()->subscribe->getValue<TOPIC_STATUS_DISPLAYMODE>() !=
         VehicleStatus::DisplayMode::MODE_ATTITUDE) {
-        LSTATUS("Successful takeoff!");
+        LSTATUS("Successful take-off!");
     } else {
-        LERROR("Takeoff finished, but the aircraft is in an unexpected mode. Please connect DJI GO");
+        LERROR("Take-off finished, but the aircraft is in an unexpected mode. Please connect DJI GO");
         PackageManager::instance().unsubscribe(pkgIndex);
         return false;
     }

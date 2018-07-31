@@ -20,6 +20,8 @@
 
 using namespace M210;
 
+pthread_mutex_t M210::WaypointMission::mutex = PTHREAD_MUTEX_INITIALIZER;
+
 M210::WaypointMission::WaypointMission(FlightController *flightController) {
     this->flightController = flightController;
     setWaypointSettingsDefaults(&waypointsSettings);
@@ -65,14 +67,16 @@ bool M210::WaypointMission::start() {
 
 void M210::WaypointMission::reset() {
     stop();
+    pthread_mutex_lock(&mutex);
     index = 0;
     waypointsList.clear();
     setWaypointSettingsDefaults(&waypointsSettings);
+    pthread_mutex_unlock(&mutex);
     LSTATUS("Waypoints mission reset");
 }
 
 void M210::WaypointMission::currentPosition(GlobalPosition &position) {
-    // TODO Nothing to do here !
+    // TODO Move, nothing to do here !
     if (!FlightController::startGlobalPositionBroadcast(flightController->getVehicle())) {
         LERROR("getCurrentPosition aborted");
         return;
@@ -90,23 +94,28 @@ void M210::WaypointMission::currentPosition(GlobalPosition &position) {
 }
 
 void M210::WaypointMission::add() {
-    // TODO Add mutex
     if(index < MAX_WAYPOINTS) {
         GlobalPosition position;
         currentPosition(position);
-        waypointsSettings.indexNumber = index+(uint8_t)1;
 
         WayPointSettings wp;
         setWaypointDefaults(&wp);
+
+        pthread_mutex_lock(&mutex);
+        waypointsSettings.indexNumber = index+(uint8_t)1;
+
         wp.index = index;
         wp.longitude = position.longitude;
         wp.latitude = position.latitude;
         wp.altitude = position.height;
         waypointsList.push_back(wp);
 
-        LSTATUS("Waypoint %u added (Lon Lat Hei): %f \t%f \t%f \t%f", index, wp.longitude,
+        LSTATUS("Waypoint %u added (Lon Lat Hei): %f \t%f \t%f", index, wp.longitude,
                 wp.latitude, wp.altitude);
         index++;
+        pthread_mutex_unlock(&mutex);
+    } else {
+        LERROR("Max waypoints reached");
     }
 }
 
@@ -207,8 +216,5 @@ void M210::WaypointMission::action(unsigned int task) {
 }
 
 bool M210::WaypointMission::isMissionInitialized() {
-    if(flightController->getVehicle()->missionManager->wpMission != nullptr)
-        return true;
-    LERROR("Waypoints mission not started");
-    return false;
+    return flightController->getVehicle()->missionManager->wpMission != nullptr;
 }
