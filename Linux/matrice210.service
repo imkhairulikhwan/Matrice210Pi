@@ -1,0 +1,18 @@
+# Add this file in /etc/systemd/system
+# Reload files after each modification with : sudo systemctl daemon-reload
+# Start the service : sudo systemctl start matrice210 --now
+# Stop the service : sudo systemctl stop matrice210 --now
+# List current services : systemctl list-units, add [| grep matrice] to display only matrice210 service status
+
+[Unit]
+Description=Start Matrice210 program
+
+[Service]
+Type=forking
+WorkingDirectory=/home/pi/Matrice210/code/Matrice210/build/bin/
+ExecStart=/bin/bash runMatrice210.sh
+TimeoutSec=infinity
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
