@@ -109,7 +109,6 @@ void *FlightController::flightControllerThread(void *param) {
                 break;
             case STOP:
                 // TODO Remove if packages need to be keep while aircraft is stopped
-                fc->stopAircraft();
                 PackageManager::instance().clear();
                 fc->setMovingMode(WAIT);
                 break;

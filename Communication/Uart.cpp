@@ -45,11 +45,15 @@ void *Uart::uartRxThread(void *param) {
     auto uart = static_cast<Uart*>(param);
     char rxBuffer[256];
     uint8_t rxChar;
-    int rxIndex = 0;
+    uint8_t rxIndex = 0;
 
-    // TODO Improve protocol
     // Current protocol implementation transmit ascii value of numbers
-    // Transmit 32 bits value with predefined frame format and length
+    // | char indicates new value
+    // @ char indicates end of frame
+    // frame example : 1|4|2.4513|123.4@
+    // TODO Improve protocol
+    // It would be better to transmit 32 bits value
+    // Needs more frame formatting and CRC
     bool running = true;
     while(running) {
         // New char received
@@ -59,8 +63,8 @@ void *Uart::uartRxThread(void *param) {
             rxIndex++;
             // '@' indicate end of transmission
             if(rxChar == '@') {
-                LSTATUS("Frame received : %u", rxIndex);
-                // TODO Launch in new thread ?
+                //DSTATUS("Frame received : %u", rxIndex);
+                // TODO Launch in new thread ?!
                 // Process data
                 long data_i[20];
                 float data_f[20];
@@ -102,16 +106,18 @@ void *Uart::uartRxThread(void *param) {
 
                 // Process data
                 switch(data_i[0]) {
-                    case 0: {
-                        char tempBf[100];
-                        sprintf(tempBf, "Valeur de l'antenne : %.6f", data_f[1]);
-                        size_t size = strlen(tempBf);
-                        uart->flightController->sendDataToMSDK((uint8_t *)tempBf, size);
-                        DSTATUS("Float data received : %.6f", data_f[1]);
+                    case 0: {           // antenna value received
+                        char buffer[6];
+                        buffer[0] = '#';
+                        buffer[1] = 'a';
+                        memcpy(&buffer[2], &data_i[1], 4);
+                        // Send data to MSDK : #a[4 bytes of float value]
+                        uart->flightController->sendDataToMSDK(reinterpret_cast<uint8_t *>(buffer), 6);
+                        //DSTATUS("Antenna value : %lu", data_i[1]);
                     }
                         break;
                     default:
-                        LERROR("Unknown data received : %u", data_i[0]);
+                        LERROR("Unknown data received from antenna : %u", data_i[0]);
                         break;
                 }
 

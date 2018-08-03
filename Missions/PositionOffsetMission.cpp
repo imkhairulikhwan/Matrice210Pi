@@ -23,7 +23,7 @@ PositionOffsetMission::PositionOffsetMission(FlightController *flightController)
 
 bool PositionOffsetMission::move(const Vector3f *offset, float yaw,
                                  float posThreshold, float yawThreshold) {
-    LSTATUS("PositionOffsetMission move : x = % .2f m, y = % .2f m, z = % .2f m, % .2f deg",
+    LSTATUS("PositionOffsetMission move : x = % .2f m, y = % .2f m, z = % .2f m, yaw = % .2f deg",
             offset->x, offset->y, offset->z, yaw);
     vehicle = flightController->getVehicle();
     setOffset(offset, yaw * DEG2RAD);
