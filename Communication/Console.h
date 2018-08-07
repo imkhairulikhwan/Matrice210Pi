@@ -2,6 +2,8 @@
  *  @version 1.0
  *  @date Jul 04 2018
  *  @author Jonathan Michel
+ *  @brief  This class launch a thread to get char on
+ *  console and control FlightController
  */
 
 
@@ -17,9 +19,7 @@ using namespace DJI::OSDK;
 
 namespace M210 {
     class FlightController;
-/**
- * Launch a thread to get char on console and control FlightController
- */
+
     class Console {
     private:
         // Thread attributes

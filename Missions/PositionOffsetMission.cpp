@@ -23,7 +23,7 @@ PositionOffsetMission::PositionOffsetMission(FlightController *flightController)
 
 bool PositionOffsetMission::move(const Vector3f *offset, float yaw,
                                  float posThreshold, float yawThreshold) {
-    LSTATUS("PositionOffsetMission move : x = % .2f m, y = % .2f m, z = % .2f m, yaw = % .2f deg",
+    LSTATUS("PositionOffsetMission move : x = % .2f m, y = % .2f m, z = % .2f m, yaw = % .2f degposThreshold",
             offset->x, offset->y, offset->z, yaw);
     vehicle = flightController->getVehicle();
     setOffset(offset, yaw * DEG2RAD);
@@ -64,12 +64,6 @@ bool PositionOffsetMission::move(const Vector3f *offset, float yaw,
     // Wait for data to come in
     delay_ms(1000);
 
-    moveToPosition();
-
-    return true;
-}
-
-bool PositionOffsetMission::moveToPosition() {
     // Global position retrieved via subscription
     Telemetry::TypeMap<TOPIC_GPS_FUSED>::type currentSubscriptionGPS;
     // Global position retrieved via broadcast
@@ -80,43 +74,43 @@ bool PositionOffsetMission::moveToPosition() {
     currentSubscriptionGPS = vehicle->subscribe->getValue<TOPIC_GPS_FUSED>();
     originSubscriptionGPS = currentSubscriptionGPS;
     FlightController::localOffsetFromGpsOffset(localOffset,
-                             &currentSubscriptionGPS,
-                             &originSubscriptionGPS);
+                                               &currentSubscriptionGPS,
+                                               &originSubscriptionGPS);
 
     // Get the broadcast GP since we need the height for position.z
     currentBroadcastGP = vehicle->broadcast->getGlobalPosition();
 
     resetMissionCounters();
 
-    /*! Calculate the inputs to send the position controller. We implement basic
-    *  receding setpoint position control and the setpoint is always 2 m away
-    *  from the current position - until we get within a threshold of the goal.
-    *  From that point on, we send the remaining distance as the setpoint.
-    */
-    if (offset.x > 0)
-        positionToMove.x = (offset.x < speedFactor) ?
-                     offset.x : speedFactor;
-    else if (offset.x < 0)
-        positionToMove.x = (offset.x > -1 * speedFactor) ?
-                     offset.x : -1 * speedFactor;
+    // Basic receding setpoint position control with the setpoint always x [m] away
+    // from the current position - until aircraft get within a threshold of the goal.
+    // From that point on, the remaining distance is sent as the setpoint
+    if (offset->x > 0)
+        positionToMove.x = (offset->x < setPointDistance) ?
+                           offset->x : setPointDistance;
+    else if (offset->x < 0)
+        positionToMove.x = (offset->x > -1 * setPointDistance) ?
+                           offset->x : -1 * setPointDistance;
     else
         positionToMove.x = 0;
 
-    if (offset.y > 0)
-        positionToMove.y = (offset.y < speedFactor) ?
-                     offset.y : speedFactor;
-    else if (offset.y < 0)
-        positionToMove.y = (offset.y > -1 * speedFactor) ?
-                     offset.y : -1 * speedFactor;
+    if (offset->y > 0)
+        positionToMove.y = (offset->y < setPointDistance) ?
+                           offset->y : setPointDistance;
+    else if (offset->y < 0)
+        positionToMove.y = (offset->y > -1 * setPointDistance) ?
+                           offset->y : -1 * setPointDistance;
     else
         positionToMove.y = 0;
 
     // Since subscription cannot give us a relative height, use broadcast.
-    positionToMove.z = currentBroadcastGP.height + offset.z;
+    positionToMove.z = currentBroadcastGP.height + offset->z;
 
     startTime = getTimeMs();
 
     // update() has now to be called continuously
+
+    return true;
 }
 
 bool PositionOffsetMission::update() {
@@ -146,10 +140,10 @@ bool PositionOffsetMission::update() {
         double zOffsetRemaining = offset.z - (-localOffset.z);
 
         // See if we need to modify the setpoint
-        if (abs(xOffsetRemaining) < speedFactor)
+        if (abs(xOffsetRemaining) < setPointDistance)
             positionToMove.x = (float) xOffsetRemaining;
 
-        if (abs(yOffsetRemaining) < speedFactor)
+        if (abs(yOffsetRemaining) < setPointDistance)
             positionToMove.y = (float) yOffsetRemaining;
 
         if (abs(xOffsetRemaining) < posThreshold &&
@@ -169,7 +163,7 @@ bool PositionOffsetMission::update() {
             withinBoundsCnt = 0;
             outOfBoundsCnt = 0;
         }
-        // 4. If within bounds, set flag and break
+        // 4. If within bounds, destination is reached
         if (withinBoundsCnt >= getWithinBoundsTimeRequirement()) {
             destinationReached = true;
         }
@@ -180,6 +174,7 @@ bool PositionOffsetMission::update() {
     }
 
     if(destinationReached) {
+        // Stop aircraft
         stop();
         LSTATUS("Position offset mission done");
         return true;
@@ -219,12 +214,13 @@ void PositionOffsetMission::resetMissionCounters() {
    outOfBoundsCnt = 0;
    brakeCnt = 0;
 }
-void PositionOffsetMission::setOffset(const Vector3f* o, double y) {
-   offset.x = o->x;
-   offset.y = o->y;
-   offset.z = o->z;
-   targetYaw = y;
+void PositionOffsetMission::setOffset(const Vector3f* offset, double yaw) {
+    this->offset.x = offset->x;
+    this->offset.y = offset->y;
+    this->offset.z = offset->z;
+    this->targetYaw = yaw;
 }
+
 void PositionOffsetMission::setThreshold(float posThreshold, double yawThreshold) {
    this->posThreshold = posThreshold;
    this->yawThreshold = yawThreshold;

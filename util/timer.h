@@ -7,7 +7,16 @@
 #ifndef MATRICE210_TIMER_H
 #define MATRICE210_TIMER_H
 
+/**
+ * Return current millisecond since the Epoch
+ * @return Current timestamp [ms]
+ */
 long getTimeMs();
+
+/**
+ * Thread sleep
+ * @param durationMs sleep duration [ms]
+ */
 void delay_ms(unsigned int durationMs);
 
 #endif //MATRICE210_TIMER_H

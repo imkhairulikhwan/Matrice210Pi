@@ -2,6 +2,8 @@
  *  @version 1.0
  *  @date Jul 03 2018
  *  @author Jonathan Michel
+ *  @brief  Configure Mobile-Onboard communication by setting
+ *  incoming data callback
  */
 
 #ifndef MATRICE210_MOBILECOMMUNICATION_H
@@ -15,10 +17,7 @@ using namespace DJI::OSDK;
 
 namespace M210 {
     class FlightController;
-/**
- *  Configure Mobile-Onboard communication by setting
- *  incoming data callback
- */
+
     class Mobile {
     private:
         FlightController *flightController;

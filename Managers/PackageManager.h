@@ -2,6 +2,8 @@
  *  @version 1.0
  *  @date Jul 05 2018
  *  @author Jonathan Michel
+ *  @brief This class provides to user an user friendly interface
+ *  to manage subscription. More details below
  */
 
 #ifndef MATRICE210_PACKAGEMANAGER_H

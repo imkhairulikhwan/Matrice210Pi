@@ -47,24 +47,20 @@ void *Uart::uartRxThread(void *param) {
     uint8_t rxChar;
     uint8_t rxIndex = 0;
 
-    // Current protocol implementation transmit ascii value of numbers
-    // | char indicates new value
-    // @ char indicates end of frame
-    // frame example : 1|4|2.4513|123.4@
-    // TODO Improve protocol
+    // todo Improve protocol
     // It would be better to transmit 32 bits value
     // Needs more frame formatting and CRC
+    // todo Fill buffer continuously and process data with a dedicated method
+    // Need circular buffer implementation
     bool running = true;
     while(running) {
         // New char received
         if(uart->read(&rxChar, 1) != 0) {
-            // Add to rx buffer
+            // Add data to rx buffer
             rxBuffer[rxIndex] = rxChar;
             rxIndex++;
             // '@' indicate end of transmission
-            if(rxChar == '@') {
-                //DSTATUS("Frame received : %u", rxIndex);
-                // TODO Launch in new thread ?!
+            if(rxChar == END_OF_FRAME_CHAR) {
                 // Process data
                 long data_i[20];
                 float data_f[20];
@@ -74,6 +70,7 @@ void *Uart::uartRxThread(void *param) {
                 int length = rxIndex;
 
 #ifdef DEBUG_UART_FRAME
+                //DSTATUS("Frame received : %u", length);
                 std::cout << std::endl;
 #endif
                 for(uint16_t i = 0; i < length; i++)
@@ -82,7 +79,7 @@ void *Uart::uartRxThread(void *param) {
                     std::cout << rxBuffer[i];
 #endif
                     // '|' char indicate end of value
-                    if(rxBuffer[i] == '|')
+                    if(rxBuffer[i] == NEW_VALUE_CHAR)
                     {
                         tabValues[valuesInc] = ' ';
                         data_f[countValue] = strtof(tabValues, nullptr);
@@ -105,13 +102,14 @@ void *Uart::uartRxThread(void *param) {
                 data_i[countValue] = strtol(tabValues, nullptr, 10);
 
                 // Process data
+                // First integer indicate which value is transmitted
                 switch(data_i[0]) {
                     case 0: {           // antenna value received
+                        // Send data to MSDK : #a[4 bytes of float value]
                         char buffer[6];
                         buffer[0] = '#';
                         buffer[1] = 'a';
                         memcpy(&buffer[2], &data_i[1], 4);
-                        // Send data to MSDK : #a[4 bytes of float value]
                         uart->flightController->sendDataToMSDK(reinterpret_cast<uint8_t *>(buffer), 6);
                         //DSTATUS("Antenna value : %lu", data_i[1]);
                     }

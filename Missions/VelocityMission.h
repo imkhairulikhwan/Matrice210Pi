@@ -2,6 +2,8 @@
  *  @version 1.0
  *  @date Jul 05 2018
  *  @author Jonathan Michel
+ *  @brief This class implements velocity mission. It allows user
+ *  to set a velocity vector to the aircraft
  */
 
 #ifndef MATRICE210_VELOCITYMISSION_H
@@ -24,8 +26,20 @@ namespace M210 {
     public:
         explicit VelocityMission(FlightController *flightController);
 
+        /**
+         * Velocity Control. Allows user to set a velocity vector.
+         * The aircraft will move as described by vector until update()
+         * is no more called.
+         * @param velocity Absolute velocity vector to set [m/s]
+         * Vector is relative to the ground
+         * x face to north, y face to east, z face to sky
+         * @param yaw Absolute yaw rate to set [deg/s]
+         */
         void move(const Vector3f *velocity, float yaw);
 
+        /**
+         *
+         */
         void update();
     };
 }

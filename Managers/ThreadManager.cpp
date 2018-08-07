@@ -14,6 +14,7 @@
 using namespace M210;
 
 bool ThreadManager::start(string name, pthread_t *id, pthread_attr_t *attr, void *(*thread)(void *), void *arg) {
+    // todo remove attr parameter
     pthread_attr_init(attr);
     pthread_attr_setdetachstate(attr, PTHREAD_CREATE_JOINABLE);
 
@@ -32,6 +33,5 @@ bool ThreadManager::start(string name, pthread_t *id, pthread_attr_t *attr, void
 }
 
 void ThreadManager::stop(const pthread_t *id) {
-    // TODO Doesn't work, to bugfix, unused now
     pthread_join(*id, nullptr);
 }

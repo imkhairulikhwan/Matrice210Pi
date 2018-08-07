@@ -37,7 +37,9 @@ void Mobile::mobileCallback(Vehicle *vehicle, RecvContainer recvFrame,
     uint8_t* data = recvFrame.recvData.raw_ack_array;
 
     ActionData* actionData = nullptr;
+    // Command char at the beginning of a frame indicates frame is a command
     if(data[0] == COMMAND_CHAR) {
+        // Get command char
         if(msgLength >= 2) {
             switch (data[1]) {
                 case 'e':
@@ -60,9 +62,9 @@ void Mobile::mobileCallback(Vehicle *vehicle, RecvContainer recvFrame,
                     if(msgLength >= 4) { // 4 command bytes and unknown data length
                         size_t dataLength =  msgLength - (size_t)2;
                         actionData = new ActionData(ActionData::ActionId::mission, dataLength);
-                        actionData->push(data+4, dataLength-2);
-                        actionData->push((char)data[3]);    // mission action
-                        actionData->push((char)data[2]);    // mission type
+                        actionData->push(data+4, dataLength-2); // mission parameters
+                        actionData->push((char)data[3]);        // mission action
+                        actionData->push((char)data[2]);        // mission type
                     } else {
                         LERROR("Mission data format error");
                     }
@@ -71,13 +73,13 @@ void Mobile::mobileCallback(Vehicle *vehicle, RecvContainer recvFrame,
                     actionData = new ActionData(ActionData::ActionId::watchdog);
                     break;
                 default:
-                    LERROR("Unknown command");
+                    LERROR("Unknown command received from MOSDK");
                     break;
             }
             if(actionData != nullptr)
                 Action::instance().add(actionData);
         } else {
-            LERROR("Unknown command format");
+            LERROR("Unknown command format received from MOSDK");
         }
     } else {
         // Data received displayed as string
@@ -85,7 +87,7 @@ void Mobile::mobileCallback(Vehicle *vehicle, RecvContainer recvFrame,
             msgLength = 99;
         }
         data[msgLength] = '\0';
-        DSTATUS("String received : %s", recvFrame.recvData.raw_ack_array);
+        DSTATUS("String received: %s", recvFrame.recvData.raw_ack_array);
 
         // Hello world response for fun
         string msg = string(reinterpret_cast<char*>(data));

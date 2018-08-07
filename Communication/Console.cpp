@@ -148,16 +148,17 @@ void Console::displayMenu() const {
 }
 
 void Console::displayMenuLine(char command, const std::string &hint) const{
+    // Display line as follow :
+    // | [1] Take-off                                               |
+    // If hint is longer than lineLength end border char "|" will be shifted
     const int lineLength = 55;
     int length = hint.length();
-    if(length < lineLength) {
-        cout << endl << "| [" << command << "] ";
-        cout << hint;
-        for(int i = 0 ; i < lineLength-length; i++) {
-            cout << " ";
-        }
-        cout << "|";
+    cout << endl << "| [" << command << "] ";
+    cout << hint;
+    for(int i = 0 ; i < lineLength-length; i++) {
+        cout << " ";
     }
+    cout << "|";
 }
 
 float Console::getNumber(const std::string &hint) const {

@@ -20,7 +20,8 @@ Action::Action() {
     flightController = nullptr;
     // actionQueue is a blocking queue
     actionQueueAttr.mq_flags = 0;
-    actionQueueAttr.mq_maxmsg = 5;
+    actionQueueAttr.mq_maxmsg = 10;
+    // Queue contains a pointer to an ActionData object
     actionQueueAttr.mq_msgsize = sizeof(void*);
     actionQueueAttr.mq_curmsgs = 0;
     // Queue are files shared between programs,ensure that queue
@@ -65,29 +66,32 @@ void Action::process() const {
     }
 
     ActionData *action;
-    // Blocking call
+    // Blocking call, wait for data added in queue
     int status = mq_receive(actionQueue, (char *)&action, sizeof(void *), NULL);
 
-    // queue had a message, safety verification
+    // Queue had a message, safety verification
     if(status >= 0) {
+        // Call desired action depending on action id
         switch(action->getActionId()) {
             case ActionData::ActionId::takeOff:
-                flightController->takeoff();
+                flightController->takeOff();
                 break;
             case ActionData::ActionId::landing:
                 flightController->landing();
                 break;
             case ActionData::ActionId::mission: {
                 char mission;
+                // When action id is a mission, last byte indicates mission kind
+                // Call dedicated mission function
                 if(action->popChar(mission)) {
                     switch ((unsigned) mission){
-                        case MissionType::VELOCITY:    // Velocity mission
+                        case MissionType::VELOCITY:         // Velocity mission
                             velocityMission(action);
                             break;
-                        case MissionType::POSITION :    // Position mission
+                        case MissionType::POSITION :        // Position mission
                             positionMission(action);
                             break;
-                        case MissionType::POSITION_OFFSET: // Position offset mission
+                        case MissionType::POSITION_OFFSET:  // Position offset mission
                             positionOffsetMission(action);
                             break;
                         case MissionType::WAYPOINTS:        // Waypoints mission
@@ -103,6 +107,7 @@ void Action::process() const {
             }
                 break;
             case ActionData::ActionId::sendDataToMSDK:
+                // Not yet implemented by action queue
                 break;
             case ActionData::ActionId::stopAircraft:
                 flightController->stopAircraft();
@@ -115,15 +120,17 @@ void Action::process() const {
                 break;
             case ActionData::ActionId::watchdog:
                 flightController->getWatchdog()->reset();
+                // Resend watchdog to mobile SDK to indicates code is running
                 flightController->sendDataToMSDK(reinterpret_cast<const uint8_t *>("#w"), 2);
                 break;
             case ActionData::ActionId ::helloWorld: {
+                // Send a response to Mobile SDK
                 char hw[] = "Hello world from Pi";
                 flightController->sendDataToMSDK(reinterpret_cast<const uint8_t *>(hw), strlen(hw));
             }
                 break;
             default:
-                LERROR("Mission - Unknown action");
+                LERROR("Unknown action to process");
         }
         delete action;
     }
@@ -133,16 +140,24 @@ void Action::velocityMission(ActionData *action) const {
     char task;
     Vector3f v;
     float yaw;
+    // Last byte indicated mission task
     if(action->popChar(task)) {
-        if(task == MissionAction::START) { // start mission
-            action->popFloat(yaw);
-            action->popVector3f(v);
-            flightController->moveByVelocity(&v, yaw);
+        if(task == MissionAction::START) {
+            // Get parameters
+            bool b = true;
+            b &= action->popFloat(yaw);
+            b &= action->popVector3f(v);
+            // Only if all parameters have been recovered return true
+            if(b) {
+                flightController->moveByVelocity(&v, yaw);
+            } else {
+                LERROR("Velocity mission - Unable to get parameters");
+            }
         } else {
-            LERROR("velocityMission - Unknown task");
+            LERROR("Velocity mission - Unknown task");
         }
     } else {
-        LERROR("velocityMission - Unable to determine task");
+        LERROR("Velocity mission - Unable to determine task");
     }
 }
 
@@ -150,16 +165,24 @@ void Action::positionMission(ActionData *action) const {
     char task;
     Vector3f v;
     float yaw;
+    // Last byte indicated mission task
     if(action->popChar(task)) {
-        if(task == MissionAction::START) { // start mission
-            action->popFloat(yaw);
-            action->popVector3f(v);
-            flightController->moveByPosition(&v, yaw);
+        if(task == MissionAction::START) {
+            // Get parameters
+            bool b = true;
+            b &= action->popFloat(yaw);
+            b &= action->popVector3f(v);
+            // Only if all parameters have been recovered return true
+            if(b) {
+                flightController->moveByPosition(&v, yaw);
+            } else {
+                LERROR("Position mission - Unable to get parameters");
+            }
         } else {
-            LERROR("positionMission - Unknown task");
+            LERROR("Position mission - Unknown task");
         }
     } else {
-        LERROR("positionMission - Unable to determine task");
+        LERROR("Position mission - Unable to determine task");
     }
 }
 
@@ -167,24 +190,33 @@ void Action::positionOffsetMission(ActionData *action) const {
     char task;
     Vector3f v;
     float yaw;
+    // Last byte indicated mission task
     if(action->popChar(task)) {
-        if(task == MissionAction::START) { // start mission
-            action->popFloat(yaw);
-            action->popVector3f(v);
-            flightController->moveByPositionOffset(&v, yaw);
+        if(task == MissionAction::START) {
+            // Get parameters
+            bool b = true;
+            b &= action->popFloat(yaw);
+            b &= action->popVector3f(v);
+            // Only if all parameters have been recovered return true
+            if(b) {
+                flightController->moveByPositionOffset(&v, yaw);
+            } else {
+                LERROR("Position offset mission - Unable to get parameters");
+            }
         } else {
-            LERROR("positionOffsetMission - Unknown task");
+            LERROR("Position offset mission - Unknown task");
         }
     } else {
-        LERROR("positionOffsetMission - Unable to determine task");
+        LERROR("Position offset mission - Unable to determine task");
     }
 }
 
 void Action::waypointsMission(ActionData *action) const {
     char task;
+    // Last byte indicated mission task
     if(action->popChar(task)) {
         flightController->waypointsMissionAction((unsigned) task);
     } else {
-        LERROR("waypointsMission - Unable to determine task");
+        LERROR("waypoints mission - Unable to determine task");
     }
 }

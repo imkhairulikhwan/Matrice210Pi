@@ -33,7 +33,7 @@ FlightController::FlightController() {
     linuxEnvironment = nullptr;
     vehicle = nullptr;
     flightControllerThreadRunning = false;
-    watchdog = new Watchdog(1000);
+    watchdog = new Watchdog(50);
     emergency = new Emergency();
     setMovingMode(STOP);
     // Missions
@@ -63,6 +63,7 @@ void FlightController::setupVehicle(int argc, char **argv) {
             delete linuxEnvironment;
             delay_ms(1000);
         }
+        // Configure linux environment with dji Linux helpers
         linuxEnvironment = new LinuxSetup(argc, argv);
 
         vehicle = linuxEnvironment->getVehicle();
@@ -95,11 +96,6 @@ void FlightController::launchFlightControllerThread() {
     }
 }
 
-void FlightController::stopFlightControllerThread() {
-    flightControllerThreadRunning = false;
-    ThreadManager::stop(&flightControllerThreadID);
-}
-
 void *FlightController::flightControllerThread(void *param) {
     auto fc = (FlightController *) param;
     while (fc->flightControllerThreadRunning) {
@@ -118,6 +114,7 @@ void *FlightController::flightControllerThread(void *param) {
                 break;
             case VELOCITY:
                 fc->velocityMission->update();
+                // Orders are send at 50 Hz, as recommended by DJI
                 delay_ms(20);
                 break;
             case POSITION_OFFSET:
@@ -129,7 +126,7 @@ void *FlightController::flightControllerThread(void *param) {
     return nullptr;
 }
 
-bool FlightController::takeoff() {
+bool FlightController::takeOff() {
     return monitoredMission->takeOff();
 }
 
@@ -165,13 +162,13 @@ void FlightController::moveByPositionOffset(const Vector3f *offset, float yaw,
 }
 
 void FlightController::stopAircraft() {
-    LSTATUS("Aircraft stopped");
     // Stop aircraft
     vehicle->control->emergencyBrake();
-    // Stop waypoints mission
-    waypointMission->action(Action::MissionAction::STOP);
     // Stop state machine sending moving commands
     setMovingMode(STOP);
+    // Stop waypoints mission
+    waypointMission->action(Action::MissionAction::STOP);
+    LSTATUS("Aircraft stopped");
 }
 
 void FlightController::velocityAndYawRateCtrl(const Vector3f *velocity, float yaw) {
@@ -196,11 +193,7 @@ void FlightController::emergencyStop() {
     // First of all set emergency state (to stop sending moving order)
     emergency->set();
     // Stop aircraft
-    vehicle->control->emergencyBrake();
-    // Set FlightController thread in stop mode
-    setMovingMode(STOP);
-    // Stop waypoints mission
-    waypointMission->action(Action::MissionAction::STOP);
+    stopAircraft();
     LERROR("Emergency break set !");
 }
 
@@ -216,9 +209,9 @@ void FlightController::sendDataToMSDK(const uint8_t *data, size_t length) const 
     pthread_mutex_unlock(&sendDataToMSDK_mutex);
 }
 
-void FlightController::setMovingMode(FlightController::movingMode_ mode) {
+void FlightController::setMovingMode(FlightController::SMState_ mode) {
     pthread_mutex_lock(&movingMode_mutex);
-    movingMode = mode;
+    SMState = mode;
     pthread_mutex_unlock(&movingMode_mutex);
 }
 
@@ -248,19 +241,15 @@ bool FlightController::startGlobalPositionBroadcast(Vehicle *vehicle) {
     return true;
 }
 
-/*! Very simple calculation of local NED offset between two pairs of GPS coordinates.
-    Accurate when distances are small.
-    Functions given by DJI Programming Guide
-!*/
 void FlightController::localOffsetFromGpsOffset(Telemetry::Vector3f &deltaNed,
-                                                const Telemetry::GPSFused *subscriptionTarget,
-                                                const Telemetry::GPSFused *subscriptionOrigin) {
-    double deltaLon = subscriptionTarget->longitude - subscriptionOrigin->longitude;
-    double deltaLat = subscriptionTarget->latitude - subscriptionOrigin->latitude;
+                                                const Telemetry::GPSFused *target,
+                                                const Telemetry::GPSFused *origin) {
+    double deltaLon = target->longitude - origin->longitude;
+    double deltaLat = target->latitude - origin->latitude;
     deltaNed.x = (float32_t) (deltaLat * C_EARTH);
     deltaNed.y = (float32_t) (deltaLon * C_EARTH *
-                              cos(subscriptionTarget->latitude / 2.0 + subscriptionOrigin->latitude / 2.0));
-    deltaNed.z = subscriptionTarget->altitude - subscriptionOrigin->altitude;
+                              cos(target->latitude / 2.0 + origin->latitude / 2.0));
+    deltaNed.z = target->altitude - origin->altitude;
 }
 
 Telemetry::Vector3f FlightController::toEulerAngle(const Telemetry::Quaternion *quaternion) {

@@ -24,9 +24,9 @@ void M210::Log::send(const char* type, const char *format, ...) {
     if(!isInitialized())
         return;
     char buffer[100];
-    buffer[0] = '%';
+    buffer[0] = LOG_CHAR;
     // type = DSTATUS or DERROR or DDEBUG
-    // tpye[1] S or E or D
+    // type[1] is respectively S or E or D
     buffer[1] = type[1];
     va_list args;
     va_start(args, format);

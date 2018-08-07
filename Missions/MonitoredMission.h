@@ -2,6 +2,8 @@
  *  @version 1.0
  *  @date Jul 25 2018
  *  @author Jonathan Michel
+ *  @brief This class provides monitored take-off and landing
+ *  implementation. Note that methods are blocking.
  */
 
 #ifndef MATRICE210_MONITOREDMISSION_H
@@ -22,14 +24,14 @@ namespace M210 {
 
         /**
          * Monitored take-off. Blocking call
-         * @param timeout
+         * @param timeout Timeout used on SDK method calls [s]
          * @return true if success
          */
         bool takeOff(int timeout = 1) const;
 
         /**
          *  Monitored landing. Blocking call
-         * @param timeout
+         * @param timeout Timeout used on SDK method calls [s]
          * @return true if success
          */
         bool landing(int timeout = 1) const;

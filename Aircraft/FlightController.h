@@ -2,6 +2,10 @@
  *  @version 1.0
  *  @date Jul 03 2018
  *  @author Jonathan Michel
+ *  @brief This class handle all aircraft status, actions and missions.
+ *  It contains a dedicated thread that implement a state machine. The goal is to
+ *  continuously send order to the aircraft when a mission is running.
+ *  Many types of missions are existing, for details see Missions folder
  */
 
 #ifndef MATRICE210_FLIGHTCONTROLLER_HPP
@@ -19,7 +23,7 @@ using namespace DJI::OSDK::Telemetry;
 
 class LinuxSetup;
 
-namespace M210 {
+ namespace M210 {
     class Watchdog;
     class Emergency;
     class MonitoredMission;
@@ -29,16 +33,13 @@ namespace M210 {
     class WaypointMission;
 
     class FlightController {
-    public:
-        void launchFlightControllerThread();
-
-        void stopFlightControllerThread();      // unused
     private:
         // Fight controller thread
         bool flightControllerThreadRunning;
         pthread_t flightControllerThreadID;
         pthread_attr_t flightControllerThreadAttr;
 
+        // State machine thread
         static void *flightControllerThread(void *param);
 
         // Aircraft
@@ -46,14 +47,14 @@ namespace M210 {
         Vehicle *vehicle;
         LinuxSetup *linuxEnvironment;
         Watchdog *watchdog;
-        // Moving modes
-        enum movingMode_ {
+        // State machine states
+        enum SMState_ {
             WAIT,
             STOP,
             VELOCITY,
             POSITION_OFFSET,
             POSITION
-        } movingMode;
+        } SMState;
         // Missions
         M210::MonitoredMission *monitoredMission;
         M210::PositionMission *positionMission;
@@ -68,40 +69,71 @@ namespace M210 {
 
         ~FlightController();
 
+        /**
+         * Configure linux environment, get vehicle and
+         * obtain control authority
+         * @param argc main parameter
+         * @param argv main parameter
+         */
         void setupVehicle(int argc, char **argv);
 
-        // Mobile-On board communication
+        /**
+         * Launch flight controller thread
+         */
+        void launchFlightControllerThread();
+
+        /**
+         * Send data to mobile SDK
+         * @param data Pointer to data to send
+         * @param length Length of data to send
+         */
         void sendDataToMSDK(const uint8_t *data, size_t length) const;
 
         // Movement control
-        bool takeoff();
+        /**
+         * Monitored take-off blocking call
+         * @return True if take-off success
+         */
+        bool takeOff();
 
+        /**
+         * Monitored landing blocking call.
+         * @return True is landing success
+         *
+         */
         bool landing();
 
         /**
          * Control the position and yaw angle of the vehicle.
          * Here to try DJI SDK positionAndYawCtrl() method
          * To move aircraft of a desired offset please use moveByPositionOffset()
-         * @param offset [m]
-         * @param yaw [deg}
+         * @param offset Relative offset vector to move [m]
+         * Vector is relative to the ground
+         * x face to north, y face to east, z face to sky
+         * TODO explain difference with PositionOffset
+         * @param yaw Absolute yaw angle to set [deg}
          */
         void moveByPosition(const Vector3f *offset, float yaw);
 
         /**
          * Velocity Control. Allows user to set a velocity vector.
-         * The aircraft will move as described by vector until stopAircraft() call.
-         * @param velocity [deg/s]
-         * @param yaw [deg/s]
+         * The aircraft will move as described by vector until stopAircraft() is called.
+         * @param velocity Absolute velocity vector to set [m/s]
+         * Vector is relative to the ground
+         * x face to north, y face to east, z face to sky
+         * @param yaw Absolute yaw rate to set [deg/s]
          */
         void moveByVelocity(const Vector3f *velocity, float yaw);
 
         /**
          * Position Control. Allows user to set an offset from current location.
          * The aircraft will move to that position and stay there.
-         * @param offset [m]
-         * @param yaw [deg]
-         * @param posThreshold [m]
-         * @param yawThreshold [m]
+         * @param offset Relative offset vector to move [m]
+         * Vector is relative to the ground
+         * x face to north, y face to east, z face to sky
+         * @param yaw Absolute yaw angle to set [deg]
+         * @param posThreshold Position threshold used by mission to consider position as reached [m]
+         * @param yawThreshold Angle threshold used by mission to consider angle as reached [deg]
          */
         void moveByPositionOffset(const Vector3f *offset, float yaw,
                                   float posThreshold = 0.2,
@@ -110,42 +142,75 @@ namespace M210 {
         void waypointsMissionAction(unsigned task);
 
         // Stop and emergency
+        /**
+         * Stop aircraft
+         * Stop FlightController state machine and stop all current missions
+         */
         void stopAircraft();
 
+        /**
+         *  Set FlightController emergency state and stop aircraft
+         */
         void emergencyStop();
 
+        /**
+         * Reset FlightController emergency state
+         */
         void emergencyRelease();
 
         // Emergency safe ObSdk call
-        void positionAndYawCtrl(const Vector3f *position, float yaw);
-
+        /**
+         * Control the velocity and yaw rate of the aircraft
+         * On-board SDK method call with safety verification
+         * This method must be used by all missions instead of direct call to vehicle method
+         * @param velocity Absolute velocity vector to set [m/s]
+         * Vector is relative to the ground
+         * x face to north, y face to east, z face to sky
+         * @param yaw Absolute yaw rate to set [deg/s]
+         */
         void velocityAndYawRateCtrl(const Vector3f *velocity, float yaw);
 
-        // Getters and setters functions
+        /**
+         * Control the position and yaw angle of the vehicle.
+         * On-board SDK method call with safety verification
+         * This method must be used by all missions instead of direct call to vehicle method
+         * @param position Relative position vector to move [m]
+         * Vector is relative to the ground
+         * x face to north, y face to east, z face to sky
+         * @param yaw Absolute yaw angle to set [deg}
+         * TODO Explain with multiple calls are needed
+         */
+        void positionAndYawCtrl(const Vector3f *position, float yaw);
+
+        /** Getters and setters functions */
         Vehicle *getVehicle() const { return vehicle; }
 
-        movingMode_ getMovingMode() const { return movingMode; }
+        SMState_ getMovingMode() const { return SMState; }
 
         Watchdog *getWatchdog() const { return watchdog; }
 
-        void setMovingMode(movingMode_ mode);
+        void setMovingMode(SMState_ mode);
 
 // Static functions
     public:
         // TODO Global broadcast manager implementation !
         static bool startGlobalPositionBroadcast(Vehicle *vehicle);
-        /*! Very simple calculation of local NED offset between
-         *  two pairs of GPS coordinates.
-         * Accurate when distances are small.
-        !*/
-        static void localOffsetFromGpsOffset(Vector3f &deltaNed,
-                                             const Telemetry::GPSFused *subscriptionTarget,
-                                             const Telemetry::GPSFused *subscriptionOrigin);
 
         /**
-         * toEulerAngle
+         * Calculate local NED offset between two pairs of GPS coordinates.
+         * Accurate when distances are small.
+         * @param deltaNed Float vector used to return offset
+         * @param target Target GPS coordinates
+         * @param origin Origin GPS coordinates
+         */
+        static void localOffsetFromGpsOffset(Vector3f &deltaNed,
+                                             const Telemetry::GPSFused *target,
+                                             const Telemetry::GPSFused *origin);
+
+        /**
+         * Calculate euler angle from quaternion data
          * @param quaternionData quaternion
-         * @return Rad yaw value
+         * @return Rad euler angle
          */
         static Telemetry::Vector3f toEulerAngle(const Telemetry::Quaternion *quaternion);
     };

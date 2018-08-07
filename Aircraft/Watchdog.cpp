@@ -31,16 +31,18 @@ void Watchdog::increment() {
 void Watchdog::reset() {
     pthread_mutex_lock(&mutex);
     counter = 0;
+    // Error will be displayed next time watchdog will be enabled
     errorDisplayed = false;
     pthread_mutex_unlock(&mutex);
 }
 
 bool Watchdog::isEnabled() {
+    pthread_mutex_lock(&mutex);
     if(counter < limit) {
+        pthread_mutex_unlock(&mutex);
         return false;
     }
     // Display error once
-    pthread_mutex_lock(&mutex);
     if(!errorDisplayed) {
         // Supposed to use DERROR, if watchdog is enabled it means that Android App is
         // disconnected. But sometimes watchdog appears during app use. LERROR for debug
