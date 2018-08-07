@@ -17,37 +17,8 @@
   <component name="ChangeListManager">
     <list default="true" id="fdbea2dc-1dac-46da-b7f3-5776329e16ab" name="Default" comment="ADC value transmission">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Action/Action.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Action/Action.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Action/Action.h" beforeDir="false" afterPath="$PROJECT_DIR$/Action/Action.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Action/ActionData.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Action/ActionData.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Action/ActionData.h" beforeDir="false" afterPath="$PROJECT_DIR$/Action/ActionData.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Aircraft/Emergency.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Aircraft/Emergency.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Aircraft/Emergency.h" beforeDir="false" afterPath="$PROJECT_DIR$/Aircraft/Emergency.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Aircraft/FlightController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Aircraft/FlightController.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Aircraft/FlightController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Aircraft/FlightController.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Aircraft/Watchdog.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Aircraft/Watchdog.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Aircraft/Watchdog.h" beforeDir="false" afterPath="$PROJECT_DIR$/Aircraft/Watchdog.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Communication/Console.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Communication/Console.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Communication/Console.h" beforeDir="false" afterPath="$PROJECT_DIR$/Communication/Console.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Communication/Mobile.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Communication/Mobile.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Communication/Mobile.h" beforeDir="false" afterPath="$PROJECT_DIR$/Communication/Mobile.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Communication/Uart.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Communication/Uart.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Communication/Uart.h" beforeDir="false" afterPath="$PROJECT_DIR$/Communication/Uart.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Linux/makeMatrice210.sh" beforeDir="false" afterPath="$PROJECT_DIR$/Linux/makeMatrice210.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Linux/matrice210.service" beforeDir="false" afterPath="$PROJECT_DIR$/Linux/matrice210.service" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Linux/runMatrice210.sh" beforeDir="false" afterPath="$PROJECT_DIR$/Linux/runMatrice210.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Linux/startMatrice210.sh" beforeDir="false" afterPath="$PROJECT_DIR$/Linux/startMatrice210.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Linux/stopMatrice210.sh" beforeDir="false" afterPath="$PROJECT_DIR$/Linux/stopMatrice210.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Managers/PackageManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/Managers/PackageManager.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Managers/ThreadManager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Managers/ThreadManager.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Managers/ThreadManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/Managers/ThreadManager.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Missions/MonitoredMission.h" beforeDir="false" afterPath="$PROJECT_DIR$/Missions/MonitoredMission.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Missions/PositionOffsetMission.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Missions/PositionOffsetMission.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Missions/PositionOffsetMission.h" beforeDir="false" afterPath="$PROJECT_DIR$/Missions/PositionOffsetMission.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Missions/VelocityMission.h" beforeDir="false" afterPath="$PROJECT_DIR$/Missions/VelocityMission.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/Log.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/util/Log.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/Log.h" beforeDir="false" afterPath="$PROJECT_DIR$/util/Log.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/timer.h" beforeDir="false" afterPath="$PROJECT_DIR$/util/timer.h" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -64,7 +35,7 @@
           <entry key="h" value="7920" />
           <entry key="service" value="380" />
           <entry key="sh" value="348" />
-          <entry key="txt" value="227" />
+          <entry key="txt" value="240" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
@@ -72,7 +43,7 @@
           <entry key="Bash" value="348" />
           <entry key="Doxygen file" value="105" />
           <entry key="ObjectiveC" value="12364" />
-          <entry key="PLAIN_TEXT" value="607" />
+          <entry key="PLAIN_TEXT" value="620" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -132,8 +103,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/util/Log.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="14" selection-start-line="12" selection-start-column="14" selection-end-line="12" selection-end-column="14" />
+            <state relative-caret-position="294">
+              <caret line="27" column="39" lean-forward="true" selection-start-line="27" selection-start-column="39" selection-end-line="27" selection-end-column="39" />
             </state>
           </provider>
         </entry>
@@ -445,7 +416,7 @@
       <workItem from="1533216623245" duration="1033000" />
       <workItem from="1533279997060" duration="11696000" />
       <workItem from="1533538898992" duration="1696000" />
-      <workItem from="1533626303256" duration="18685000" />
+      <workItem from="1533626303256" duration="18945000" />
     </task>
     <task id="LOCAL-00001" summary="Flight control implementation, mobile and timers dedicated files">
       <created>1530609127680</created>
@@ -657,11 +628,18 @@
       <option name="project" value="LOCAL" />
       <updated>1533299182040</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="Code comments">
+      <created>1533652575241</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1533652575241</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="424971000" />
+    <option name="totallyTimeSpent" value="425231000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -719,7 +697,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="I2C Test : Pi is master, STM32 is slave" />
     <MESSAGE value="PackageManager now return negative error code if subscription failed. Uart implementation for STM32" />
     <MESSAGE value="Sourcetrail project" />
     <MESSAGE value="Uart communication and protocol with STM32 implementation" />
@@ -744,7 +721,8 @@
     <MESSAGE value="Linux services file and bash script to handle it" />
     <MESSAGE value="Add program argument to disable console" />
     <MESSAGE value="ADC value transmission" />
-    <option name="LAST_COMMIT_MESSAGE" value="ADC value transmission" />
+    <MESSAGE value="Code comments" />
+    <option name="LAST_COMMIT_MESSAGE" value="Code comments" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/Linux/runMatrice210.sh">
@@ -1117,8 +1095,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/util/Log.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="14" selection-start-line="12" selection-start-column="14" selection-end-line="12" selection-end-column="14" />
+        <state relative-caret-position="294">
+          <caret line="27" column="39" lean-forward="true" selection-start-line="27" selection-start-column="39" selection-end-line="27" selection-end-column="39" />
         </state>
       </provider>
     </entry>
