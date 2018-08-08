@@ -27,7 +27,7 @@
 using namespace M210;
 
 pthread_mutex_t FlightController::sendDataToMSDK_mutex = PTHREAD_MUTEX_INITIALIZER;
-pthread_mutex_t FlightController::movingMode_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t FlightController::smState_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 FlightController::FlightController() {
     linuxEnvironment = nullptr;
@@ -88,6 +88,7 @@ void FlightController::setupVehicle(int argc, char **argv) {
 }
 
 void FlightController::launchFlightControllerThread() {
+    // Launch flight controller thread if it is not already running
     if (!flightControllerThreadRunning) {
         flightControllerThreadRunning = true;
         ThreadManager::start("flightCtrThread",
@@ -210,9 +211,9 @@ void FlightController::sendDataToMSDK(const uint8_t *data, size_t length) const 
 }
 
 void FlightController::setMovingMode(FlightController::SMState_ mode) {
-    pthread_mutex_lock(&movingMode_mutex);
+    pthread_mutex_lock(&smState_mutex);
     SMState = mode;
-    pthread_mutex_unlock(&movingMode_mutex);
+    pthread_mutex_unlock(&smState_mutex);
 }
 
 bool FlightController::startGlobalPositionBroadcast(Vehicle *vehicle) {
@@ -244,15 +245,17 @@ bool FlightController::startGlobalPositionBroadcast(Vehicle *vehicle) {
 void FlightController::localOffsetFromGpsOffset(Telemetry::Vector3f &deltaNed,
                                                 const Telemetry::GPSFused *target,
                                                 const Telemetry::GPSFused *origin) {
+    // Formulas are provided by DJI
     double deltaLon = target->longitude - origin->longitude;
     double deltaLat = target->latitude - origin->latitude;
-    deltaNed.x = (float32_t) (deltaLat * C_EARTH);
-    deltaNed.y = (float32_t) (deltaLon * C_EARTH *
+    deltaNed.x = (float32_t) (deltaLat * R_EARTH);
+    deltaNed.y = (float32_t) (deltaLon * R_EARTH *
                               cos(target->latitude / 2.0 + origin->latitude / 2.0));
     deltaNed.z = target->altitude - origin->altitude;
 }
 
 Telemetry::Vector3f FlightController::toEulerAngle(const Telemetry::Quaternion *quaternion) {
+    // Formulas are provided by DJI
     Telemetry::Vector3f ans;
 
     double q2sqr = quaternion->q2 * quaternion->q2;

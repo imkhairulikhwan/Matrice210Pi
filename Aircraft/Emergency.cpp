@@ -21,7 +21,7 @@ Emergency::Emergency() {
 void Emergency::release() {
     pthread_mutex_lock(&mutex);
     this->state = false;
-    // Error will be displayed next time watchdog will be enabled
+    // Error will be displayed next time emergency will be enabled
     messageDisplayed = false;
     pthread_mutex_unlock(&mutex);
 }
@@ -35,7 +35,7 @@ void Emergency::set() {
 
 bool Emergency::isEnabled(bool displayError) {
     if(state) {
-        // Display error one unless display is forced by user
+        // Display error once unless display is forced on user call
         if(!messageDisplayed || displayError) {
             LERROR("Emergency break enabled");
             messageDisplayed = true;

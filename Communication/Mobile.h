@@ -2,8 +2,8 @@
  *  @version 1.0
  *  @date Jul 03 2018
  *  @author Jonathan Michel
- *  @brief  Configure Mobile-Onboard communication by setting
- *  incoming data callback
+ *  @brief  This class configures Mobile-Onboard communication
+ *  by setting incoming data callback and process received data.
  */
 
 #ifndef MATRICE210_MOBILECOMMUNICATION_H
@@ -13,18 +13,18 @@
 
 using namespace DJI::OSDK;
 
-#define COMMAND_CHAR '#'
+#define COMMAND_CHAR '#'    /*!< If first char received is COMMAND_CHAR, frame is a command */
 
 namespace M210 {
     class FlightController;
 
     class Mobile {
     private:
-        FlightController *flightController;
+        FlightController *flightController; /*!< Flight controller used */
     public:
         /**
          * Create Mobile Object
-         * @param flightController FlightController to use
+         * @param flightController flight controller to use
          */
         explicit Mobile(FlightController *flightController);
 
@@ -45,8 +45,8 @@ namespace M210 {
                                    UserData userData);
 
         /**
-         * Get used FlightController
-         * @return FlightController pointer
+         * Get used flight controller
+         * @return Flight controller pointer
          */
         FlightController *getFlightController() const { return flightController; }
     };

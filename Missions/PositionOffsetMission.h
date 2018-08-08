@@ -15,8 +15,7 @@
 #ifndef MATRICE210_POSITIONOFFSETMISSION_H
 #define MATRICE210_POSITIONOFFSETMISSION_H
 
-#define C_EARTH (double)6378137.0
-#define DEG2RAD 0.01745329252       // pi/180
+#define DEG2RAD 0.01745329252       /*!< Deg to rad factor (pi/180) */
 
 // DJI OSDK includes
 #include <dji_vehicle.hpp>

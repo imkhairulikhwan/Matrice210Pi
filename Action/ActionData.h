@@ -22,27 +22,6 @@
 #include <dji_vehicle.hpp>
 
 /**
- * Read data from dynamic memory
- * @param _data_ Pointer to data where write result
- * @param _type_ Type of data to read
- * @return False if there is no more data to read in allocated dynamic memory, true otherwise
- */
-#define _pop(_data_, _type_)                        \
-{                                                   \
-    pthread_mutex_lock(&mutex);                     \
-    size_t length = sizeof(_type_);                 \
-    if(dataPosCnt < length) {                       \
-        DERROR("Unable to pop %s", #_type_);        \
-        pthread_mutex_unlock(&mutex);               \
-        return false;                               \
-    }                                               \
-    dataPosCnt -= length;                           \
-    memcpy(&_data_, dataPtr + dataPosCnt, length);  \
-    pthread_mutex_unlock(&mutex);                   \
-    return true;                                    \
-}
-
-/**
  * Copy data to allocated dynamic memory
  * @param _data_ Pointer to data to copy
  * @param _length_ Length of data to copy [bytes]
@@ -51,6 +30,8 @@
 #define __push(_data_, _length_)                        \
 {                                                       \
     pthread_mutex_lock(&mutex);                         \
+    /* Copy data in dynamic memory allocated if there */\
+    /* is enough place                                */\
     auto ptr = reinterpret_cast<const char *>(_data_);  \
     if(!checkSize(_length_)) {                          \
         DERROR("Unable to push data");                  \
@@ -58,7 +39,7 @@
         return false;                                   \
     }                                                   \
     memcpy(dataPtr + dataPosCnt, ptr, _length_);        \
-    dataPosCnt += _length_;                             \
+    dataPosCnt += (_length_);                             \
     pthread_mutex_unlock(&mutex);                       \
     return true;                                        \
 }
@@ -74,15 +55,36 @@
     __push(_data_, sizeof(_type_));     \
 }
 
+/**
+ * Read data from dynamic memory
+ * @param _data_ Pointer to data where write result
+ * @param _type_ Type of data to read
+ * @return False if there is no more data to read in allocated dynamic memory, true otherwise
+ */
+#define _pop(_data_, _type_)                        \
+{                                                   \
+    pthread_mutex_lock(&mutex);                     \
+    /* Pop data from dynamic memory allocated if */ \
+    /* there is remaining data                   */ \
+    size_t length = sizeof(_type_);                 \
+    if(dataPosCnt < length) {                       \
+        DERROR("Unable to pop %s", #_type_);        \
+        pthread_mutex_unlock(&mutex);               \
+        return false;                               \
+    }                                               \
+    dataPosCnt -= length;                           \
+    memcpy(&(_data_), dataPtr + dataPosCnt, length);  \
+    pthread_mutex_unlock(&mutex);                   \
+    return true;                                    \
+}
+
 using namespace DJI::OSDK;
 
 namespace M210 {
     class ActionData {
     public:
-        // Action id indicates which action is relative to
-        // current action data object
         // todo move this declaration in a better place
-        enum ActionId {
+        enum ActionId {     /*!< Indicates which action is relative to current action data object */
             takeOff,
             landing,
             mission,
@@ -98,6 +100,7 @@ namespace M210 {
         size_t dataPosCnt;  /*!< Current numbers of bytes used */
         size_t dataSize;    /*!< Size allocated in dynamic memory [bytes] */
         ActionId actionId;  /*!< Action id concerned by current action data */
+        static pthread_mutex_t mutex; /*!< Mutex to ensure dynamic memory operations */
 
         /**
          * Check if enough place has been allocated to copy data
@@ -105,19 +108,23 @@ namespace M210 {
          * @return True if enough place is available
          */
         bool checkSize(size_t size) const;
-
-        // Mutex
-        static pthread_mutex_t mutex;
     public:
         /**
-         * Allocates dynamic memory for specified action
+         * Allocate dynamic memory for specified action
          * @param actionId Action id concerned by current action data
          * @param size Size to allocate in dynamic memory [bytes]
          */
         explicit ActionData(ActionId actionId, size_t size = 0);
 
+        /**
+         * Delete dynamic memory allocated
+         */
         ~ActionData();
 
+        /**
+         * Return action id concerned by current action data
+         * @return Action id
+         */
         ActionId getActionId() const { return actionId; }
 
         /**

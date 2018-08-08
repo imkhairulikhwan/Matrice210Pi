@@ -16,9 +16,9 @@ namespace M210 {
     public:
         const static bool displayError = true;
     private:
-        bool state;
-        bool messageDisplayed;
-        static pthread_mutex_t mutex;
+        bool state;             /*!< Emergency state (true = emergency) */
+        bool messageDisplayed;  /*!< Use to display error only once */
+        static pthread_mutex_t mutex;   /*!< Protect emergency state */
     public:
         Emergency();
 

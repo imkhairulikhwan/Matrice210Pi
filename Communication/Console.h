@@ -2,8 +2,8 @@
  *  @version 1.0
  *  @date Jul 04 2018
  *  @author Jonathan Michel
- *  @brief  This class launch a thread to get char on
- *  console and control FlightController
+ *  @brief  This class launches a thread to get char on
+ *  console and control flight controller
  */
 
 
@@ -23,10 +23,10 @@ namespace M210 {
     class Console {
     private:
         // Thread attributes
-        pthread_t consoleThreadID;
-        pthread_attr_t consoleThreadAttr;
+        pthread_t consoleThreadID;              /*!< Console thread id */
+        pthread_attr_t consoleThreadAttr;       /*!< Console thread attributes */
         // FlightController
-        FlightController *flightController;
+        FlightController *flightController;     /*!< Flight controller used */
     public:
         /**
          * Create console object

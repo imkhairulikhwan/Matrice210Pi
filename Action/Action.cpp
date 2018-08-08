@@ -5,6 +5,8 @@
  */
 
 #include <fcntl.h>
+#include <cassert>
+
 #include "Action.h"
 
 #include "ActionData.h"
@@ -24,7 +26,7 @@ Action::Action() {
     // Queue contains a pointer to an ActionData object
     actionQueueAttr.mq_msgsize = sizeof(void*);
     actionQueueAttr.mq_curmsgs = 0;
-    // Queue are files shared between programs,ensure that queue
+    // Queue are files shared between programs, ensure that queue
     // is empty at the beginning
     mq_unlink(ACTION_QUEUE_NAME);
     // Open queue
@@ -41,7 +43,7 @@ Action::~Action() {
     mq_unlink(ACTION_QUEUE_NAME);
 }
 
-void Action::add(const ActionData *actionData) {
+bool Action::add(const ActionData *actionData) {
     pthread_mutex_lock(&mutex);
     static struct timespec sendTimeout;
     sendTimeout.tv_sec = 0;
@@ -53,10 +55,13 @@ void Action::add(const ActionData *actionData) {
         int errsv = errno;  // save error code
         DERROR("Action added to queue failed, error : %i", errsv);
         delete actionData;
+        pthread_mutex_unlock(&mutex);
+        return false;
     } else {
         //DSTATUS("Action added to queue");
     }
     pthread_mutex_unlock(&mutex);
+    return true;
 }
 
 void Action::process() const {
@@ -219,4 +224,13 @@ void Action::waypointsMission(ActionData *action) const {
     } else {
         LERROR("waypoints mission - Unable to determine task");
     }
+}
+
+void Action::unitTest() {
+    // Try to add action data to queue
+    bool actionQueue;
+    auto actionData = new ActionData(ActionData::ActionId::helloWorld);
+    actionQueue = Action::instance().add(actionData);
+
+    assert(actionQueue);
 }

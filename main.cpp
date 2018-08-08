@@ -34,8 +34,8 @@ int main(int argc, char** argv)
 {
     // Unit test for action data class
     ActionData::unitTest();
-    /* Todo add unit test for :
-     *      - ActionData queue
+    Action::unitTest();
+    /* Todo add unit tests
      *      - Subscription
      *      - MOC
      */
@@ -44,7 +44,7 @@ int main(int argc, char** argv)
     flightController = new FlightController();
     flightController->setupVehicle(argc, argv);
     
-    // Package manager
+    // Singleton configuration
     M210::Log::instance().setFlightController(flightController);
     M210::PackageManager::instance().setVehicle(flightController->getVehicle());
     M210::Action::instance().setFlightController(flightController);
@@ -68,7 +68,7 @@ int main(int argc, char** argv)
     //*/
 
     while(running) {
-        //
+        // Process action queue
         Action::instance().process();
         //*/
     }

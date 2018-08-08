@@ -33,7 +33,6 @@ bool PackageManager::verify() const {
     return true;
 }
 
-
 int PackageManager::subscribe(TopicName *topics, int numTopic, uint16_t frequency, bool enableTimestamp) {
     if(!isVehicleInstanced())
         return VEHICLE_NOT_INSTANCED;
@@ -41,16 +40,19 @@ int PackageManager::subscribe(TopicName *topics, int numTopic, uint16_t frequenc
     if(!verify())
         return VERIFY_FAILED;
 
+    // Try to allocate package
     int pkgIndex = allocatePackage();
     if(pkgIndex == PACKAGE_UNAVAILABLE) {
         DERROR("Cannot start package. All packages are used");
         return PACKAGE_UNAVAILABLE;
     }
 
+    // Initialize current package
     bool pkgStatus = vehicle->subscribe->initPackageFromTopicList(
             pkgIndex, numTopic, topics,
             enableTimestamp, frequency);
     if (pkgStatus) {
+        // Subscribe to current package
         ACK::ErrorCode ack = vehicle->subscribe->startPackage(pkgIndex, timeout);
         if (ACK::getError(ack) != ACK::SUCCESS)
         {
@@ -74,8 +76,9 @@ int PackageManager::unsubscribe(int index) {
     if(!validIndex(index))
         return INVALID_INDEX;
 
-
+    // Remove package from aircraft
     ACK::ErrorCode ack = vehicle->subscribe->removePackage(index, timeout);
+    // Release package in local
     releasePackage(index);
     if (ACK::getError(ack)) {
         DERROR("Error unsubscribing package %u", index);

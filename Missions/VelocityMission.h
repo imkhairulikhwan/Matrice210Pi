@@ -38,7 +38,8 @@ namespace M210 {
         void move(const Vector3f *velocity, float yaw);
 
         /**
-         *
+         * Has to be called frequently to send moving order to the
+         * aircraft. DJI recommend to send orders at 50Hz
          */
         void update();
     };

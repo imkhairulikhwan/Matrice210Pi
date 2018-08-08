@@ -26,8 +26,8 @@ Uart::~Uart() {
     delete serialDevice;
 }
 
-void Uart::launchRxThread() {
-    ThreadManager::start("uartRxThread",
+bool Uart::launchRxThread() {
+    return ThreadManager::start("uartRxThread",
                          &uartRxThreadID, &uartRxThreadAttr,
                          uartRxThread, (void*)this);
 }

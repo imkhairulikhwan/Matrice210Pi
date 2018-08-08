@@ -27,6 +27,7 @@ void M210::Log::send(const char* type, const char *format, ...) {
     buffer[0] = LOG_CHAR;
     // type = DSTATUS or DERROR or DDEBUG
     // type[1] is respectively S or E or D
+    // used by mobile application to know log type
     buffer[1] = type[1];
     va_list args;
     va_start(args, format);

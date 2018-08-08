@@ -2,7 +2,7 @@
  *  @version 1.0
  *  @date Jul 05 2018
  *  @author Jonathan Michel
- *  @brief This class provides to user an user friendly interface
+ *  @brief This class provides an user friendly interface
  *  to manage subscription. More details below
  */
 
@@ -19,7 +19,7 @@ using namespace DJI::OSDK::Telemetry;
 
 /**
  * Data Subscription is a paradigm proposed by DJI, it offers
- * real-time telemetry data transmission from the flight controller
+ * real-time telemetry data transmission from the aircraft
  * to the Onboard SDK.
  * User can choose a set of Topics or Subscription data sets, add them
  * to a Subscription package and configure the package to arrive on
@@ -55,7 +55,7 @@ using namespace DJI::OSDK::Telemetry;
 namespace M210 {
     class PackageManager : public Singleton<PackageManager> {
     public:
-        enum RETURN_ERROR_CODE {
+        enum RETURN_ERROR_CODE {        /*!< Error code values, have to be negative */
             VEHICLE_NOT_INSTANCED = -7,
             VERIFY_FAILED,
             INVALID_INDEX,
@@ -68,6 +68,7 @@ namespace M210 {
         const Vehicle *vehicle = nullptr;
         int timeout{1};             /*!< DJI subscription method call timeout */
         bool packageAvailable[DataSubscription::MAX_NUMBER_OF_PACKAGE]; /*!< Available packages */
+        static pthread_mutex_t packageManager_mutex; /*!< Protect package array on allocation/release operations */
         /**
          * Verify if setVehicle() has been called
          * @return true is vehicle has been instanced
@@ -91,7 +92,7 @@ namespace M210 {
         int allocatePackage();
 
         /**
-         * Set package available for ne w allocation
+         * Set package available for new allocation in package array
          * @param index Package index to set available
          *
          */
@@ -102,9 +103,6 @@ namespace M210 {
         * @return true if version match
         */
         bool verify() const;
-
-        // Mutex
-        static pthread_mutex_t packageManager_mutex;
     public:
         /**
         *  PackageManager is a singleton

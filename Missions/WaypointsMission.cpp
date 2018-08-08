@@ -1,4 +1,4 @@
-/*! @file WaypointMission.cpp
+/*! @file WaypointsMission.cpp
  *  @version 1.0
  *  @date Jul 26 2018
  *  @author Jonathan Michel
@@ -76,7 +76,7 @@ void M210::WaypointMission::reset() {
 }
 
 void M210::WaypointMission::currentPosition(GlobalPosition &position) {
-    // TODO Move, nothing to do here !
+    // todo Move, nothing to do here !
     if (!FlightController::startGlobalPositionBroadcast(flightController->getVehicle())) {
         LERROR("getCurrentPosition aborted");
         return;
@@ -86,6 +86,7 @@ void M210::WaypointMission::currentPosition(GlobalPosition &position) {
     delay_ms(500);
 
     // Get ultrasonic height in m from broadcast
+    // todo get height from subscription package and remove broadcast
     GlobalPosition globalPosition = flightController->getVehicle()->broadcast->getGlobalPosition();
     position.longitude = globalPosition.longitude;
     position.latitude = globalPosition.latitude;
@@ -93,7 +94,7 @@ void M210::WaypointMission::currentPosition(GlobalPosition &position) {
     position.height = globalPosition.height;
 }
 
-void M210::WaypointMission::add() {
+bool M210::WaypointMission::add() {
     if(index < MAX_WAYPOINTS) {
         GlobalPosition position;
         currentPosition(position);
@@ -102,59 +103,89 @@ void M210::WaypointMission::add() {
         setWaypointDefaults(&wp);
 
         pthread_mutex_lock(&mutex);
-        waypointsSettings.indexNumber = index+(uint8_t)1;
+        waypointsSettings.indexNumber = index+(uint8_t)1; /*!< Total number of waypoints */
 
-        wp.index = index;
-        wp.longitude = position.longitude;
-        wp.latitude = position.latitude;
-        wp.altitude = position.height;
+        wp.index = index;                    /*!< Index to be uploaded */
+        wp.longitude = position.longitude;  /*!< Latitude (rad) */
+        wp.latitude = position.latitude;    /*!< Longitude (rad) */
+        wp.altitude = position.height;      /*!< Altitude (relative altitude from takeoff point) */
         waypointsList.push_back(wp);
 
         LSTATUS("Waypoint %u added (Lon Lat Hei): %f \t%f \t%f", index, wp.longitude,
                 wp.latitude, wp.altitude);
         index++;
         pthread_mutex_unlock(&mutex);
+        return true;
     } else {
         LERROR("Max waypoints reached");
+        return false;
     }
 }
 
 void M210::WaypointMission::setWaypointDefaults(WayPointSettings* wp)
 {
-    wp->damping         = 0;
-    wp->yaw             = 0;
-    wp->gimbalPitch     = 0;
-    wp->turnMode        = 0;
-    wp->hasAction       = 0;
-    wp->actionTimeLimit = 100;
-    wp->actionNumber    = 0;
-    wp->actionRepeat    = 0;
+    // todo use actions
+    wp->damping         = 0;    /*!< Bend length */
+    wp->yaw             = 0;    /*!< Yaw [deg]) */
+    wp->gimbalPitch     = 0;    /*!< Gimbal pitch */
+    wp->turnMode        = 0;    /*!< Turn mode */
+                                    /*!< 0: clockwise */
+                                    /*!< 1: counter-clockwise */
+    wp->hasAction       = 0;    /*!< Action flag */
+                                    /*!< 0: no action */
+                                    /*!< 1: has action */
+    wp->actionTimeLimit = 100;  /*!< Action time limit */
+    wp->actionNumber    = 0;    /*!< Total number of actions */
+    wp->actionRepeat    = 0;    /*!< Total running times */
     for (int i = 0; i < 16; ++i)
     {
-        wp->commandList[i]      = 0;
-        wp->commandParameter[i] = 0;
+        wp->commandList[i]      = 0;    /*!< Command list */
+        wp->commandParameter[i] = 0;    /*!< Command parameters */
     }
 }
 
-void M210::WaypointMission::setWaypointSettingsDefaults(WayPointInitSettings *fdata)
+void M210::WaypointMission::setWaypointSettingsDefaults(WayPointInitSettings *wp)
 {
-    fdata->maxVelocity    = 6;
-    fdata->idleVelocity   = 4;
-    fdata->finishAction   = 0;
-    fdata->executiveTimes = 1;
-    fdata->yawMode        = 0;
-    fdata->traceMode      = 0;
-    fdata->RCLostAction   = 1;
-    fdata->gimbalPitch    = 0;
-    fdata->latitude       = 0;
-    fdata->longitude      = 0;
-    fdata->altitude       = 0;
+    wp->maxVelocity    = 6;  /*!< Maximum speed joystick input(2~15m)*/
+    wp->idleVelocity   = 4;  /*!< Cruising Speed */
+    wp->finishAction   = 0;  /*!< Action on finish */
+                                    /*!< 0: no action */
+                                    /*!< 1: return to home */
+                                    /*!< 2: auto landing */
+                                    /*!< 3: return to point 0 */
+                                    /*!< 4: infinite mode， no exit */
+    wp->executiveTimes = 1;  /*!< Function execution times */
+                                    /*!< 1: once */
+                                    /*!< 2: twice */
+    wp->yawMode        = 0;  /*!< Yaw mode */
+                                    /*!< 0: auto mode(point to next waypoint) */
+                                    /*!< 1: lock as an initial value */
+                                    /*!< 2: controlled by RC */
+                                    /*!< 3: use waypoint's yaw(tgt_yaw) */
+    wp->traceMode      = 0;  /*!< Trace mode */
+                                    /*!< 0: point to point, after reaching the target waypoint hover, 
+                                     * complete waypoints action (if any), 
+                                     * then fly to the next waypoint  */
+                                    /*!< 1: Coordinated turn mode, smooth transition between waypoints,
+                                     * no waypoints task  */
+    wp->RCLostAction   = 1;  /*!< Action on rc lost */
+                                    /*!< 0: exit waypoint and failsafe */
+                                    /*!< 1: continue the waypoint */
+    wp->gimbalPitch    = 0;  /*!< Gimbal pitch mode */
+                                    /*!< 0: free mode, no control on gimbal */
+                                    /*!< 1: auto mode, Smooth transition between waypoints */
+    wp->latitude       = 0;  /*!< Focus latitude [rad] */
+    wp->longitude      = 0;  /*!< Focus longitude [rad] */
+    wp->altitude       = 0;  /*!< Focus altitude (relative takeoff point height) */
 }
 
 bool M210::WaypointMission::stop() {
+    // Verify is mission is initialized
     if(!isMissionInitialized())
         return false;
+    // Send stop order
     ACK::ErrorCode ack = flightController->getVehicle()->missionManager->wpMission->stop(1);
+    // If an error occured, display error message
     if (ACK::getError(ack)) {
         LERROR("Stop waypoints mission failed");
         ACK::getErrorCodeMessage(ack, __func__);
@@ -165,9 +196,12 @@ bool M210::WaypointMission::stop() {
 }
 
 bool M210::WaypointMission::pause() {
+    // Verify is mission is initialized
     if(!isMissionInitialized())
         return false;
+    // Send pause order
     ACK::ErrorCode ack = flightController->getVehicle()->missionManager->wpMission->pause(1);
+    // If an error occured, display error message
     if (ACK::getError(ack)) {
         LERROR("Pause waypoints mission failed");
         ACK::getErrorCodeMessage(ack, __func__);
@@ -178,9 +212,12 @@ bool M210::WaypointMission::pause() {
 }
 
 bool M210::WaypointMission::resume() {
+    // Verify is mission is initialized
     if(!isMissionInitialized())
         return false;
+    // Send resume order
     ACK::ErrorCode ack = flightController->getVehicle()->missionManager->wpMission->resume(1);
+    // If an error occured, display error message
     if (ACK::getError(ack)) {
         LERROR("Resume waypoints mission failed");
         ACK::getErrorCodeMessage(ack, __func__);
@@ -211,7 +248,7 @@ void M210::WaypointMission::action(unsigned int task) {
             resume();
             break;
         default:
-            LERROR("Unknown action");
+            LERROR("Waypoints mission unknown action");
     }
 }
 

@@ -2,7 +2,7 @@
  *  @version 1.0
  *  @date Jul 25 2018
  *  @author Jonathan Michel
- *  @brief Watchdog ensure that communication with mobile SDK is
+ *  @brief Watchdog ensures that the communication with the mobile SDK is
  *  maintained. It is regularly reset on specified data received from
  *  mobile SDK and increment on each sending of moving order to aircraft.
  */
@@ -17,7 +17,8 @@ namespace M210 {
     private:
         const unsigned limit;   /*!< Numbers of orders that can be sent to aircraft before watchdog is triggered */
         unsigned counter;       /*!< Numbers of orders sent to aircraft since last reset */
-        bool errorDisplayed;    /*!< Used to display error once when watchdog is enabled */
+        bool errorDisplayed;    /*!< Used to display error only once */
+        static pthread_mutex_t mutex; /*!< Protect watchdog shared attributes */
     public:
         /**
          * Create watchdog
@@ -25,9 +26,6 @@ namespace M210 {
          * Relative watchdog duration depends on order sending frequency. See FlightController thread
          */
         explicit Watchdog(unsigned limit);
-
-        // Mutex
-        static pthread_mutex_t mutex;
 
         /**
          * Increment local counter

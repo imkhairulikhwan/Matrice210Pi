@@ -4,13 +4,13 @@
  *  @author Jonathan Michel
  *  @brief This class provides log functions. The goal is to
  *  use DJI::LOG methods to print log on console and send log
- *  to Mobile application too.
+ *  to mobile application.
  *  Three types are available : LSTATUS, LERROR, LDEBUG
  *  User can use DJI::OSDK::Log class to enable/disable
- *  specified log kind
+ *  specified log type
  *  DSTATUS, DERROR, DDEBUG methods can always be used to
  *  log local messages on the console and not send them
- *  to Mobile.
+ *  to mobile.
  */
 
 #ifndef MATRICE210_LOG_H
@@ -20,6 +20,7 @@
 
 #define LOG_CHAR '%'
 
+// _state_ is DJI::OSDK::Log::instance().getStatusLogState() or .getDebugLogState()  or .getErrorLogState()
 // _type_ is DJI::LOG definition (DSTATUS, DERROR or DDEBUG)
 // ## before __VA_ARGS__ delete previous comma if user call macro
 // without variadic elements
@@ -48,6 +49,14 @@ namespace M210 {
     public:
         Log();
         void setFlightController(FlightController* flightController);
+        /**
+         * Send log message to mobile.
+         * @param type Log type (DSTATUS, DERROR or DDEBUG)
+         * @param format Text to be sent to mobile. Can optionally contain embedded format specifiers
+         * that are replaced by the values specified in subsequent additional arguments and formatted
+         * as requested.
+         * @param ... Variadic additional arguments
+         */
         void send(const char* type, const char* format, ...);
     };
 }

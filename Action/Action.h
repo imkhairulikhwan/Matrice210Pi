@@ -6,6 +6,7 @@
  *  Queue is filled on data reception from mobile SDK or console
  *  Queue is continuously processed in main
  *  Action are ActionData objects, see ActionData.h
+ *  mqueue.h is used
  */
 
 #ifndef MATRICE210_ACTION_H
@@ -26,17 +27,15 @@ namespace M210 {
 
     class Action : public Singleton<Action> {
     public:
-        // Mission type, used when action concern a mission
         // todo move this declaration to a better place
-        enum MissionType {
+        enum MissionType {      /*!< Mission type, used when action concern a mission */
             VELOCITY = 1,
             POSITION,
             POSITION_OFFSET,
             WAYPOINTS
         };
-        // Mission action, mainly used with waypoints actions
         // todo move this declaration to a better place
-        enum MissionAction {
+        enum MissionAction {    /*!< Mission action, mainly used with waypoints actions */
             START = 1,
             ADD,
             RESET,
@@ -45,11 +44,10 @@ namespace M210 {
             RESUME
         };
     private:
-        mq_attr actionQueueAttr;
-        mqd_t actionQueue;
-        // Mutex
-        static pthread_mutex_t mutex;
-        FlightController *flightController;
+        mqd_t actionQueue;              /*!< Action queue */
+mq_attr actionQueueAttr;                /*!< Action queue attributes */
+        static pthread_mutex_t mutex;   /*!< Action queue mutex, mqueue are supposed to be protected but safety first */
+        FlightController *flightController;     /*!< Flight controller concerned by the actions */
 
         /**
          * Dedicated function when action is a position mission.
@@ -85,6 +83,9 @@ namespace M210 {
          */
         Action();
 
+        /**
+         * Close action queue and unlink it.
+         */
         ~Action();
         /**
          * Define the FlightController to whom the action should be transmitted
@@ -93,15 +94,22 @@ namespace M210 {
         void setFlightController(FlightController *flightController) { this->flightController = flightController; }
 
         /**
-         * Add action to queue
+         * Add action data to queue
          * @param actionData Pointer to ActionData object to add
+         * @return true if action data has been added to queue, false otherwise
          */
-        void add(const ActionData *actionData);
+        bool add(const ActionData *actionData);
 
         /**
          *  Receive message from queue a process it. Blocking call.
          */
         void process() const;
+
+        /**
+         * Unit test to check that class is working. Called at the
+         * beginning of the program. Assert if a test fails
+         */
+        static void unitTest();
     };
 }
 

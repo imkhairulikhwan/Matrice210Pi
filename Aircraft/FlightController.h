@@ -2,14 +2,16 @@
  *  @version 1.0
  *  @date Jul 03 2018
  *  @author Jonathan Michel
- *  @brief This class handle all aircraft status, actions and missions.
- *  It contains a dedicated thread that implement a state machine. The goal is to
+ *  @brief This class handles all aircraft status, actions and missions.
+ *  It contains a dedicated thread that implements a state machine. The goal is to
  *  continuously send order to the aircraft when a mission is running.
  *  Many types of missions are existing, for details see Missions folder
  */
 
 #ifndef MATRICE210_FLIGHTCONTROLLER_HPP
 #define MATRICE210_FLIGHTCONTROLLER_HPP
+
+#define R_EARTH (double)6378137.0   /*!< Earth equatorial radius [m] */
 
 // System includes
 #include <pthread.h>
@@ -34,39 +36,43 @@ class LinuxSetup;
 
     class FlightController {
     private:
-        // Fight controller thread
-        bool flightControllerThreadRunning;
-        pthread_t flightControllerThreadID;
-        pthread_attr_t flightControllerThreadAttr;
-
-        // State machine thread
-        static void *flightControllerThread(void *param);
-
-        // Aircraft
-        Emergency *emergency;
-        Vehicle *vehicle;
-        LinuxSetup *linuxEnvironment;
-        Watchdog *watchdog;
-        // State machine states
-        enum SMState_ {
+        // Flight controller thread
+        bool flightControllerThreadRunning;         /*!< Flight controller thread state */
+        pthread_t flightControllerThreadID;         /*!< Flight controller thread id */
+        pthread_attr_t flightControllerThreadAttr;  /*!< Flight controller thread attributes */
+        static void *flightControllerThread(void *param); /*!< Flight controller thread, state machine */
+        enum SMState_ {                             /*!< State machine states, used by flight controller thread */
             WAIT,
             STOP,
             VELOCITY,
             POSITION_OFFSET,
             POSITION
         } SMState;
+
+        // Aircraft
+        LinuxSetup *linuxEnvironment;   /*!< Pointer to used linux environment */
+        Vehicle *vehicle;               /*!< Pointer to used vehicle */
+        Emergency *emergency;           /*!< Emergency state */
+        Watchdog *watchdog;             /*!< Watchdog */
+
         // Missions
-        M210::MonitoredMission *monitoredMission;
-        M210::PositionMission *positionMission;
-        M210::PositionOffsetMission *positionOffsetMission;
-        M210::VelocityMission *velocityMission;
-        M210::WaypointMission *waypointMission;
+        M210::MonitoredMission *monitoredMission;               /*!< Monitored mission */
+        M210::PositionMission *positionMission;                 /*!< Position mission */
+        M210::PositionOffsetMission *positionOffsetMission;     /*!< Position offset mission */
+        M210::VelocityMission *velocityMission;                 /*!< Velocity mission */
+        M210::WaypointMission *waypointMission;                 /*!< Waypoints mission */
         // Mutex
-        static pthread_mutex_t sendDataToMSDK_mutex;
-        static pthread_mutex_t movingMode_mutex;
+        static pthread_mutex_t sendDataToMSDK_mutex;            /*!< Ensure that data are sent one by one to the mobile */
+        static pthread_mutex_t smState_mutex;                   /*!< Protect state machine states modification */
     public :
+        /**
+         * Initialize flight controller and create mission
+         */
         FlightController();
 
+        /**
+         *  Delete missions and flight controller attributes
+         */
         ~FlightController();
 
         /**
@@ -138,30 +144,33 @@ class LinuxSetup;
         void moveByPositionOffset(const Vector3f *offset, float yaw,
                                   float posThreshold = 0.2,
                                   float yawThreshold = 1.0);
-        // Todo replace
+        /**
+         * Modify action flow of the waypoints mission
+         * @param task Task to do, value of Action::MissionAction (Action.h) structure
+         */
         void waypointsMissionAction(unsigned task);
 
         // Stop and emergency
         /**
          * Stop aircraft
-         * Stop FlightController state machine and stop all current missions
+         * Stop flight controller state machine and stop all current missions
          */
         void stopAircraft();
 
         /**
-         *  Set FlightController emergency state and stop aircraft
+         *  Set flight controller emergency state and stop aircraft
          */
         void emergencyStop();
 
         /**
-         * Reset FlightController emergency state
+         * Reset flight controller emergency state
          */
         void emergencyRelease();
 
         // Emergency safe ObSdk call
         /**
          * Control the velocity and yaw rate of the aircraft
-         * On-board SDK method call with safety verification
+         * On-board SDK method call with safety verification (emergency and watchdog states)
          * This method must be used by all missions instead of direct call to vehicle method
          * @param velocity Absolute velocity vector to set [m/s]
          * Vector is relative to the ground
@@ -172,13 +181,13 @@ class LinuxSetup;
 
         /**
          * Control the position and yaw angle of the vehicle.
-         * On-board SDK method call with safety verification
+         * On-board SDK method call with safety verification (emergency and watchdog states)
          * This method must be used by all missions instead of direct call to vehicle method
          * @param position Relative position vector to move [m]
          * Vector is relative to the ground
          * x face to north, y face to east, z face to sky
          * @param yaw Absolute yaw angle to set [deg}
-         * TODO Explain with multiple calls are needed
+         * TODO Explain why multiple calls are needed
          */
         void positionAndYawCtrl(const Vector3f *position, float yaw);
 
@@ -191,9 +200,14 @@ class LinuxSetup;
 
         void setMovingMode(SMState_ mode);
 
-// Static functions
+    // Static functions
     public:
         // TODO Global broadcast manager implementation !
+        /**
+         * Start broadcast send of position from aircaft
+         * @param vehicle Vehicle concerned
+         * @return True if broadcast successfully started
+         */
         static bool startGlobalPositionBroadcast(Vehicle *vehicle);
 
         /**
