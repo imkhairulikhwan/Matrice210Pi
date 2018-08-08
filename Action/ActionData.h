@@ -147,7 +147,6 @@ namespace M210 {
         bool push(const Telemetry::Vector3f &v);
         bool push(const uint8_t *data, size_t length);
 
-        // todo replace implementation with macro
         /**
          * Dedicated pop methods
          * See _pop() macro for details

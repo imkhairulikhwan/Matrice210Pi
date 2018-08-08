@@ -217,9 +217,9 @@ class LinuxSetup;
          * @param target Target GPS coordinates
          * @param origin Origin GPS coordinates
          */
-        static void localOffsetFromGpsOffset(Vector3f &deltaNed,
-                                             const Telemetry::GPSFused *target,
-                                             const Telemetry::GPSFused *origin);
+        static void offsetFromGpsOffset(Vector3f &deltaNed,
+                                        const Telemetry::GPSFused *target,
+                                        const Telemetry::GPSFused *origin);
 
         /**
          * Calculate euler angle from quaternion data

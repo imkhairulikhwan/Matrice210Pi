@@ -111,7 +111,8 @@ void *FlightController::flightControllerThread(void *param) {
                 break;
             case POSITION:
                 fc->positionMission->update();
-                fc->setMovingMode(WAIT);
+                // Orders are send at 50 Hz, as recommended by DJI
+                delay_ms(20);
                 break;
             case VELOCITY:
                 fc->velocityMission->update();
@@ -120,7 +121,8 @@ void *FlightController::flightControllerThread(void *param) {
                 break;
             case POSITION_OFFSET:
                 fc->positionOffsetMission->update();
-                delay_ms(fc->positionOffsetMission->getCycleTimeMs());
+                // Orders are send at 50 Hz, as recommended by DJI
+                delay_ms(20);
                 break;
         }
     }
@@ -242,9 +244,9 @@ bool FlightController::startGlobalPositionBroadcast(Vehicle *vehicle) {
     return true;
 }
 
-void FlightController::localOffsetFromGpsOffset(Telemetry::Vector3f &deltaNed,
-                                                const Telemetry::GPSFused *target,
-                                                const Telemetry::GPSFused *origin) {
+void FlightController::offsetFromGpsOffset(Telemetry::Vector3f &deltaNed,
+                                           const Telemetry::GPSFused *target,
+                                           const Telemetry::GPSFused *origin) {
     // Formulas are provided by DJI
     double deltaLon = target->longitude - origin->longitude;
     double deltaLat = target->latitude - origin->latitude;

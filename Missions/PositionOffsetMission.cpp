@@ -23,11 +23,13 @@ PositionOffsetMission::PositionOffsetMission(FlightController *flightController)
 
 bool PositionOffsetMission::move(const Vector3f *offset, float yaw,
                                  float posThreshold, float yawThreshold) {
-    LSTATUS("PositionOffsetMission move : x = % .2f m, y = % .2f m, z = % .2f m, yaw = % .2f degposThreshold",
+    // Ensure an other mission is not running
+    stop();
+    LSTATUS("PositionOffsetMission move : x = % .2f m, y = % .2f m, z = % .2f m, yaw = % .2f deg",
             offset->x, offset->y, offset->z, yaw);
     vehicle = flightController->getVehicle();
-    setOffset(offset, yaw * DEG2RAD);
-    setThreshold(posThreshold, yawThreshold * DEG2RAD);
+    setOffset(offset, yaw);
+    setThreshold(posThreshold, yawThreshold);
 
     if(!missionRunning) {
         /*/ Subscribe to package
@@ -52,6 +54,8 @@ bool PositionOffsetMission::move(const Vector3f *offset, float yaw,
         missionRunning = true;
     }
 
+    startTime = getTimeMs();
+
     // Broadcast height is used since relative height through subscription arrived
     if (!FlightController::startGlobalPositionBroadcast(vehicle))
     {
@@ -62,23 +66,12 @@ bool PositionOffsetMission::move(const Vector3f *offset, float yaw,
     }
 
     // Wait for data to come in
-    delay_ms(1000);
+    delay_ms(500);
 
     // Global position retrieved via subscription
-    Telemetry::TypeMap<TOPIC_GPS_FUSED>::type currentSubscriptionGPS;
-    // Global position retrieved via broadcast
-    Telemetry::GlobalPosition currentBroadcastGP;
-    // Convert position offset from first position to local coordinates
-    Telemetry::Vector3f localOffset;
-
-    currentSubscriptionGPS = vehicle->subscribe->getValue<TOPIC_GPS_FUSED>();
-    originSubscriptionGPS = currentSubscriptionGPS;
-    FlightController::localOffsetFromGpsOffset(localOffset,
-                                               &currentSubscriptionGPS,
-                                               &originSubscriptionGPS);
-
-    // Get the broadcast GP since we need the height for position.z
-    currentBroadcastGP = vehicle->broadcast->getGlobalPosition();
+    Telemetry::TypeMap<TOPIC_GPS_FUSED>::type currentSubscriptionGPS
+        = vehicle->subscribe->getValue<TOPIC_GPS_FUSED>();
+    originGpsPosition = currentSubscriptionGPS;
 
     resetMissionCounters();
 
@@ -103,10 +96,11 @@ bool PositionOffsetMission::move(const Vector3f *offset, float yaw,
     else
         positionToMove.y = 0;
 
+    // Get the broadcast global position since we need the height for position z
     // Since subscription cannot give us a relative height, use broadcast.
+    Telemetry::GlobalPosition currentBroadcastGP;
+    currentBroadcastGP = vehicle->broadcast->getGlobalPosition();
     positionToMove.z = currentBroadcastGP.height + offset->z;
-
-    startTime = getTimeMs();
 
     // update() has now to be called continuously
 
@@ -118,26 +112,33 @@ bool PositionOffsetMission::update() {
         return false;
 
     bool destinationReached = false;
-    long elapsedTime = getTimeMs() - startTime;
+    // Time management
+    long currentTime = getTimeMs();
+    long elapsedTime = currentTime - startTime;
+
     if(elapsedTime < missionTimeout) {
-        flightController->positionAndYawCtrl(&positionToMove, (float32_t) (targetYaw / DEG2RAD));
+        flightController->positionAndYawCtrl(&positionToMove, (float32_t) targetYaw);
+
+        // Calculate duration since last update was made
+        long updateDiffTime = currentTime - lastUpdateTime;
+        lastUpdateTime = currentTime;
 
         // Get current position in required coordinates and units
-        Telemetry::TypeMap<TOPIC_QUATERNION>::type subscriptionQ
+        Telemetry::TypeMap<TOPIC_QUATERNION>::type currentQuaternion
                 = vehicle->subscribe->getValue<TOPIC_QUATERNION>();
-        double currentYaw = FlightController::toEulerAngle(&subscriptionQ).z;
-        Telemetry::TypeMap<TOPIC_GPS_FUSED>::type currentSubscriptionGPS
+        double currentYaw = FlightController::toEulerAngle(&currentQuaternion).z * RAD2DEG;
+        Telemetry::TypeMap<TOPIC_GPS_FUSED>::type currentGpsPosition
                 = vehicle->subscribe->getValue<TOPIC_GPS_FUSED>();
 
-        Telemetry::Vector3f localOffset;
-        FlightController::localOffsetFromGpsOffset(localOffset,
-                                                   &currentSubscriptionGPS,
-                                                   &originSubscriptionGPS);
+        Telemetry::Vector3f currentOffset;
+        FlightController::offsetFromGpsOffset(currentOffset,
+                                              &currentGpsPosition,
+                                              &originGpsPosition);
 
         // See how much farther we have to go
-        double xOffsetRemaining = offset.x - localOffset.x;
-        double yOffsetRemaining = offset.y - localOffset.y;
-        double zOffsetRemaining = offset.z - (-localOffset.z);
+        double xOffsetRemaining = targetOffset.x - currentOffset.x;
+        double yOffsetRemaining = targetOffset.y - currentOffset.y;
+        double zOffsetRemaining = targetOffset.z - (-currentOffset.z);
 
         // See if we need to modify the setpoint
         if (abs(xOffsetRemaining) < setPointDistance)
@@ -150,21 +151,21 @@ bool PositionOffsetMission::update() {
             abs(yOffsetRemaining) < posThreshold &&
             abs(zOffsetRemaining) < zDeadband &&
             abs(currentYaw - targetYaw) < yawThreshold) {
-            // 1. We are within bounds; start incrementing our in-bound counter
-            withinBoundsCnt += getCycleTimeMs();
+            // 1. We are within bounds; start incrementing within bounds counter
+            withinBoundsCnt += updateDiffTime;
         } else {
             if (withinBoundsCnt != 0) {
                 // 2. Start incrementing an out-of-bounds counter
-                outOfBoundsCnt += getCycleTimeMs();
+                outOfBoundsCnt += updateDiffTime;
             }
         }
-        // 3. Reset withinBoundsCounter if necessary
-        if (outOfBoundsCnt > getOutOfBoundsTimeLimit()) {
+        // 3. Reset within bounds counter if necessary
+        if (outOfBoundsCnt > outOfBoundsLimit) {
             withinBoundsCnt = 0;
             outOfBoundsCnt = 0;
         }
         // 4. If within bounds, destination is reached
-        if (withinBoundsCnt >= getWithinBoundsTimeRequirement()) {
+        if (withinBoundsCnt >= withinBoundsRequirement) {
             destinationReached = true;
         }
     } else {
@@ -186,38 +187,27 @@ bool PositionOffsetMission::update() {
 
 void PositionOffsetMission::stop() {
     if(missionRunning) {
-        while (brakeCnt < getWithinBoundsTimeRequirement()) {
+        brakeCnt = 0;
+        while (brakeCnt < withinBoundsRequirement) {
             vehicle->control->emergencyBrake();
-            delay_ms(getCycleTimeMs());
-            brakeCnt += getCycleTimeMs();
+            delay_ms(20);
+            brakeCnt += 20;
         }
 
-        missionRunning = false;
-
         PackageManager::instance().unsubscribe(pkgIndex);
+        missionRunning = false;
     }
 }
 
-unsigned int PositionOffsetMission::getCycleTimeMs() const {
-   return 1000 / (unsigned)controlFreq;
-}
-
-unsigned int PositionOffsetMission::getOutOfBoundsTimeLimit() const {
-   return outOfBoundsLimit * getCycleTimeMs();
-}
-
-unsigned int PositionOffsetMission::getWithinBoundsTimeRequirement() const {
-   return  withinBoundsRequirement * getCycleTimeMs();
-}
 void PositionOffsetMission::resetMissionCounters() {
    withinBoundsCnt = 0;
    outOfBoundsCnt = 0;
    brakeCnt = 0;
 }
 void PositionOffsetMission::setOffset(const Vector3f* offset, double yaw) {
-    this->offset.x = offset->x;
-    this->offset.y = offset->y;
-    this->offset.z = offset->z;
+    this->targetOffset.x = offset->x;
+    this->targetOffset.y = offset->y;
+    this->targetOffset.z = offset->z;
     this->targetYaw = yaw;
 }
 

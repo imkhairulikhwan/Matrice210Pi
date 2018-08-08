@@ -10,18 +10,17 @@
  */
 
  // TODO More explanation, test setPointDistance modifications, test moveToPosition
- // TODO get relative time on update method !
 
 #ifndef MATRICE210_POSITIONOFFSETMISSION_H
 #define MATRICE210_POSITIONOFFSETMISSION_H
-
-#define DEG2RAD 0.01745329252       /*!< Deg to rad factor (pi/180) */
 
 // DJI OSDK includes
 #include <dji_vehicle.hpp>
 
 using namespace DJI::OSDK;
 using namespace DJI::OSDK::Telemetry;
+
+#define RAD2DEG 57.2957795129       // 1 /(pi/180)
 
 namespace M210 {
     class FlightController;
@@ -31,29 +30,29 @@ namespace M210 {
         FlightController *flightController{nullptr};
         Vehicle *vehicle{nullptr};
         // Offset values
-        Vector3f offset{};              // Offset desired [m]
-        double targetYaw{0.0};         // yaw desired [rad]
+        Vector3f targetOffset{};         /*!< Offset desired [m] */
+        float targetYaw{0.0};           /*!< yaw desired [deg] */
         Telemetry::Vector3f positionToMove;
         // There is a deadband in position control
         // the z cmd is absolute height
         // while x and y are in relative
         float zDeadband{0.12};
         // Mission parameters
-        bool missionRunning{false};     /*!< Prevent mission to be launched multiples times */
-        long missionTimeout{10000};     /*!< Timeout to finish mission [ms] */
-        int controlFreq{50};            /*!< Sent control frame frequency [Hz] */
-        int outOfBoundsLimit{10};       /*!< Limit cycles to consider aircraft as out of bounds [cycles] */
-        int withinBoundsRequirement{50};/*!< Requirement cycles to reach target [cycles] */
-        int setPointDistance{2};        /*!< Set point distance [m] */
-        float posThreshold{0.2};        /*!< Position threshold [m] */
-        double yawThreshold{1.0};       /*!< Yaw threshold [rad] */
+        bool missionRunning{false};         /*!< Prevent mission to be launched multiples times */
+        long missionTimeout{10000};         /*!< Timeout to finish mission [ms] */
+        long outOfBoundsLimit{200};         /*!< Limit time to consider aircraft as out of bounds [ms] */
+        long withinBoundsRequirement{1000}; /*!< Requirement time to consider target as reached [ms] */
+        int setPointDistance{2};            /*!< Set point distance [m] */
+        float posThreshold{0.2};            /*!< Position threshold [m] */
+        double yawThreshold{1.0};           /*!< Yaw threshold [deg] */
         // Missions values
-        long startTime{0};              /*!< Mission start time [ms] */
-        int withinBoundsCnt{0};         /*!< Within bounds counter [ms] */
-        int outOfBoundsCnt{0};          /*!< Out of bounds counter [ms]*/
-        int brakeCnt{0};                /*!< Brake counter [ms] */
+        long startTime{0};              /*!< Mission absolute start time [ms] */
+        long lastUpdateTime{0};         /*!< Last absolute time update method was called [ms] */
+        long withinBoundsCnt{0};        /*!< Within bounds counter [ms] */
+        long outOfBoundsCnt{0};         /*!< Out of bounds counter [ms]*/
+        long brakeCnt{0};               /*!< Brake counter [ms] */
         // Subscription
-        Telemetry::TypeMap<TOPIC_GPS_FUSED>::type originSubscriptionGPS;
+        Telemetry::TypeMap<TOPIC_GPS_FUSED>::type originGpsPosition;
         int pkgIndex{0};                /*!< Package index used by subscription */
     public:
         explicit PositionOffsetMission(FlightController *flightController);
@@ -77,29 +76,15 @@ namespace M210 {
          * @return true if destination is reached, false otherwise
          */
         bool update();
-
-        unsigned int getCycleTimeMs() const;
-
     private:
         /**
-         * Stop aircraft and mission
+         * Stop aircraft and mission.
+         * Send brake order multiple times
          */
         void stop();
 
         // Mission functions
-        /**
-         * Get out of bounds time limit depending on outOfBoundsLimit and cycle time
-         * @return out of bounds time limit [ms]
-         */
-        unsigned int getOutOfBoundsTimeLimit() const;
-
-        /**
-         * Get within time requirement depending on withinBoundsRequirement and cycle time
-         * @return within time requirement [ms]
-         */
-        unsigned int getWithinBoundsTimeRequirement() const;
-
-        /**
+       /**
          * Reset all mission time counters
          */
         void resetMissionCounters();

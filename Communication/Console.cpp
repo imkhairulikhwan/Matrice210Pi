@@ -54,22 +54,24 @@ void* Console::consoleThread(void* param) {
                 actionData = new ActionData(ActionData::landing);
                 break;
             case '3': {
+                // Move by position
                 Telemetry::Vector3f position;
                 position.x = c->getNumber("x: ");
                 position.y = c->getNumber("y: ");
                 position.z = c->getNumber("z: ");
                 float yaw = c->getNumber("yaw: ");
-                actionData = new ActionData(ActionData::mission,
+                actionData = new ActionData(ActionData::ActionId::mission,
                                             sizeof(Telemetry::Vector3f) // position
                                             + sizeof(unsigned)          // mission action
                                             + 2 * sizeof(char));        // mission kind
                 actionData->push(position);
                 actionData->push(yaw);
-                actionData->push((char)1);    // action
-                actionData->push((char)2);    // mission kind
+                actionData->push((char)Action::MissionAction::START);    // action
+                actionData->push((char)Action::MissionType::POSITION);   // mission kind
             }
                 break;
             case '4': {
+                // Move by position offset
                 Telemetry::Vector3f position;
                 position.x = c->getNumber("xOffsetDesired: ");
                 position.y = c->getNumber("yOffsetDesired: ");
@@ -81,11 +83,12 @@ void* Console::consoleThread(void* param) {
                                             + 2 * sizeof(char));        // mission kind
                 actionData->push(position);
                 actionData->push(yaw);
-                actionData->push((char)1);    // action
-                actionData->push((char)3);    // mission kind
+                actionData->push((char)Action::MissionAction::START);           // action
+                actionData->push((char)Action::MissionType::POSITION_OFFSET);   // mission kind
             }
                 break;
             case '5': {
+                // Move by velocity
                 Telemetry::Vector3f velocity;
                 velocity.x = c->getNumber("Vx: ");
                 velocity.y = c->getNumber("Vy: ");
@@ -97,8 +100,8 @@ void* Console::consoleThread(void* param) {
                                             + 2 * sizeof(char));        // mission kind
                 actionData->push(velocity);
                 actionData->push(yaw);
-                actionData->push((char)1);    // action
-                actionData->push((char)1);    // mission kind
+                actionData->push((char)Action::MissionAction::START);    // action
+                actionData->push((char)Action::MissionType::VELOCITY);    // mission kind
             }
                 break;
             case 'e':
