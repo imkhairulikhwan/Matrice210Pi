@@ -11,8 +11,6 @@
 #ifndef MATRICE210_FLIGHTCONTROLLER_HPP
 #define MATRICE210_FLIGHTCONTROLLER_HPP
 
-#define R_EARTH (double)6378137.0   /*!< Earth equatorial radius [m] */
-
 // System includes
 #include <pthread.h>
 
@@ -68,7 +66,7 @@ class LinuxSetup;
         /**
          * Initialize flight controller and create mission
          */
-        FlightController();
+         FlightController();
 
         /**
          *  Delete missions and flight controller attributes
@@ -194,11 +192,11 @@ class LinuxSetup;
         /** Getters and setters functions */
         Vehicle *getVehicle() const { return vehicle; }
 
-        SMState_ getMovingMode() const { return SMState; }
+        SMState_ getSMState() const { return SMState; }
 
         Watchdog *getWatchdog() const { return watchdog; }
 
-        void setMovingMode(SMState_ mode);
+        void setSMState(SMState_ mode);
 
     // Static functions
     public:
@@ -209,24 +207,6 @@ class LinuxSetup;
          * @return True if broadcast successfully started
          */
         static bool startGlobalPositionBroadcast(Vehicle *vehicle);
-
-        /**
-         * Calculate local NED offset between two pairs of GPS coordinates.
-         * Accurate when distances are small.
-         * @param deltaNed Float vector used to return offset
-         * @param target Target GPS coordinates
-         * @param origin Origin GPS coordinates
-         */
-        static void offsetFromGpsOffset(Vector3f &deltaNed,
-                                        const Telemetry::GPSFused *target,
-                                        const Telemetry::GPSFused *origin);
-
-        /**
-         * Calculate euler angle from quaternion data
-         * @param quaternionData quaternion
-         * @return Rad euler angle
-         */
-        static Telemetry::Vector3f toEulerAngle(const Telemetry::Quaternion *quaternion);
     };
 }
 

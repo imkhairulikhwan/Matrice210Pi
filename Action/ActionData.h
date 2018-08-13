@@ -4,6 +4,7 @@
  *  @author Jonathan Michel
  *  @brief ActionData objects are added in Action queue (Action.h)
  *  The goal is to provide an object with variable data size.
+ *
  *  It is useful because all actions doesn't need the same amount of
  *  data.
  *  On object creation, dynamic memory is allocated. Size depends of user

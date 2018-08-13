@@ -4,6 +4,7 @@
  *  @author Jonathan Michel
  *  @brief This class handles UART communication with STM32 card.
  *  It launches a thread reading incoming uart data and processes received frame.
+ *
  *  Current protocol implementation transmits ascii value of numbers
  *  | char indicates new value
  *  @ char indicates end of frame

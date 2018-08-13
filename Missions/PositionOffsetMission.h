@@ -2,7 +2,7 @@
  *  @version 1.0
  *  @date Jul 05 2018
  *  @author Jonathan Michel
- *  @brief
+ *  @brief @todo Comment
  *  Calculate the inputs to send the position controller.
  *  Basic receding setpoint position control with the setpoint always 2m away
  *  from the current position - until aircraft get within a threshold of the goal.
@@ -30,9 +30,9 @@ namespace M210 {
         FlightController *flightController{nullptr};
         Vehicle *vehicle{nullptr};
         // Offset values
-        Vector3f targetOffset{};         /*!< Offset desired [m] */
+        Vector3f targetOffset{};        /*!< Offset desired [m] */
         float targetYaw{0.0};           /*!< yaw desired [deg] */
-        Telemetry::Vector3f positionToMove;
+        Vector3f positionToMove;        /*!< Position orders sent to aircraft [m] */
         // There is a deadband in position control
         // the z cmd is absolute height
         // while x and y are in relative

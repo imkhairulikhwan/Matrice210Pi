@@ -16,6 +16,8 @@
 #include "../Managers/ThreadManager.h"
 #include "../util/Log.h"
 #include "../util/timer.h"
+#include "../util/define.h"
+#include "../Gps/GpsAxis.h"
 
 using namespace M210;
 
@@ -123,6 +125,11 @@ void* Console::consoleThread(void* param) {
             case 's':
                 actionData = new ActionData(ActionData::stopAircraft,
                                             sizeof(Telemetry::Vector3f) + sizeof(unsigned));
+                break;
+            case 'g': {
+                float angle = c->getNumber("Axis angle [deg]: ");
+                GpsAxis::instance().setRotationAngle(angle / RAD2DEG);
+            }
                 break;
             default:
                 DERROR("Unknown command");

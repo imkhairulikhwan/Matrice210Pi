@@ -3,21 +3,8 @@
  *  @date Jul 05 2018
  *  @author Jonathan Michel
  *  @brief This class provides an user friendly interface
- *  to manage subscription. More details below
- */
-
-#ifndef MATRICE210_PACKAGEMANAGER_H
-#define MATRICE210_PACKAGEMANAGER_H
-
-
-#include <pthread.h>
-
-#include <dji_vehicle.hpp>
-
-using namespace DJI::OSDK;
-using namespace DJI::OSDK::Telemetry;
-
-/**
+ *  to manage subscription.
+ *
  * Data Subscription is a paradigm proposed by DJI, it offers
  * real-time telemetry data transmission from the aircraft
  * to the Onboard SDK.
@@ -31,9 +18,12 @@ using namespace DJI::OSDK::Telemetry;
  * package API. When user need a package, subscribe() method
  * return used packageId (0 to 5). Subscription errors
  * (no more package available, init or start errror from API, ...)
- * are handle. Here is an example, user want STATUS_FLIGHT and
- * DISPLAYMODE 10 times par seconds :
+ * are handle.
  *
+ * @example
+ * Here is an example, user want STATUS_FLIGHT and
+ * DISPLAYMODE 10 times par seconds :
+ * @code
     uint16_t frequency      = 10;
     TopicName topics[]      = {
             TOPIC_STATUS_FLIGHT,
@@ -48,9 +38,22 @@ using namespace DJI::OSDK::Telemetry;
         DERROR("Monitored takeoff - Failed to start package");
         return false;
     }
- *
+    @endcode
  *
  */
+
+#ifndef MATRICE210_PACKAGEMANAGER_H
+#define MATRICE210_PACKAGEMANAGER_H
+
+
+#include <pthread.h>
+
+#include <dji_vehicle.hpp>
+
+using namespace DJI::OSDK;
+using namespace DJI::OSDK::Telemetry;
+
+
 
 namespace M210 {
     class PackageManager : public Singleton<PackageManager> {

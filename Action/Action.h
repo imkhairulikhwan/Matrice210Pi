@@ -3,6 +3,7 @@
  *  @date Jul 18 2018
  *  @author Jonathan Michel
  *  @brief This class provides a queue used to add action to do by FlightController.
+ *
  *  Queue is filled on data reception from mobile SDK or console
  *  Queue is continuously processed in main
  *  Action are ActionData objects, see ActionData.h
@@ -45,7 +46,7 @@ namespace M210 {
         };
     private:
         mqd_t actionQueue;              /*!< Action queue */
-mq_attr actionQueueAttr;                /*!< Action queue attributes */
+        mq_attr actionQueueAttr;                /*!< Action queue attributes */
         static pthread_mutex_t mutex;   /*!< Action queue mutex, mqueue are supposed to be protected but safety first */
         FlightController *flightController;     /*!< Flight controller concerned by the actions */
 

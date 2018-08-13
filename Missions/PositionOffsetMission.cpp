@@ -12,6 +12,8 @@
 
 #include "../Managers/PackageManager.h"
 #include "../Aircraft/FlightController.h"
+#include "../Gps/GpsManip.h"
+#include "../Gps/GpsAxis.h"
 #include "../util/timer.h"
 #include "../util/Log.h"
 
@@ -126,18 +128,19 @@ bool PositionOffsetMission::update() {
         // Get current position in required coordinates and units
         Telemetry::TypeMap<TOPIC_QUATERNION>::type currentQuaternion
                 = vehicle->subscribe->getValue<TOPIC_QUATERNION>();
-        double currentYaw = FlightController::toEulerAngle(&currentQuaternion).z * RAD2DEG;
+        double currentYaw = GpsManip::toEulerAngle(currentQuaternion).z * RAD2DEG;
         Telemetry::TypeMap<TOPIC_GPS_FUSED>::type currentGpsPosition
                 = vehicle->subscribe->getValue<TOPIC_GPS_FUSED>();
 
-        Telemetry::Vector3f currentOffset;
-        FlightController::offsetFromGpsOffset(currentOffset,
-                                              &currentGpsPosition,
-                                              &originGpsPosition);
+        Telemetry::Vector3f currentOffset =
+                GpsManip::offsetFromGpsOffset(originGpsPosition, currentGpsPosition);
+
+        Vector2 v{currentOffset.x, currentOffset.y};
+        Vector2 projectedV = GpsAxis::instance().revertVector(v);
 
         // See how much farther we have to go
-        double xOffsetRemaining = targetOffset.x - currentOffset.x;
-        double yOffsetRemaining = targetOffset.y - currentOffset.y;
+        double xOffsetRemaining = targetOffset.x - projectedV.x;
+        double yOffsetRemaining = targetOffset.y - projectedV.y;
         double zOffsetRemaining = targetOffset.z - (-currentOffset.z);
 
         // See if we need to modify the setpoint
@@ -208,7 +211,7 @@ void PositionOffsetMission::setOffset(const Vector3f* offset, double yaw) {
     this->targetOffset.x = offset->x;
     this->targetOffset.y = offset->y;
     this->targetOffset.z = offset->z;
-    this->targetYaw = yaw;
+    this->targetYaw = (float)yaw;
 }
 
 void PositionOffsetMission::setThreshold(float posThreshold, double yawThreshold) {

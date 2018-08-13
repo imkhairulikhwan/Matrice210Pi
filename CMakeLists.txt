@@ -22,6 +22,7 @@
 
 cmake_minimum_required(VERSION 2.8)
 project(matrice210)
+add_definitions(-DCMAKE_SH="CMAKE_SH-NOTFOUND")
 
 if(NOT ONBOARDSDK_SOURCE)
     set(ONBOARDSDK_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/../../Onboard-SDK/osdk-core")
@@ -56,21 +57,27 @@ FILE(GLOB SOURCE_FILES *.hpp *.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES}
-        util/timer.cpp util/timer.h
-        util/Log.cpp util/Log.h
+        Action/Action.cpp Action/Action.h
+        Action/ActionData.cpp Action/ActionData.h
         Aircraft/FlightController.cpp Aircraft/FlightController.h
         Aircraft/Emergency.cpp Aircraft/Emergency.h
         Aircraft/Watchdog.cpp Aircraft/Watchdog.h
-        Action/Action.cpp Action/Action.h
-        Action/ActionData.cpp Action/ActionData.h
-        Managers/ThreadManager.cpp Managers/ThreadManager.h
-        Managers/PackageManager.cpp Managers/PackageManager.h
         Communication/Console.cpp Communication/Console.h
         Communication/Mobile.cpp Communication/Mobile.h
         Communication/Uart.cpp Communication/Uart.h
+        Gps/GpsAxis.cpp Gps/GpsAxis.h
+        Gps/GeodeticCoord.cpp Gps/GeodeticCoord.h
+        Gps/GpsManip.cpp Gps/GpsManip.h
+        Managers/PackageManager.cpp Managers/PackageManager.h
+        Managers/ThreadManager.cpp Managers/ThreadManager.h
+        Missions/AvalancheMission.cpp Missions/AvalancheMission.h
         Missions/MonitoredMission.cpp Missions/MonitoredMission.h
         Missions/PositionMission.cpp Missions/PositionMission.h
         Missions/PositionOffsetMission.cpp Missions/PositionOffsetMission.h
         Missions/VelocityMission.cpp Missions/VelocityMission.h
-        Missions/WaypointsMission.cpp Missions/WaypointsMission.h)
+        Missions/WaypointsMission.cpp Missions/WaypointsMission.h
+        util/define.h
+        util/Log.cpp util/Log.h
+        util/timer.cpp util/timer.h
+        )
 target_link_libraries(${PROJECT_NAME} djiosdk-core)

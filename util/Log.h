@@ -2,9 +2,10 @@
  *  @version 1.0
  *  @date Jul 27 2018
  *  @author Jonathan Michel
- *  @brief This class provides log functions. The goal is to
- *  use DJI::LOG methods to print log on console and send log
- *  to mobile application.
+ *  @brief This class provides log functions.
+ *
+ *  The goal is to use DJI::LOG methods to print log on
+ *  console and send log to mobile application.
  *  Three types are available : LSTATUS, LERROR, LDEBUG
  *  User can use DJI::OSDK::Log class to enable/disable
  *  specified log type

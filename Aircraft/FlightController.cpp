@@ -15,6 +15,7 @@
 #include "Watchdog.h"
 #include "../util/Log.h"
 #include "../util/timer.h"
+#include "../util/define.h"
 #include "../Managers/PackageManager.h"
 #include "../Managers/ThreadManager.h"
 #include "../Missions/MonitoredMission.h"
@@ -23,6 +24,7 @@
 #include "../Missions/PositionOffsetMission.h"
 #include "../Missions/WaypointsMission.h"
 #include "../Action/Action.h"
+#include "../Gps/GpsAxis.h"
 
 using namespace M210;
 
@@ -35,7 +37,7 @@ FlightController::FlightController() {
     flightControllerThreadRunning = false;
     watchdog = new Watchdog(50);
     emergency = new Emergency();
-    setMovingMode(STOP);
+    setSMState(STOP);
     // Missions
     monitoredMission = new M210::MonitoredMission(this);
     positionMission = new M210::PositionMission(this);
@@ -100,14 +102,14 @@ void FlightController::launchFlightControllerThread() {
 void *FlightController::flightControllerThread(void *param) {
     auto fc = (FlightController *) param;
     while (fc->flightControllerThreadRunning) {
-        switch (fc->getMovingMode()) {
+        switch (fc->getSMState()) {
             case WAIT:
 
                 break;
             case STOP:
                 // TODO Remove if packages need to be keep while aircraft is stopped
                 PackageManager::instance().clear();
-                fc->setMovingMode(WAIT);
+                fc->setSMState(WAIT);
                 break;
             case POSITION:
                 fc->positionMission->update();
@@ -142,7 +144,7 @@ void FlightController::moveByPosition(const Vector3f *position, float yaw) {
         return;
     // Mission parameters
     positionMission->move(position, yaw);
-    setMovingMode(POSITION);
+    setSMState(POSITION);
 
 }
 
@@ -151,7 +153,7 @@ void FlightController::moveByVelocity(const Vector3f *velocity, float yaw) {
         return;
     // Mission parameters
     velocityMission->move(velocity, yaw);
-    setMovingMode(VELOCITY);
+    setSMState(VELOCITY);
 }
 
 
@@ -161,14 +163,14 @@ void FlightController::moveByPositionOffset(const Vector3f *offset, float yaw,
         return;
     positionOffsetMission->move(offset, yaw,
                                 posThreshold, yawThreshold);
-    setMovingMode(POSITION_OFFSET);
+    setSMState(POSITION_OFFSET);
 }
 
 void FlightController::stopAircraft() {
     // Stop aircraft
     vehicle->control->emergencyBrake();
     // Stop state machine sending moving commands
-    setMovingMode(STOP);
+    setSMState(STOP);
     // Stop waypoints mission
     waypointMission->action(Action::MissionAction::STOP);
     LSTATUS("Aircraft stopped");
@@ -178,7 +180,10 @@ void FlightController::velocityAndYawRateCtrl(const Vector3f *velocity, float ya
     if (!emergency->isEnabled()) {
         if(!watchdog->isEnabled()) {
             watchdog->increment();
-            vehicle->control->velocityAndYawRateCtrl(velocity->x, velocity->y, velocity->z, yaw);
+            // Send cardinal orders to the aircraft
+            Vector2 v{velocity->x, velocity->y};
+            Vector2 projected = GpsAxis::instance().projectVector(v);
+            vehicle->control->velocityAndYawRateCtrl((float32_t)projected.x, (float32_t)projected.y, velocity->z, yaw);
         }
     }
 }
@@ -187,7 +192,10 @@ void FlightController::positionAndYawCtrl(const Vector3f *position, float yaw) {
     if (!emergency->isEnabled()) {
         if(!watchdog->isEnabled()) {
             watchdog->increment();
-            vehicle->control->positionAndYawCtrl(position->x, position->y, position->z, yaw);
+            // Send cardinal orders to the aircraft
+            Vector2 v{position->x, position->y};
+            Vector2 projected = GpsAxis::instance().projectVector(v);
+            vehicle->control->positionAndYawCtrl((float32_t)projected.x, (float32_t)projected.y, position->z, yaw);
         }
     }
 }
@@ -202,7 +210,7 @@ void FlightController::emergencyStop() {
 
 void FlightController::emergencyRelease() {
     emergency->release();
-    setMovingMode(STOP);
+    setSMState(STOP);
     LSTATUS("Emergency break released !");
 }
 
@@ -212,7 +220,7 @@ void FlightController::sendDataToMSDK(const uint8_t *data, size_t length) const 
     pthread_mutex_unlock(&sendDataToMSDK_mutex);
 }
 
-void FlightController::setMovingMode(FlightController::SMState_ mode) {
+void FlightController::setSMState(FlightController::SMState_ mode) {
     pthread_mutex_lock(&smState_mutex);
     SMState = mode;
     pthread_mutex_unlock(&smState_mutex);
@@ -242,44 +250,6 @@ bool FlightController::startGlobalPositionBroadcast(Vehicle *vehicle) {
         return false;
     }
     return true;
-}
-
-void FlightController::offsetFromGpsOffset(Telemetry::Vector3f &deltaNed,
-                                           const Telemetry::GPSFused *target,
-                                           const Telemetry::GPSFused *origin) {
-    // Formulas are provided by DJI
-    double deltaLon = target->longitude - origin->longitude;
-    double deltaLat = target->latitude - origin->latitude;
-    deltaNed.x = (float32_t) (deltaLat * R_EARTH);
-    deltaNed.y = (float32_t) (deltaLon * R_EARTH *
-                              cos(target->latitude / 2.0 + origin->latitude / 2.0));
-    deltaNed.z = target->altitude - origin->altitude;
-}
-
-Telemetry::Vector3f FlightController::toEulerAngle(const Telemetry::Quaternion *quaternion) {
-    // Formulas are provided by DJI
-    Telemetry::Vector3f ans;
-
-    double q2sqr = quaternion->q2 * quaternion->q2;
-    double t0 =
-            -2.0 * (q2sqr + quaternion->q3 * quaternion->q3) + 1.0;
-    double t1 =
-            +2.0 * (quaternion->q1 * quaternion->q2 + quaternion->q0 * quaternion->q3);
-    double t2 =
-            -2.0 * (quaternion->q1 * quaternion->q3 - quaternion->q0 * quaternion->q2);
-    double t3 =
-            +2.0 * (quaternion->q2 * quaternion->q3 + quaternion->q0 * quaternion->q1);
-    double t4 =
-            -2.0 * (quaternion->q1 * quaternion->q1 + q2sqr) + 1.0;
-
-    t2 = (t2 > 1.0) ? 1.0 : t2;
-    t2 = (t2 < -1.0) ? -1.0 : t2;
-
-    ans.x = (float32_t) asin(t2);       // pitch
-    ans.y = (float32_t) atan2(t3, t4);  // roll
-    ans.z = (float32_t) atan2(t1, t0);  // yaw
-
-    return ans;
 }
 
 void FlightController::waypointsMissionAction(unsigned task) {

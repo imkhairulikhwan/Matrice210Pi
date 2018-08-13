@@ -3,8 +3,10 @@
  *  @date Jul 26 2018
  *  @author Jonathan Michel
  *  @brief This class allows user to add GPS coordinates to a
- *  waypoints mission. The goal is to make autonomous flight
- *  with a sequence of coordinates that the aircraft will reach.
+ *  waypoints mission.
+ *
+ *  The goal is to make autonomous flight with a sequence of
+ *  coordinates that the aircraft will reach.
  *  Once the missions played, it can be paused/resumed and stopped.
  *  Current implementation use current position of the aircraft as
  *  the new point to add to the waypoints mission

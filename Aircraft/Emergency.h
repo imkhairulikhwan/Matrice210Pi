@@ -2,7 +2,7 @@
  *  @version 1.0
  *  @date Jul 25 2018
  *  @author Jonathan Michel
- *  @brief Handle aircraft emergency state and provide
+ *  @brief This class handles aircraft emergency state and provide
  *  a method to verify state and display error message
  */
 

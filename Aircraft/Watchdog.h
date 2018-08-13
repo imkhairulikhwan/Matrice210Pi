@@ -3,7 +3,9 @@
  *  @date Jul 25 2018
  *  @author Jonathan Michel
  *  @brief Watchdog ensures that the communication with the mobile SDK is
- *  maintained. It is regularly reset on specified data received from
+ *  maintained.
+ *
+ *  Watchdog is regularly reset on specified data received from
  *  mobile SDK and increment on each sending of moving order to aircraft.
  */
 

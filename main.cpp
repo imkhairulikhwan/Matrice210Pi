@@ -17,6 +17,7 @@
 #include "Communication/Console.h"
 #include "Communication/Mobile.h"
 #include "Communication/Uart.h"
+#include "Gps/GeodeticCoord.h"
 #include "util/Log.h"
 
 bool running = true;
@@ -35,6 +36,7 @@ int main(int argc, char** argv)
     // Unit test for action data class
     ActionData::unitTest();
     Action::unitTest();
+    GeodeticCoord::unitTest();
     /* Todo add unit tests
      *      - Subscription
      *      - MOC
