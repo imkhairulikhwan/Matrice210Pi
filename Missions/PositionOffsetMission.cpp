@@ -115,14 +115,14 @@ bool PositionOffsetMission::update() {
 
     bool destinationReached = false;
     // Time management
-    long currentTime = getTimeMs();
-    long elapsedTime = currentTime - startTime;
+    long long currentTime = getTimeMs();
+    long long elapsedTime = currentTime - startTime;
 
     if(elapsedTime < missionTimeout) {
         flightController->positionAndYawCtrl(&positionToMove, (float32_t) targetYaw);
 
         // Calculate duration since last update was made
-        long updateDiffTime = currentTime - lastUpdateTime;
+        long updateDiffTime = long(currentTime - lastUpdateTime);
         lastUpdateTime = currentTime;
 
         // Get current position in required coordinates and units

@@ -15,7 +15,6 @@ using namespace DJI::OSDK;
 
 namespace M210 {
     class FlightController;
-    class FlightController;
 
     class MonitoredMission {
     private:

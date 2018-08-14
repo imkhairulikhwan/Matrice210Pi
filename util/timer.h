@@ -12,7 +12,7 @@
  * Return current millisecond since the Epoch
  * @return Current timestamp [ms]
  */
-long getTimeMs();
+long long getTimeMs();
 
 /**
  * Thread sleep

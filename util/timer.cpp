@@ -9,11 +9,11 @@
 #include <sys/time.h>
 #include <unistd.h>
 
-long getTimeMs() {
-    struct timeval tp;
+long long  getTimeMs() {
+    struct timeval tp{};
     gettimeofday(&tp, nullptr);
     //get current timestamp in milliseconds
-    long ms = tp.tv_sec * 1000L + tp.tv_usec / 1000;
+    long long ms = tp.tv_sec * 1000L + tp.tv_usec / 1000;
     return ms;
 }
 

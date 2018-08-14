@@ -46,8 +46,8 @@ namespace M210 {
         float posThreshold{0.2};            /*!< Position threshold [m] */
         double yawThreshold{1.0};           /*!< Yaw threshold [deg] */
         // Missions values
-        long startTime{0};              /*!< Mission absolute start time [ms] */
-        long lastUpdateTime{0};         /*!< Last absolute time update method was called [ms] */
+        long long startTime{0};         /*!< Mission absolute start time [ms] */
+        long long lastUpdateTime{0};    /*!< Last absolute time update method was called [ms] */
         long withinBoundsCnt{0};        /*!< Within bounds counter [ms] */
         long outOfBoundsCnt{0};         /*!< Out of bounds counter [ms]*/
         long brakeCnt{0};               /*!< Brake counter [ms] */
