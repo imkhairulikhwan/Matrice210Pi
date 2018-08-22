@@ -82,6 +82,11 @@ class LinuxSetup;
         void setupVehicle(int argc, char **argv);
 
         /**
+        * Blocking call to obtain control authority
+        */
+        void obtainCtrlAuthority();
+
+        /**
          * Launch flight controller thread
          */
         void launchFlightControllerThread();

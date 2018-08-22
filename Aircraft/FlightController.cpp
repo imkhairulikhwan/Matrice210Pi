@@ -74,19 +74,24 @@ void FlightController::setupVehicle(int argc, char **argv) {
             DERROR("Vehicle not initialized, retrying...");
         }
     } while (vehicle == nullptr);
+}
 
-    bool errorMsgDisplayed = false;
-    // Obtain control authority
+void FlightController::obtainCtrlAuthority() {
+    if(vehicle == nullptr) {
+        LERROR("Vehicle not initialized, setup vehicle first");
+        return;
+    }
+
     ACK::ErrorCode ack;
     do {
         ack = vehicle->obtainCtrlAuthority(1);
-        if (ACK::getError(ack) != ACK::SUCCESS && !errorMsgDisplayed) {
-            DERROR("Obtain control authority failed, retrying...");
-            errorMsgDisplayed = true;
+        if (ACK::getError(ack) != ACK::SUCCESS) {
+            LERROR("Obtain control authority failed, retrying...");
+            LERROR("Be sure the flight controller is in mode P");
+            LERROR("Be sure aircraft has multiple flight modes enabled");
+            delay_ms(1000);
         }
     } while (ACK::getError(ack) != ACK::SUCCESS);
-
-    launchFlightControllerThread();
 }
 
 void FlightController::launchFlightControllerThread() {

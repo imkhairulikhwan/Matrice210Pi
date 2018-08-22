@@ -94,6 +94,7 @@ namespace M210 {
             emergencyStop,
             emergencyRelease,
             watchdog,
+            obtainControlAuthority,
             helloWorld
         };
     private:

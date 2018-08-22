@@ -69,6 +69,9 @@ int main(int argc, char** argv)
     uart.launchRxThread();
     //*/
 
+    flightController->obtainCtrlAuthority();
+    flightController->launchFlightControllerThread();
+
     while(running) {
         // Process action queue
         Action::instance().process();

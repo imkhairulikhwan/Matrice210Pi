@@ -69,6 +69,9 @@ void Mobile::mobileCallback(Vehicle *vehicle, RecvContainer recvFrame,
                         LERROR("Mission data format error");
                     }
                     break;
+                case 'o':
+                    actionData = new ActionData(ActionData::ActionId::obtainControlAuthority);
+                    break;
                 case 'w':
                     actionData = new ActionData(ActionData::ActionId::watchdog);
                     break;

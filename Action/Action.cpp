@@ -128,12 +128,16 @@ void Action::process() const {
                 // Resend watchdog to mobile SDK to indicates code is running
                 flightController->sendDataToMSDK(reinterpret_cast<const uint8_t *>("#w"), 2);
                 break;
-            case ActionData::ActionId ::helloWorld: {
+            case ActionData::ActionId::helloWorld: {
                 // Send a response to Mobile SDK
                 char hw[] = "Hello world from Pi";
                 flightController->sendDataToMSDK(reinterpret_cast<const uint8_t *>(hw), strlen(hw));
             }
                 break;
+            case ActionData::ActionId::obtainControlAuthority : {
+                // @todo blocking call, to replace
+                flightController->obtainCtrlAuthority();
+            }
             default:
                 LERROR("Unknown action to process");
         }
