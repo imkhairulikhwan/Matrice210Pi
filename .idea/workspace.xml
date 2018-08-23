@@ -15,14 +15,10 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fdbea2dc-1dac-46da-b7f3-5776329e16ab" name="Default" comment="GPS Geodetic and NED implementation">
+    <list default="true" id="fdbea2dc-1dac-46da-b7f3-5776329e16ab" name="Default" comment="Obtain control authority modifications">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Action/Action.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Action/Action.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Action/ActionData.h" beforeDir="false" afterPath="$PROJECT_DIR$/Action/ActionData.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Aircraft/FlightController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Aircraft/FlightController.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Aircraft/FlightController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Aircraft/FlightController.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Communication/Mobile.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Communication/Mobile.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -35,11 +31,11 @@
     <session id="1038890765">
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="cpp" value="7119" />
+          <entry key="cpp" value="7168" />
           <entry key="h" value="13724" />
           <entry key="service" value="380" />
           <entry key="sh" value="348" />
-          <entry key="txt" value="376" />
+          <entry key="txt" value="436" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
@@ -47,14 +43,14 @@
           <entry key="Bash" value="348" />
           <entry key="CMakeLists.txt" value="3" />
           <entry key="Doxygen file" value="209" />
-          <entry key="ObjectiveC" value="20634" />
-          <entry key="PLAIN_TEXT" value="753" />
+          <entry key="ObjectiveC" value="20683" />
+          <entry key="PLAIN_TEXT" value="813" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="cpp" value="175" />
-          <entry key="h" value="136" />
+          <entry key="cpp" value="177" />
+          <entry key="h" value="138" />
           <entry key="hpp" value="19" />
           <entry key="service" value="2" />
           <entry key="sh" value="24" />
@@ -65,20 +61,20 @@
         <counts>
           <entry key="Bash" value="22" />
           <entry key="CMakeLists.txt" value="4" />
-          <entry key="ObjectiveC" value="330" />
+          <entry key="ObjectiveC" value="334" />
           <entry key="PLAIN_TEXT" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="12" />
+          <entry key="project.closed" value="14" />
           <entry key="project.open.time.16" value="1" />
           <entry key="project.open.time.4" value="1" />
           <entry key="project.open.time.5" value="2" />
           <entry key="project.open.time.6" value="4" />
           <entry key="project.open.time.7" value="3" />
-          <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="12" />
+          <entry key="project.open.time.8" value="2" />
+          <entry key="project.opened" value="13" />
         </counts>
       </usages-collector>
     </session>
@@ -141,29 +137,47 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Action/Action.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="336">
-              <caret line="107" column="8" lean-forward="true" selection-start-line="107" selection-start-column="8" selection-end-line="107" selection-end-column="8" />
+            <state relative-caret-position="557">
+              <caret line="138" column="43" lean-forward="true" selection-start-line="138" selection-start-column="43" selection-end-line="138" selection-end-column="43" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Aircraft/FlightController.cpp">
+        <entry file="file://$PROJECT_DIR$/Action/ActionData.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="83" lean-forward="true" selection-start-line="83" selection-end-line="83" />
+            <state relative-caret-position="345">
+              <caret line="96" column="12" selection-start-line="96" selection-start-column="12" selection-end-line="96" selection-end-column="12" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Aircraft/FlightController.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="353">
+              <caret line="87" column="49" selection-start-line="87" selection-start-column="49" selection-end-line="87" selection-end-column="49" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Communication/Mobile.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
-              <caret line="72" column="63" selection-start-line="72" selection-start-column="63" selection-end-line="72" selection-end-column="63" />
+            <state relative-caret-position="221">
+              <caret line="73" column="26" lean-forward="true" selection-start-line="73" selection-start-column="26" selection-end-line="73" selection-end-column="26" />
               <folding>
                 <element signature="e#93#112#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Missions/PositionOffsetMission.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="200">
+              <caret line="25" column="30" selection-start-line="25" selection-start-column="30" selection-end-line="25" selection-end-column="30" />
             </state>
           </provider>
         </entry>
@@ -306,10 +320,10 @@
         <option value="$PROJECT_DIR$/Missions/MonitoredMission.h" />
         <option value="$PROJECT_DIR$/Aircraft/FlightController.h" />
         <option value="$PROJECT_DIR$/main.cpp" />
-        <option value="$PROJECT_DIR$/Aircraft/FlightController.cpp" />
         <option value="$PROJECT_DIR$/Action/ActionData.h" />
         <option value="$PROJECT_DIR$/Communication/Mobile.cpp" />
         <option value="$PROJECT_DIR$/Action/Action.cpp" />
+        <option value="$PROJECT_DIR$/Aircraft/FlightController.cpp" />
       </list>
     </option>
   </component>
@@ -334,6 +348,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -367,7 +382,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -486,7 +500,8 @@
       <workItem from="1534150134687" duration="149000" />
       <workItem from="1534231987072" duration="181000" />
       <workItem from="1534922444325" duration="1081000" />
-      <workItem from="1534929272980" duration="2963000" />
+      <workItem from="1534929272980" duration="3372000" />
+      <workItem from="1535022739615" duration="1320000" />
     </task>
     <task id="LOCAL-00001" summary="Flight control implementation, mobile and timers dedicated files">
       <created>1530609127680</created>
@@ -740,11 +755,18 @@
       <option name="project" value="LOCAL" />
       <updated>1534149538749</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="Obtain control authority modifications">
+      <created>1534934230295</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1534934230295</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="487448000" />
+    <option name="totallyTimeSpent" value="489177000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -757,9 +779,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1696" height="1036" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49723145" visible="true" weight="0.27017114" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49723145" visible="true" weight="0.2732274" />
       <window_info id="Structure" order="1" sideWeight="0.5010846" side_tool="true" weight="0.20416667" />
       <window_info id="Favorites" order="2" sideWeight="0.5027686" side_tool="true" weight="0.22738387" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -828,7 +849,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Missions life cycle modification" />
     <MESSAGE value="PackageManager singleton with DJI template" />
     <MESSAGE value="Action Queue implementation and file organization" />
     <MESSAGE value="Bugfix ActionQueue and ActionData implementation (char + unsigned)" />
@@ -853,7 +873,8 @@
     <MESSAGE value="GPS manipulations implementation" />
     <MESSAGE value="GPS operations implementation" />
     <MESSAGE value="GPS Geodetic and NED implementation" />
-    <option name="LAST_COMMIT_MESSAGE" value="GPS Geodetic and NED implementation" />
+    <MESSAGE value="Obtain control authority modifications" />
+    <option name="LAST_COMMIT_MESSAGE" value="Obtain control authority modifications" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/../Onboard-SDK/osdk-core/api/inc/dji_telemetry.hpp" />
@@ -1073,13 +1094,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Missions/PositionOffsetMission.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="489">
-          <caret line="135" column="74" selection-start-line="135" selection-start-column="74" selection-end-line="135" selection-end-column="74" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/util/timer.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
@@ -1108,31 +1122,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Missions/AvalancheMission.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Missions/AvalancheMission.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" selection-start-line="19" selection-end-line="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../Onboard-SDK/sample/linux/common/dji_linux_helpers.hpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="403">
           <caret line="54" column="22" selection-start-line="54" selection-start-column="22" selection-end-line="54" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Action/ActionData.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="96" column="34" selection-start-line="96" selection-start-column="12" selection-end-line="96" selection-end-column="34" />
         </state>
       </provider>
     </entry>
@@ -1171,27 +1164,55 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Action/Action.cpp">
+    <entry file="file://$PROJECT_DIR$/Missions/AvalancheMission.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="107" column="8" lean-forward="true" selection-start-line="107" selection-start-column="8" selection-end-line="107" selection-end-column="8" />
+        <state relative-caret-position="272">
+          <caret line="16" column="41" selection-start-line="16" selection-start-column="41" selection-end-line="16" selection-end-column="41" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Aircraft/FlightController.cpp">
+    <entry file="file://$PROJECT_DIR$/Missions/AvalancheMission.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="83" lean-forward="true" selection-start-line="83" selection-end-line="83" />
+        <state relative-caret-position="255">
+          <caret line="19" selection-start-line="19" selection-end-line="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Missions/PositionOffsetMission.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="25" column="30" selection-start-line="25" selection-start-column="30" selection-end-line="25" selection-end-column="30" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Communication/Mobile.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="72" column="63" selection-start-line="72" selection-start-column="63" selection-end-line="72" selection-end-column="63" />
+        <state relative-caret-position="221">
+          <caret line="73" column="26" lean-forward="true" selection-start-line="73" selection-start-column="26" selection-end-line="73" selection-end-column="26" />
           <folding>
             <element signature="e#93#112#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Action/ActionData.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="96" column="12" selection-start-line="96" selection-start-column="12" selection-end-line="96" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Action/Action.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="557">
+          <caret line="138" column="43" lean-forward="true" selection-start-line="138" selection-start-column="43" selection-end-line="138" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Aircraft/FlightController.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="353">
+          <caret line="87" column="49" selection-start-line="87" selection-start-column="49" selection-end-line="87" selection-end-column="49" />
         </state>
       </provider>
     </entry>

@@ -137,6 +137,7 @@ void Action::process() const {
             case ActionData::ActionId::obtainControlAuthority : {
                 // @todo blocking call, to replace
                 flightController->obtainCtrlAuthority();
+                break;
             }
             default:
                 LERROR("Unknown action to process");

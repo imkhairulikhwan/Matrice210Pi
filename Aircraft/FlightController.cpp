@@ -92,6 +92,7 @@ void FlightController::obtainCtrlAuthority() {
             delay_ms(1000);
         }
     } while (ACK::getError(ack) != ACK::SUCCESS);
+    LSTATUS("Control authority obtained");
 }
 
 void FlightController::launchFlightControllerThread() {
@@ -164,6 +165,7 @@ void FlightController::moveByVelocity(const Vector3f *velocity, float yaw) {
 
 void FlightController::moveByPositionOffset(const Vector3f *offset, float yaw,
                                             float posThreshold, float yawThreshold) {
+    setSMState(STOP);
     if(emergency->isEnabled(Emergency::displayError))
         return;
     positionOffsetMission->move(offset, yaw,
