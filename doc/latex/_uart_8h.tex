@@ -1,0 +1,38 @@
+\hypertarget{_uart_8h}{}\section{Communication/\+Uart.h File Reference}
+\label{_uart_8h}\index{Communication/\+Uart.\+h@{Communication/\+Uart.\+h}}
+
+
+This class handles U\+A\+RT communication with S\+T\+M32 card. It launches a thread reading incoming uart data and processes received frame.  
+
+
+{\ttfamily \#include $<$pthread.\+h$>$}\newline
+{\ttfamily \#include $<$dji\+\_\+vehicle.\+hpp$>$}\newline
+{\ttfamily \#include $<$linux\+\_\+serial\+\_\+device.\+hpp$>$}\newline
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_m210_1_1_uart}{M210\+::\+Uart}}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{_uart_8h_a3f9b515e2c8cb10b642712fdc3bdb53f}\label{_uart_8h_a3f9b515e2c8cb10b642712fdc3bdb53f}} 
+\#define {\bfseries E\+N\+D\+\_\+\+O\+F\+\_\+\+F\+R\+A\+M\+E\+\_\+\+C\+H\+AR}~\textquotesingle{}@\textquotesingle{}
+\item 
+\mbox{\Hypertarget{_uart_8h_a0e47ed9eaf30a288fe97dcb0b3370117}\label{_uart_8h_a0e47ed9eaf30a288fe97dcb0b3370117}} 
+\#define {\bfseries N\+E\+W\+\_\+\+V\+A\+L\+U\+E\+\_\+\+C\+H\+AR}~\textquotesingle{}$\vert$\textquotesingle{}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class handles U\+A\+RT communication with S\+T\+M32 card. It launches a thread reading incoming uart data and processes received frame. 
+
+\begin{DoxyVersion}{Version}
+1.\+0 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+Jul 12 2018 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Jonathan Michel Current protocol implementation transmits ascii value of numbers $\vert$ char indicates new value @ char indicates end of frame Frame example \+: 1$\vert$4$\vert$2.4513$\vert$123.4@ Currently protocol is only used to receive data from S\+T\+M32 Raw data can be sent to S\+T\+M32 
+\end{DoxyAuthor}

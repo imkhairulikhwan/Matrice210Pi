@@ -1,0 +1,75 @@
+\hypertarget{_c_1_2_users_2jonathan_8michel_2_desktop_2_matrice210_2pi_2_matrice210_pi_2_managers_2_package_manager_8h-example}{}\section{C\+:/\+Users/jonathan.\+michel/\+Desktop/\+Matrice210/pi/\+Matrice210\+Pi/\+Managers/\+Package\+Manager.\+h}
+Here is an example, user want S\+T\+A\+T\+U\+S\+\_\+\+F\+L\+I\+G\+HT and D\+I\+S\+P\+L\+A\+Y\+M\+O\+DE 10 times par seconds \+: 
+\begin{DoxyCode}
+uint16\_t frequency      = 10;
+TopicName topics[]      = \{
+        TOPIC\_STATUS\_FLIGHT,
+        TOPIC\_STATUS\_DISPLAYMODE
+\};
+\textcolor{keywordtype}{int}  numTopics          = \textcolor{keyword}{sizeof}(topics) / \textcolor{keyword}{sizeof}(topics[0]);
+\textcolor{keywordtype}{boolean} enableTimestamp = \textcolor{keyword}{false};
+
+\textcolor{keywordtype}{int} pkgIndex = PackageManager::instance().subscribe(topics,
+    numTopics, frequency, enableTimestamp);
+\textcolor{keywordflow}{if}(pkgIndex < 0) \{
+    DERROR(\textcolor{stringliteral}{"Monitored takeoff - Failed to start package"});
+    \textcolor{keywordflow}{return} \textcolor{keyword}{false};
+\}
+\end{DoxyCode}
+
+
+
+\begin{DoxyCodeInclude}
+
+\textcolor{preprocessor}{#ifndef MATRICE210\_PACKAGEMANAGER\_H}
+\textcolor{preprocessor}{#define MATRICE210\_PACKAGEMANAGER\_H}
+
+
+\textcolor{preprocessor}{#include <pthread.h>}
+
+\textcolor{preprocessor}{#include <dji\_vehicle.hpp>}
+
+\textcolor{keyword}{using namespace }\mbox{\hyperlink{namespace_d_j_i_1_1_o_s_d_k}{DJI::OSDK}};
+\textcolor{keyword}{using namespace }\mbox{\hyperlink{namespace_d_j_i_1_1_o_s_d_k_1_1_telemetry}{DJI::OSDK::Telemetry}};
+
+\textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_m210}{M210}} \{
+    \textcolor{keyword}{class }PackageManager : \textcolor{keyword}{public} Singleton<PackageManager> \{
+    \textcolor{keyword}{public}:
+        \textcolor{keyword}{enum} RETURN\_ERROR\_CODE \{        
+            VEHICLE\_NOT\_INSTANCED = -7,
+            VERIFY\_FAILED,
+            INVALID\_INDEX,
+            START\_PACKAGE\_FAILED,
+            INIT\_PACKAGE\_FAILED,
+            UNSUBSCRIPTION\_FAILED,
+            PACKAGE\_UNAVAILABLE     \textcolor{comment}{// -1}
+        \};
+    \textcolor{keyword}{private}:
+        \textcolor{keyword}{const} Vehicle *vehicle = \textcolor{keyword}{nullptr};
+        \textcolor{keywordtype}{int} timeout\{1\};             
+        \textcolor{keywordtype}{bool} packageAvailable[DataSubscription::MAX\_NUMBER\_OF\_PACKAGE]; 
+        \textcolor{keyword}{static} pthread\_mutex\_t packageManager\_mutex; 
+        \textcolor{keywordtype}{bool} isVehicleInstanced() \textcolor{keyword}{const};
+
+        \textcolor{keywordtype}{bool} validIndex(\textcolor{keywordtype}{int} index) \textcolor{keyword}{const};
+
+        \textcolor{keywordtype}{int} allocatePackage();
+
+        \textcolor{keywordtype}{void} releasePackage(\textcolor{keywordtype}{int} index);
+
+        \textcolor{keywordtype}{bool} verify() \textcolor{keyword}{const};
+    \textcolor{keyword}{public}:
+        PackageManager();
+
+        \textcolor{keywordtype}{void} setVehicle(\textcolor{keyword}{const} Vehicle *vehicle);
+
+        \textcolor{keywordtype}{int} subscribe(TopicName *topics, \textcolor{keywordtype}{int} numTopic, uint16\_t frequency, \textcolor{keywordtype}{bool} enableTimestamp);
+
+        \textcolor{keywordtype}{int} unsubscribe(\textcolor{keywordtype}{int} index);
+
+        \textcolor{keywordtype}{void} clear();
+    \};
+\}
+\textcolor{preprocessor}{#endif //MATRICE210\_PACKAGEMANAGER\_H}
+\end{DoxyCodeInclude}
+ 

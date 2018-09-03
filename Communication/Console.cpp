@@ -2,6 +2,7 @@
  *  @version 1.0
  *  @date Jul 04 2018
  *  @author Jonathan Michel
+ *  @brief Console.h implementation
  */
 
 #include "Console.h"

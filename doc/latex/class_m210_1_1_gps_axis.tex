@@ -1,0 +1,78 @@
+\hypertarget{class_m210_1_1_gps_axis}{}\section{M210\+:\+:Gps\+Axis Class Reference}
+\label{class_m210_1_1_gps_axis}\index{M210\+::\+Gps\+Axis@{M210\+::\+Gps\+Axis}}
+Inheritance diagram for M210\+:\+:Gps\+Axis\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_m210_1_1_gps_axis}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_m210_1_1_gps_axis_ac926b543520abc8c87e3692a560954ad}{set\+Rotation\+Angle}} (double angle)
+\item 
+void \mbox{\hyperlink{class_m210_1_1_gps_axis_a89a2b85d3f6b644fd3b4836dcd69c88b}{update\+Front\+Vector}} (const \mbox{\hyperlink{struct_vector2}{Vector2}} \&v)
+\item 
+\mbox{\hyperlink{struct_vector2}{Vector2}} \mbox{\hyperlink{class_m210_1_1_gps_axis_a2ca6c7a8f723940b09d00441cff7d4a9}{project\+Vector}} (\mbox{\hyperlink{struct_vector2}{Vector2}} \&v) const
+\item 
+\mbox{\hyperlink{struct_vector2}{Vector2}} \mbox{\hyperlink{class_m210_1_1_gps_axis_afbcf2ad8d7c70a6e3422272a9abe4086}{revert\+Vector}} (\mbox{\hyperlink{struct_vector2}{Vector2}} \&v) const
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m210_1_1_gps_axis_a2ca6c7a8f723940b09d00441cff7d4a9}\label{class_m210_1_1_gps_axis_a2ca6c7a8f723940b09d00441cff7d4a9}} 
+\index{M210\+::\+Gps\+Axis@{M210\+::\+Gps\+Axis}!project\+Vector@{project\+Vector}}
+\index{project\+Vector@{project\+Vector}!M210\+::\+Gps\+Axis@{M210\+::\+Gps\+Axis}}
+\subsubsection{\texorpdfstring{project\+Vector()}{projectVector()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_vector2}{Vector2}} Gps\+Axis\+::project\+Vector (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_vector2}{Vector2}} \&}]{v }\end{DoxyParamCaption}) const}
+
+Project vector from custom base to N\+ED 
+\begin{DoxyParams}{Parameters}
+{\em v} & Vector to project \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Projected vector 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_gps_axis_afbcf2ad8d7c70a6e3422272a9abe4086}\label{class_m210_1_1_gps_axis_afbcf2ad8d7c70a6e3422272a9abe4086}} 
+\index{M210\+::\+Gps\+Axis@{M210\+::\+Gps\+Axis}!revert\+Vector@{revert\+Vector}}
+\index{revert\+Vector@{revert\+Vector}!M210\+::\+Gps\+Axis@{M210\+::\+Gps\+Axis}}
+\subsubsection{\texorpdfstring{revert\+Vector()}{revertVector()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_vector2}{Vector2}} Gps\+Axis\+::revert\+Vector (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_vector2}{Vector2}} \&}]{v }\end{DoxyParamCaption}) const}
+
+Project vector from N\+ED to custom base 
+\begin{DoxyParams}{Parameters}
+{\em v} & Vector to project \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Projected vector 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_gps_axis_ac926b543520abc8c87e3692a560954ad}\label{class_m210_1_1_gps_axis_ac926b543520abc8c87e3692a560954ad}} 
+\index{M210\+::\+Gps\+Axis@{M210\+::\+Gps\+Axis}!set\+Rotation\+Angle@{set\+Rotation\+Angle}}
+\index{set\+Rotation\+Angle@{set\+Rotation\+Angle}!M210\+::\+Gps\+Axis@{M210\+::\+Gps\+Axis}}
+\subsubsection{\texorpdfstring{set\+Rotation\+Angle()}{setRotationAngle()}}
+{\footnotesize\ttfamily void Gps\+Axis\+::set\+Rotation\+Angle (\begin{DoxyParamCaption}\item[{double}]{angle }\end{DoxyParamCaption})}
+
+Set rotation angle 
+\begin{DoxyParams}{Parameters}
+{\em angle} & Rotation angle to save \mbox{[}rad\mbox{]} \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m210_1_1_gps_axis_a89a2b85d3f6b644fd3b4836dcd69c88b}\label{class_m210_1_1_gps_axis_a89a2b85d3f6b644fd3b4836dcd69c88b}} 
+\index{M210\+::\+Gps\+Axis@{M210\+::\+Gps\+Axis}!update\+Front\+Vector@{update\+Front\+Vector}}
+\index{update\+Front\+Vector@{update\+Front\+Vector}!M210\+::\+Gps\+Axis@{M210\+::\+Gps\+Axis}}
+\subsubsection{\texorpdfstring{update\+Front\+Vector()}{updateFrontVector()}}
+{\footnotesize\ttfamily void Gps\+Axis\+::update\+Front\+Vector (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_vector2}{Vector2}} \&}]{v }\end{DoxyParamCaption})}
+
+Calculate rotation angle to use from 2d vector who indicates new x positive direction 
+\begin{DoxyParams}{Parameters}
+{\em v} & Direction vector in N\+ED \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Gps/\mbox{\hyperlink{_gps_axis_8h}{Gps\+Axis.\+h}}\item 
+Gps/\mbox{\hyperlink{_gps_axis_8cpp}{Gps\+Axis.\+cpp}}\end{DoxyCompactItemize}

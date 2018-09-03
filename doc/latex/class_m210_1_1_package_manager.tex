@@ -1,0 +1,119 @@
+\hypertarget{class_m210_1_1_package_manager}{}\section{M210\+:\+:Package\+Manager Class Reference}
+\label{class_m210_1_1_package_manager}\index{M210\+::\+Package\+Manager@{M210\+::\+Package\+Manager}}
+Inheritance diagram for M210\+:\+:Package\+Manager\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_m210_1_1_package_manager}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{class_m210_1_1_package_manager_a2da6ff8ace580a0081e1412dd874e21d}{R\+E\+T\+U\+R\+N\+\_\+\+E\+R\+R\+O\+R\+\_\+\+C\+O\+DE}} \{ \newline
+\mbox{\hyperlink{class_m210_1_1_package_manager_a2da6ff8ace580a0081e1412dd874e21da7ad0fc69b0a18553d576b9a01118921f}{V\+E\+H\+I\+C\+L\+E\+\_\+\+N\+O\+T\+\_\+\+I\+N\+S\+T\+A\+N\+C\+ED}} = -\/7, 
+{\bfseries V\+E\+R\+I\+F\+Y\+\_\+\+F\+A\+I\+L\+ED}, 
+{\bfseries I\+N\+V\+A\+L\+I\+D\+\_\+\+I\+N\+D\+EX}, 
+{\bfseries S\+T\+A\+R\+T\+\_\+\+P\+A\+C\+K\+A\+G\+E\+\_\+\+F\+A\+I\+L\+ED}, 
+\newline
+{\bfseries I\+N\+I\+T\+\_\+\+P\+A\+C\+K\+A\+G\+E\+\_\+\+F\+A\+I\+L\+ED}, 
+{\bfseries U\+N\+S\+U\+B\+S\+C\+R\+I\+P\+T\+I\+O\+N\+\_\+\+F\+A\+I\+L\+ED}, 
+{\bfseries P\+A\+C\+K\+A\+G\+E\+\_\+\+U\+N\+A\+V\+A\+I\+L\+A\+B\+LE}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_m210_1_1_package_manager_a269a5e51438236422dd3de365ea88860}{Package\+Manager}} ()
+\item 
+void \mbox{\hyperlink{class_m210_1_1_package_manager_a6c89556663cb2b7484f5819557dc2534}{set\+Vehicle}} (const Vehicle $\ast$vehicle)
+\item 
+int \mbox{\hyperlink{class_m210_1_1_package_manager_a0448702a3c39e0fc75da71fdf72ebd30}{subscribe}} (Topic\+Name $\ast$topics, int num\+Topic, uint16\+\_\+t frequency, bool enable\+Timestamp)
+\item 
+int \mbox{\hyperlink{class_m210_1_1_package_manager_a44c8f6bce0db6d2166048b53cef09f9f}{unsubscribe}} (int index)
+\item 
+void \mbox{\hyperlink{class_m210_1_1_package_manager_a01119dd3d0cc989f95bb7ed4bd94b043}{clear}} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{class_m210_1_1_package_manager_a2da6ff8ace580a0081e1412dd874e21d}\label{class_m210_1_1_package_manager_a2da6ff8ace580a0081e1412dd874e21d}} 
+\index{M210\+::\+Package\+Manager@{M210\+::\+Package\+Manager}!R\+E\+T\+U\+R\+N\+\_\+\+E\+R\+R\+O\+R\+\_\+\+C\+O\+DE@{R\+E\+T\+U\+R\+N\+\_\+\+E\+R\+R\+O\+R\+\_\+\+C\+O\+DE}}
+\index{R\+E\+T\+U\+R\+N\+\_\+\+E\+R\+R\+O\+R\+\_\+\+C\+O\+DE@{R\+E\+T\+U\+R\+N\+\_\+\+E\+R\+R\+O\+R\+\_\+\+C\+O\+DE}!M210\+::\+Package\+Manager@{M210\+::\+Package\+Manager}}
+\subsubsection{\texorpdfstring{R\+E\+T\+U\+R\+N\+\_\+\+E\+R\+R\+O\+R\+\_\+\+C\+O\+DE}{RETURN\_ERROR\_CODE}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{class_m210_1_1_package_manager_a2da6ff8ace580a0081e1412dd874e21d}{M210\+::\+Package\+Manager\+::\+R\+E\+T\+U\+R\+N\+\_\+\+E\+R\+R\+O\+R\+\_\+\+C\+O\+DE}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{V\+E\+H\+I\+C\+L\+E\+\_\+\+N\+O\+T\+\_\+\+I\+N\+S\+T\+A\+N\+C\+ED@{V\+E\+H\+I\+C\+L\+E\+\_\+\+N\+O\+T\+\_\+\+I\+N\+S\+T\+A\+N\+C\+ED}!M210\+::\+Package\+Manager@{M210\+::\+Package\+Manager}}\index{M210\+::\+Package\+Manager@{M210\+::\+Package\+Manager}!V\+E\+H\+I\+C\+L\+E\+\_\+\+N\+O\+T\+\_\+\+I\+N\+S\+T\+A\+N\+C\+ED@{V\+E\+H\+I\+C\+L\+E\+\_\+\+N\+O\+T\+\_\+\+I\+N\+S\+T\+A\+N\+C\+ED}}}\mbox{\Hypertarget{class_m210_1_1_package_manager_a2da6ff8ace580a0081e1412dd874e21da7ad0fc69b0a18553d576b9a01118921f}\label{class_m210_1_1_package_manager_a2da6ff8ace580a0081e1412dd874e21da7ad0fc69b0a18553d576b9a01118921f}} 
+V\+E\+H\+I\+C\+L\+E\+\_\+\+N\+O\+T\+\_\+\+I\+N\+S\+T\+A\+N\+C\+ED&Error code values, have to be negative \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_m210_1_1_package_manager_a269a5e51438236422dd3de365ea88860}\label{class_m210_1_1_package_manager_a269a5e51438236422dd3de365ea88860}} 
+\index{M210\+::\+Package\+Manager@{M210\+::\+Package\+Manager}!Package\+Manager@{Package\+Manager}}
+\index{Package\+Manager@{Package\+Manager}!M210\+::\+Package\+Manager@{M210\+::\+Package\+Manager}}
+\subsubsection{\texorpdfstring{Package\+Manager()}{PackageManager()}}
+{\footnotesize\ttfamily Package\+Manager\+::\+Package\+Manager (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\hyperlink{class_m210_1_1_package_manager}{Package\+Manager}} is a singleton 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m210_1_1_package_manager_a01119dd3d0cc989f95bb7ed4bd94b043}\label{class_m210_1_1_package_manager_a01119dd3d0cc989f95bb7ed4bd94b043}} 
+\index{M210\+::\+Package\+Manager@{M210\+::\+Package\+Manager}!clear@{clear}}
+\index{clear@{clear}!M210\+::\+Package\+Manager@{M210\+::\+Package\+Manager}}
+\subsubsection{\texorpdfstring{clear()}{clear()}}
+{\footnotesize\ttfamily void Package\+Manager\+::clear (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Unsubscribe to all subscribed packages \mbox{\Hypertarget{class_m210_1_1_package_manager_a6c89556663cb2b7484f5819557dc2534}\label{class_m210_1_1_package_manager_a6c89556663cb2b7484f5819557dc2534}} 
+\index{M210\+::\+Package\+Manager@{M210\+::\+Package\+Manager}!set\+Vehicle@{set\+Vehicle}}
+\index{set\+Vehicle@{set\+Vehicle}!M210\+::\+Package\+Manager@{M210\+::\+Package\+Manager}}
+\subsubsection{\texorpdfstring{set\+Vehicle()}{setVehicle()}}
+{\footnotesize\ttfamily void Package\+Manager\+::set\+Vehicle (\begin{DoxyParamCaption}\item[{const Vehicle $\ast$}]{vehicle }\end{DoxyParamCaption})}
+
+Has to be called before usage to define vehicle to send package 
+\begin{DoxyParams}{Parameters}
+{\em vehicle} & Pointer to used vehicle \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m210_1_1_package_manager_a0448702a3c39e0fc75da71fdf72ebd30}\label{class_m210_1_1_package_manager_a0448702a3c39e0fc75da71fdf72ebd30}} 
+\index{M210\+::\+Package\+Manager@{M210\+::\+Package\+Manager}!subscribe@{subscribe}}
+\index{subscribe@{subscribe}!M210\+::\+Package\+Manager@{M210\+::\+Package\+Manager}}
+\subsubsection{\texorpdfstring{subscribe()}{subscribe()}}
+{\footnotesize\ttfamily int Package\+Manager\+::subscribe (\begin{DoxyParamCaption}\item[{Topic\+Name $\ast$}]{topics,  }\item[{int}]{num\+Topic,  }\item[{uint16\+\_\+t}]{frequency,  }\item[{bool}]{enable\+Timestamp }\end{DoxyParamCaption})}
+
+Try to allocate package. Setup members of package and start it 
+\begin{DoxyParams}{Parameters}
+{\em topics} & List of Topic Names to subscribe in the package \\
+\hline
+{\em num\+Topic} & Number of topics in topics list \\
+\hline
+{\em frequency} & Package frequency \\
+\hline
+{\em enable\+Timestamp} & Enable send of transmission package time \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Negative value of \mbox{\hyperlink{class_m210_1_1_package_manager_a2da6ff8ace580a0081e1412dd874e21d}{Package\+Manager\+::\+R\+E\+T\+U\+R\+N\+\_\+\+E\+R\+R\+O\+R\+\_\+\+C\+O\+DE}} if subscription failed Positive package index if success 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_package_manager_a44c8f6bce0db6d2166048b53cef09f9f}\label{class_m210_1_1_package_manager_a44c8f6bce0db6d2166048b53cef09f9f}} 
+\index{M210\+::\+Package\+Manager@{M210\+::\+Package\+Manager}!unsubscribe@{unsubscribe}}
+\index{unsubscribe@{unsubscribe}!M210\+::\+Package\+Manager@{M210\+::\+Package\+Manager}}
+\subsubsection{\texorpdfstring{unsubscribe()}{unsubscribe()}}
+{\footnotesize\ttfamily int Package\+Manager\+::unsubscribe (\begin{DoxyParamCaption}\item[{int}]{index }\end{DoxyParamCaption})}
+
+Unsubscribe from indexed topic 
+\begin{DoxyParams}{Parameters}
+{\em index} & Package index \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Negative value of \mbox{\hyperlink{class_m210_1_1_package_manager_a2da6ff8ace580a0081e1412dd874e21d}{Package\+Manager\+::\+R\+E\+T\+U\+R\+N\+\_\+\+E\+R\+R\+O\+R\+\_\+\+C\+O\+DE}} if unsubscription failed 0 if success 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Managers/\mbox{\hyperlink{_package_manager_8h}{Package\+Manager.\+h}}\item 
+Managers/\mbox{\hyperlink{_package_manager_8cpp}{Package\+Manager.\+cpp}}\end{DoxyCompactItemize}

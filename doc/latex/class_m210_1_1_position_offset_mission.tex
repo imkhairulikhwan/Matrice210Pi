@@ -1,0 +1,50 @@
+\hypertarget{class_m210_1_1_position_offset_mission}{}\section{M210\+:\+:Position\+Offset\+Mission Class Reference}
+\label{class_m210_1_1_position_offset_mission}\index{M210\+::\+Position\+Offset\+Mission@{M210\+::\+Position\+Offset\+Mission}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_m210_1_1_position_offset_mission_aca7a22775c3d9bd04f780b4754595304}\label{class_m210_1_1_position_offset_mission_aca7a22775c3d9bd04f780b4754595304}} 
+{\bfseries Position\+Offset\+Mission} (\mbox{\hyperlink{class_m210_1_1_flight_controller}{Flight\+Controller}} $\ast$flight\+Controller)
+\item 
+bool \mbox{\hyperlink{class_m210_1_1_position_offset_mission_a0927b9499ed266163a029679ff1723cb}{move}} (const Vector3f $\ast$offset, float yaw, float pos\+Threshold, float yaw\+Threshold)
+\item 
+bool \mbox{\hyperlink{class_m210_1_1_position_offset_mission_a73b8383335905c16a9a3b9298bbe2d75}{update}} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m210_1_1_position_offset_mission_a0927b9499ed266163a029679ff1723cb}\label{class_m210_1_1_position_offset_mission_a0927b9499ed266163a029679ff1723cb}} 
+\index{M210\+::\+Position\+Offset\+Mission@{M210\+::\+Position\+Offset\+Mission}!move@{move}}
+\index{move@{move}!M210\+::\+Position\+Offset\+Mission@{M210\+::\+Position\+Offset\+Mission}}
+\subsubsection{\texorpdfstring{move()}{move()}}
+{\footnotesize\ttfamily bool Position\+Offset\+Mission\+::move (\begin{DoxyParamCaption}\item[{const Vector3f $\ast$}]{offset,  }\item[{float}]{yaw,  }\item[{float}]{pos\+Threshold,  }\item[{float}]{yaw\+Threshold }\end{DoxyParamCaption})}
+
+Allows user to move aircraft of an offset from current location. The aircraft will move to that position and stay there. 
+\begin{DoxyParams}{Parameters}
+{\em offset} & Relative offset vector to move \mbox{[}m\mbox{]} Vector is relative to the ground x face to north, y face to east, z face to sky \\
+\hline
+{\em yaw} & Absolute yaw angle to set \mbox{[}deg\mbox{]} \\
+\hline
+{\em pos\+Threshold} & Position threshold used by mission to consider position as reached \mbox{[}m\mbox{]} \\
+\hline
+{\em yaw\+Threshold} & Angle threshold used by mission to consider angle as reached \mbox{[}deg\mbox{]} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if mission is correctly initialized 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_position_offset_mission_a73b8383335905c16a9a3b9298bbe2d75}\label{class_m210_1_1_position_offset_mission_a73b8383335905c16a9a3b9298bbe2d75}} 
+\index{M210\+::\+Position\+Offset\+Mission@{M210\+::\+Position\+Offset\+Mission}!update@{update}}
+\index{update@{update}!M210\+::\+Position\+Offset\+Mission@{M210\+::\+Position\+Offset\+Mission}}
+\subsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily bool Position\+Offset\+Mission\+::update (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Has to be called continuously \begin{DoxyReturn}{Returns}
+true if destination is reached, false otherwise 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Missions/\mbox{\hyperlink{_position_offset_mission_8h}{Position\+Offset\+Mission.\+h}}\item 
+Missions/\mbox{\hyperlink{_position_offset_mission_8cpp}{Position\+Offset\+Mission.\+cpp}}\end{DoxyCompactItemize}

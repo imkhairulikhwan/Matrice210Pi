@@ -2,6 +2,7 @@
  *  @version 1.0
  *  @date Aou 12 2018
  *  @author Jonathan Michel
+ *  @brief GpsAxis.h implementation
  */
 
 #include "GpsAxis.h"

@@ -1,0 +1,57 @@
+\hypertarget{class_m210_1_1_watchdog}{}\section{M210\+:\+:Watchdog Class Reference}
+\label{class_m210_1_1_watchdog}\index{M210\+::\+Watchdog@{M210\+::\+Watchdog}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_m210_1_1_watchdog_a4a992183689c0800d586f6a6daacc7b4}{Watchdog}} (unsigned limit)
+\item 
+void \mbox{\hyperlink{class_m210_1_1_watchdog_a4342960b3b6881def5dc2342fee990ba}{increment}} ()
+\item 
+void \mbox{\hyperlink{class_m210_1_1_watchdog_ad64f941736836164bf9049ead5ca31b2}{reset}} ()
+\item 
+bool \mbox{\hyperlink{class_m210_1_1_watchdog_a235a91f4745f75bd5222ecc57d01f9ef}{is\+Enabled}} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_m210_1_1_watchdog_a4a992183689c0800d586f6a6daacc7b4}\label{class_m210_1_1_watchdog_a4a992183689c0800d586f6a6daacc7b4}} 
+\index{M210\+::\+Watchdog@{M210\+::\+Watchdog}!Watchdog@{Watchdog}}
+\index{Watchdog@{Watchdog}!M210\+::\+Watchdog@{M210\+::\+Watchdog}}
+\subsubsection{\texorpdfstring{Watchdog()}{Watchdog()}}
+{\footnotesize\ttfamily Watchdog\+::\+Watchdog (\begin{DoxyParamCaption}\item[{unsigned}]{limit }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+Create watchdog 
+\begin{DoxyParams}{Parameters}
+{\em limit} & Numbers of orders that can be sent to aircraft before watchdog is triggered Relative watchdog duration depends on order sending frequency. See \mbox{\hyperlink{class_m210_1_1_flight_controller}{Flight\+Controller}} thread \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m210_1_1_watchdog_a4342960b3b6881def5dc2342fee990ba}\label{class_m210_1_1_watchdog_a4342960b3b6881def5dc2342fee990ba}} 
+\index{M210\+::\+Watchdog@{M210\+::\+Watchdog}!increment@{increment}}
+\index{increment@{increment}!M210\+::\+Watchdog@{M210\+::\+Watchdog}}
+\subsubsection{\texorpdfstring{increment()}{increment()}}
+{\footnotesize\ttfamily void Watchdog\+::increment (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Increment local counter \mbox{\Hypertarget{class_m210_1_1_watchdog_a235a91f4745f75bd5222ecc57d01f9ef}\label{class_m210_1_1_watchdog_a235a91f4745f75bd5222ecc57d01f9ef}} 
+\index{M210\+::\+Watchdog@{M210\+::\+Watchdog}!is\+Enabled@{is\+Enabled}}
+\index{is\+Enabled@{is\+Enabled}!M210\+::\+Watchdog@{M210\+::\+Watchdog}}
+\subsubsection{\texorpdfstring{is\+Enabled()}{isEnabled()}}
+{\footnotesize\ttfamily bool Watchdog\+::is\+Enabled (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Verify watchdog and display error message on first call (until watchdog is reset) \begin{DoxyReturn}{Returns}
+True if watchdog is enabled 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_watchdog_ad64f941736836164bf9049ead5ca31b2}\label{class_m210_1_1_watchdog_ad64f941736836164bf9049ead5ca31b2}} 
+\index{M210\+::\+Watchdog@{M210\+::\+Watchdog}!reset@{reset}}
+\index{reset@{reset}!M210\+::\+Watchdog@{M210\+::\+Watchdog}}
+\subsubsection{\texorpdfstring{reset()}{reset()}}
+{\footnotesize\ttfamily void Watchdog\+::reset (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Reset local counter 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Aircraft/\mbox{\hyperlink{_watchdog_8h}{Watchdog.\+h}}\item 
+Aircraft/\mbox{\hyperlink{_watchdog_8cpp}{Watchdog.\+cpp}}\end{DoxyCompactItemize}

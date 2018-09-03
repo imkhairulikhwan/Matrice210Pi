@@ -2,14 +2,11 @@
  *  @version 1.0
  *  @date Jul 05 2018
  *  @author Jonathan Michel
- *  @brief @todo Comment
- *  Calculate the inputs to send the position controller.
+ *  @brief Calculate the inputs to send the position controller.
  *  Basic receding setpoint position control with the setpoint always 2m away
  *  from the current position - until aircraft get within a threshold of the goal.
  *  From that point on, the remaining distance is sent as the setpoint.
  */
-
- // TODO More explanation, test setPointDistance modifications, test moveToPosition
 
 #ifndef MATRICE210_POSITIONOFFSETMISSION_H
 #define MATRICE210_POSITIONOFFSETMISSION_H

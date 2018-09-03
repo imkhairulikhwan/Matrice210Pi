@@ -2,6 +2,7 @@
  *  @version 1.0
  *  @date Jul 05 2018
  *  @author Jonathan Michel
+ *  @brief VelocityMission.h implementation
  */
 #include "VelocityMission.h"
 

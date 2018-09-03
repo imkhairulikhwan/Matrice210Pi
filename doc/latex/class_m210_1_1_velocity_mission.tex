@@ -1,0 +1,40 @@
+\hypertarget{class_m210_1_1_velocity_mission}{}\section{M210\+:\+:Velocity\+Mission Class Reference}
+\label{class_m210_1_1_velocity_mission}\index{M210\+::\+Velocity\+Mission@{M210\+::\+Velocity\+Mission}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_m210_1_1_velocity_mission_aebd12135407bb5c9487ec1a5d9ec3966}\label{class_m210_1_1_velocity_mission_aebd12135407bb5c9487ec1a5d9ec3966}} 
+{\bfseries Velocity\+Mission} (\mbox{\hyperlink{class_m210_1_1_flight_controller}{Flight\+Controller}} $\ast$flight\+Controller)
+\item 
+void \mbox{\hyperlink{class_m210_1_1_velocity_mission_a35a436e3ae0c48014334ccd5d2868861}{move}} (const Vector3f $\ast$velocity, float yaw)
+\item 
+void \mbox{\hyperlink{class_m210_1_1_velocity_mission_a709e74d4c01378c7cd2bcbab602bba2c}{update}} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m210_1_1_velocity_mission_a35a436e3ae0c48014334ccd5d2868861}\label{class_m210_1_1_velocity_mission_a35a436e3ae0c48014334ccd5d2868861}} 
+\index{M210\+::\+Velocity\+Mission@{M210\+::\+Velocity\+Mission}!move@{move}}
+\index{move@{move}!M210\+::\+Velocity\+Mission@{M210\+::\+Velocity\+Mission}}
+\subsubsection{\texorpdfstring{move()}{move()}}
+{\footnotesize\ttfamily void Velocity\+Mission\+::move (\begin{DoxyParamCaption}\item[{const Vector3f $\ast$}]{velocity,  }\item[{float}]{yaw }\end{DoxyParamCaption})}
+
+Velocity Control. Allows user to set a velocity vector. The aircraft will move as described by vector until \mbox{\hyperlink{class_m210_1_1_velocity_mission_a709e74d4c01378c7cd2bcbab602bba2c}{update()}} is no more called. 
+\begin{DoxyParams}{Parameters}
+{\em velocity} & Absolute velocity vector to set \mbox{[}m/s\mbox{]} Vector is relative to the ground x face to north, y face to east, z face to sky \\
+\hline
+{\em yaw} & Absolute yaw rate to set \mbox{[}deg/s\mbox{]} \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m210_1_1_velocity_mission_a709e74d4c01378c7cd2bcbab602bba2c}\label{class_m210_1_1_velocity_mission_a709e74d4c01378c7cd2bcbab602bba2c}} 
+\index{M210\+::\+Velocity\+Mission@{M210\+::\+Velocity\+Mission}!update@{update}}
+\index{update@{update}!M210\+::\+Velocity\+Mission@{M210\+::\+Velocity\+Mission}}
+\subsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily void Velocity\+Mission\+::update (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Has to be called frequently to send moving order to the aircraft. D\+JI recommend to send orders at 50\+Hz 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Missions/\mbox{\hyperlink{_velocity_mission_8h}{Velocity\+Mission.\+h}}\item 
+Missions/\mbox{\hyperlink{_velocity_mission_8cpp}{Velocity\+Mission.\+cpp}}\end{DoxyCompactItemize}

@@ -1,0 +1,136 @@
+\hypertarget{class_m210_1_1_gps_manip}{}\section{M210\+:\+:Gps\+Manip Class Reference}
+\label{class_m210_1_1_gps_manip}\index{M210\+::\+Gps\+Manip@{M210\+::\+Gps\+Manip}}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static double \mbox{\hyperlink{class_m210_1_1_gps_manip_a8703f003ce3fde60baf51473dd3ec6b7}{vector\+Norm}} (const \mbox{\hyperlink{struct_vector2}{Vector2}} \&v)
+\item 
+static \mbox{\hyperlink{struct_vector2}{Vector2}} \mbox{\hyperlink{class_m210_1_1_gps_manip_ad3bf0e3449554a4d644316fec52dfa4c}{rotate\+Vector}} (const \mbox{\hyperlink{struct_vector2}{Vector2}} \&init\+Vector, double rotation\+Angle)
+\item 
+static double \mbox{\hyperlink{class_m210_1_1_gps_manip_a0036870394e772796ff3090bc03bc1de}{angle\+Vector}} (const \mbox{\hyperlink{struct_vector2}{Vector2}} \&v1, const \mbox{\hyperlink{struct_vector2}{Vector2}} \&v2)
+\item 
+static double \mbox{\hyperlink{class_m210_1_1_gps_manip_a65fa5b63dfcdf3ad4e77e2d7c2f94f58}{scalar\+Product}} (const \mbox{\hyperlink{struct_vector2}{Vector2}} \&v1, const \mbox{\hyperlink{struct_vector2}{Vector2}} \&v2)
+\item 
+static \mbox{\hyperlink{struct_vector2}{Vector2}} \mbox{\hyperlink{class_m210_1_1_gps_manip_a1b08acaa8e7dc5d77197382806a86d52}{offset\+From\+Gps\+Offset}} (const \mbox{\hyperlink{class_m210_1_1_geodetic_coord}{Geodetic\+Coord}} \&origin, const \mbox{\hyperlink{class_m210_1_1_geodetic_coord}{Geodetic\+Coord}} \&target)
+\item 
+static Telemetry\+::\+Vector3f \mbox{\hyperlink{class_m210_1_1_gps_manip_aea368ba6b2b436bb46aeece755c4b421}{offset\+From\+Gps\+Offset}} (const Telemetry\+::\+G\+P\+S\+Fused \&origin, const Telemetry\+::\+G\+P\+S\+Fused \&target)
+\item 
+static Telemetry\+::\+Vector3f \mbox{\hyperlink{class_m210_1_1_gps_manip_aaeb89d7f581d6171aa8bc33b76c9d532}{to\+Euler\+Angle}} (const Telemetry\+::\+Quaternion \&quaternion)
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m210_1_1_gps_manip_a0036870394e772796ff3090bc03bc1de}\label{class_m210_1_1_gps_manip_a0036870394e772796ff3090bc03bc1de}} 
+\index{M210\+::\+Gps\+Manip@{M210\+::\+Gps\+Manip}!angle\+Vector@{angle\+Vector}}
+\index{angle\+Vector@{angle\+Vector}!M210\+::\+Gps\+Manip@{M210\+::\+Gps\+Manip}}
+\subsubsection{\texorpdfstring{angle\+Vector()}{angleVector()}}
+{\footnotesize\ttfamily double Gps\+Manip\+::angle\+Vector (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_vector2}{Vector2}} \&}]{v1,  }\item[{const \mbox{\hyperlink{struct_vector2}{Vector2}} \&}]{v2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Calculate angle between two vectors 
+\begin{DoxyParams}{Parameters}
+{\em v1} & First vector \\
+\hline
+{\em v2} & Second vector \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Angle, always positive \mbox{[}rad\mbox{]} 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_gps_manip_a1b08acaa8e7dc5d77197382806a86d52}\label{class_m210_1_1_gps_manip_a1b08acaa8e7dc5d77197382806a86d52}} 
+\index{M210\+::\+Gps\+Manip@{M210\+::\+Gps\+Manip}!offset\+From\+Gps\+Offset@{offset\+From\+Gps\+Offset}}
+\index{offset\+From\+Gps\+Offset@{offset\+From\+Gps\+Offset}!M210\+::\+Gps\+Manip@{M210\+::\+Gps\+Manip}}
+\subsubsection{\texorpdfstring{offset\+From\+Gps\+Offset()}{offsetFromGpsOffset()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_vector2}{Vector2}} Gps\+Manip\+::offset\+From\+Gps\+Offset (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_m210_1_1_geodetic_coord}{Geodetic\+Coord}} \&}]{origin,  }\item[{const \mbox{\hyperlink{class_m210_1_1_geodetic_coord}{Geodetic\+Coord}} \&}]{target }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Calculate local N\+ED offset between two pairs of geodetic coordinates. Accurate when distances are small. 
+\begin{DoxyParams}{Parameters}
+{\em origin} & Origin G\+PS coordinates \\
+\hline
+{\em target} & Target G\+PS coordinates \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Float 2d vector value 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_gps_manip_aea368ba6b2b436bb46aeece755c4b421}\label{class_m210_1_1_gps_manip_aea368ba6b2b436bb46aeece755c4b421}} 
+\index{M210\+::\+Gps\+Manip@{M210\+::\+Gps\+Manip}!offset\+From\+Gps\+Offset@{offset\+From\+Gps\+Offset}}
+\index{offset\+From\+Gps\+Offset@{offset\+From\+Gps\+Offset}!M210\+::\+Gps\+Manip@{M210\+::\+Gps\+Manip}}
+\subsubsection{\texorpdfstring{offset\+From\+Gps\+Offset()}{offsetFromGpsOffset()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Telemetry\+::\+Vector3f Gps\+Manip\+::offset\+From\+Gps\+Offset (\begin{DoxyParamCaption}\item[{const Telemetry\+::\+G\+P\+S\+Fused \&}]{origin,  }\item[{const Telemetry\+::\+G\+P\+S\+Fused \&}]{target }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Calculate local N\+ED offset between two pairs of G\+PS coordinates. Accurate when distances are small. 
+\begin{DoxyParams}{Parameters}
+{\em origin} & Origin G\+PS coordinates \\
+\hline
+{\em target} & Target G\+PS coordinates \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Float 3d vector value 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_gps_manip_ad3bf0e3449554a4d644316fec52dfa4c}\label{class_m210_1_1_gps_manip_ad3bf0e3449554a4d644316fec52dfa4c}} 
+\index{M210\+::\+Gps\+Manip@{M210\+::\+Gps\+Manip}!rotate\+Vector@{rotate\+Vector}}
+\index{rotate\+Vector@{rotate\+Vector}!M210\+::\+Gps\+Manip@{M210\+::\+Gps\+Manip}}
+\subsubsection{\texorpdfstring{rotate\+Vector()}{rotateVector()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_vector2}{Vector2}} Gps\+Manip\+::rotate\+Vector (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_vector2}{Vector2}} \&}]{init\+Vector,  }\item[{double}]{rotation\+Angle }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Rotate 2d vector 
+\begin{DoxyParams}{Parameters}
+{\em init\+Vector} & Vector to rotate \\
+\hline
+{\em rotation\+Angle} & Clockwise rotation angle \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Rotated vector 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_gps_manip_a65fa5b63dfcdf3ad4e77e2d7c2f94f58}\label{class_m210_1_1_gps_manip_a65fa5b63dfcdf3ad4e77e2d7c2f94f58}} 
+\index{M210\+::\+Gps\+Manip@{M210\+::\+Gps\+Manip}!scalar\+Product@{scalar\+Product}}
+\index{scalar\+Product@{scalar\+Product}!M210\+::\+Gps\+Manip@{M210\+::\+Gps\+Manip}}
+\subsubsection{\texorpdfstring{scalar\+Product()}{scalarProduct()}}
+{\footnotesize\ttfamily double Gps\+Manip\+::scalar\+Product (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_vector2}{Vector2}} \&}]{v1,  }\item[{const \mbox{\hyperlink{struct_vector2}{Vector2}} \&}]{v2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Calculate scalar product between two vectors 
+\begin{DoxyParams}{Parameters}
+{\em v1} & First vector \\
+\hline
+{\em v2} & Second vector \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Scalar product 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_gps_manip_aaeb89d7f581d6171aa8bc33b76c9d532}\label{class_m210_1_1_gps_manip_aaeb89d7f581d6171aa8bc33b76c9d532}} 
+\index{M210\+::\+Gps\+Manip@{M210\+::\+Gps\+Manip}!to\+Euler\+Angle@{to\+Euler\+Angle}}
+\index{to\+Euler\+Angle@{to\+Euler\+Angle}!M210\+::\+Gps\+Manip@{M210\+::\+Gps\+Manip}}
+\subsubsection{\texorpdfstring{to\+Euler\+Angle()}{toEulerAngle()}}
+{\footnotesize\ttfamily Telemetry\+::\+Vector3f Gps\+Manip\+::to\+Euler\+Angle (\begin{DoxyParamCaption}\item[{const Telemetry\+::\+Quaternion \&}]{quaternion }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Calculate euler angle from quaternion data 
+\begin{DoxyParams}{Parameters}
+{\em quaternion\+Data} & quaternion \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Rad euler angle 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_gps_manip_a8703f003ce3fde60baf51473dd3ec6b7}\label{class_m210_1_1_gps_manip_a8703f003ce3fde60baf51473dd3ec6b7}} 
+\index{M210\+::\+Gps\+Manip@{M210\+::\+Gps\+Manip}!vector\+Norm@{vector\+Norm}}
+\index{vector\+Norm@{vector\+Norm}!M210\+::\+Gps\+Manip@{M210\+::\+Gps\+Manip}}
+\subsubsection{\texorpdfstring{vector\+Norm()}{vectorNorm()}}
+{\footnotesize\ttfamily double Gps\+Manip\+::vector\+Norm (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_vector2}{Vector2}} \&}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Calculate 2d vector norm 
+\begin{DoxyParams}{Parameters}
+{\em v} & Vector \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Vector norm 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Gps/\mbox{\hyperlink{_gps_manip_8h}{Gps\+Manip.\+h}}\item 
+Gps/\mbox{\hyperlink{_gps_manip_8cpp}{Gps\+Manip.\+cpp}}\end{DoxyCompactItemize}

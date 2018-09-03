@@ -2,6 +2,7 @@
  *  @version 1.0
  *  @date Jul 27 2018
  *  @author Jonathan Michel
+ *  @brief Log.h implementation
  */
 
 #include "Log.h"

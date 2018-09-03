@@ -1,4 +1,4 @@
-/*! @file VelocityMission.cpp
+/*! @file VelocityMission.h
  *  @version 1.0
  *  @date Jul 05 2018
  *  @author Jonathan Michel

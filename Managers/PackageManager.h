@@ -53,8 +53,6 @@
 using namespace DJI::OSDK;
 using namespace DJI::OSDK::Telemetry;
 
-
-
 namespace M210 {
     class PackageManager : public Singleton<PackageManager> {
     public:

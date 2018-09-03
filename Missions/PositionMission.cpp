@@ -2,6 +2,7 @@
  *  @version 1.0
  *  @date Jul 09 2018
  *  @author Jonathan Michel
+ *  @brief PositionMission.h implementation
  */
 
 #include "PositionMission.h"

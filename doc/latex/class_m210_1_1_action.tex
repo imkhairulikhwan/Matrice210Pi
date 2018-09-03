@@ -1,0 +1,133 @@
+\hypertarget{class_m210_1_1_action}{}\section{M210\+:\+:Action Class Reference}
+\label{class_m210_1_1_action}\index{M210\+::\+Action@{M210\+::\+Action}}
+Inheritance diagram for M210\+:\+:Action\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_m210_1_1_action}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{class_m210_1_1_action_ad9730775da7e3f099bef4571100e2f5d}{Mission\+Type}} \{ \mbox{\hyperlink{class_m210_1_1_action_ad9730775da7e3f099bef4571100e2f5da2c44c9af44f0d97e16ee0f7c0562658f}{V\+E\+L\+O\+C\+I\+TY}} = 1, 
+{\bfseries P\+O\+S\+I\+T\+I\+ON}, 
+{\bfseries P\+O\+S\+I\+T\+I\+O\+N\+\_\+\+O\+F\+F\+S\+ET}, 
+{\bfseries W\+A\+Y\+P\+O\+I\+N\+TS}
+ \}
+\item 
+enum \mbox{\hyperlink{class_m210_1_1_action_a0bb36f0932c930e1193428e3c3c98046}{Mission\+Action}} \{ \newline
+\mbox{\hyperlink{class_m210_1_1_action_a0bb36f0932c930e1193428e3c3c98046ae9c51def583033613d398c85a26e927a}{S\+T\+A\+RT}} = 1, 
+{\bfseries A\+DD}, 
+{\bfseries R\+E\+S\+ET}, 
+{\bfseries S\+T\+OP}, 
+\newline
+{\bfseries P\+A\+U\+SE}, 
+{\bfseries R\+E\+S\+U\+ME}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_m210_1_1_action_a4f457ccfc8336b565cadca56b36e0271}{Action}} ()
+\item 
+\mbox{\hyperlink{class_m210_1_1_action_acdb06775d157339256a8ecd55749226c}{$\sim$\+Action}} ()
+\item 
+void \mbox{\hyperlink{class_m210_1_1_action_a2079c96a8a88d045037c730f3f752d25}{set\+Flight\+Controller}} (\mbox{\hyperlink{class_m210_1_1_flight_controller}{Flight\+Controller}} $\ast$flight\+Controller)
+\item 
+bool \mbox{\hyperlink{class_m210_1_1_action_abd7130a46d5212979903418a0888aab5}{add}} (const \mbox{\hyperlink{class_m210_1_1_action_data}{Action\+Data}} $\ast$action\+Data)
+\item 
+void \mbox{\hyperlink{class_m210_1_1_action_a38eac84b9b832225548d16d37b16ffbd}{process}} () const
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{class_m210_1_1_action_ac60580623e0519acbada490342fc8f0b}{unit\+Test}} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{class_m210_1_1_action_a0bb36f0932c930e1193428e3c3c98046}\label{class_m210_1_1_action_a0bb36f0932c930e1193428e3c3c98046}} 
+\index{M210\+::\+Action@{M210\+::\+Action}!Mission\+Action@{Mission\+Action}}
+\index{Mission\+Action@{Mission\+Action}!M210\+::\+Action@{M210\+::\+Action}}
+\subsubsection{\texorpdfstring{Mission\+Action}{MissionAction}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{class_m210_1_1_action_a0bb36f0932c930e1193428e3c3c98046}{M210\+::\+Action\+::\+Mission\+Action}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{S\+T\+A\+RT@{S\+T\+A\+RT}!M210\+::\+Action@{M210\+::\+Action}}\index{M210\+::\+Action@{M210\+::\+Action}!S\+T\+A\+RT@{S\+T\+A\+RT}}}\mbox{\Hypertarget{class_m210_1_1_action_a0bb36f0932c930e1193428e3c3c98046ae9c51def583033613d398c85a26e927a}\label{class_m210_1_1_action_a0bb36f0932c930e1193428e3c3c98046ae9c51def583033613d398c85a26e927a}} 
+S\+T\+A\+RT&Mission action, mainly used with waypoints actions \\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{class_m210_1_1_action_ad9730775da7e3f099bef4571100e2f5d}\label{class_m210_1_1_action_ad9730775da7e3f099bef4571100e2f5d}} 
+\index{M210\+::\+Action@{M210\+::\+Action}!Mission\+Type@{Mission\+Type}}
+\index{Mission\+Type@{Mission\+Type}!M210\+::\+Action@{M210\+::\+Action}}
+\subsubsection{\texorpdfstring{Mission\+Type}{MissionType}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{class_m210_1_1_action_ad9730775da7e3f099bef4571100e2f5d}{M210\+::\+Action\+::\+Mission\+Type}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{V\+E\+L\+O\+C\+I\+TY@{V\+E\+L\+O\+C\+I\+TY}!M210\+::\+Action@{M210\+::\+Action}}\index{M210\+::\+Action@{M210\+::\+Action}!V\+E\+L\+O\+C\+I\+TY@{V\+E\+L\+O\+C\+I\+TY}}}\mbox{\Hypertarget{class_m210_1_1_action_ad9730775da7e3f099bef4571100e2f5da2c44c9af44f0d97e16ee0f7c0562658f}\label{class_m210_1_1_action_ad9730775da7e3f099bef4571100e2f5da2c44c9af44f0d97e16ee0f7c0562658f}} 
+V\+E\+L\+O\+C\+I\+TY&Mission type, used when action concern a mission \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_m210_1_1_action_a4f457ccfc8336b565cadca56b36e0271}\label{class_m210_1_1_action_a4f457ccfc8336b565cadca56b36e0271}} 
+\index{M210\+::\+Action@{M210\+::\+Action}!Action@{Action}}
+\index{Action@{Action}!M210\+::\+Action@{M210\+::\+Action}}
+\subsubsection{\texorpdfstring{Action()}{Action()}}
+{\footnotesize\ttfamily Action\+::\+Action (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Initialize action queue \mbox{\Hypertarget{class_m210_1_1_action_acdb06775d157339256a8ecd55749226c}\label{class_m210_1_1_action_acdb06775d157339256a8ecd55749226c}} 
+\index{M210\+::\+Action@{M210\+::\+Action}!````~Action@{$\sim$\+Action}}
+\index{````~Action@{$\sim$\+Action}!M210\+::\+Action@{M210\+::\+Action}}
+\subsubsection{\texorpdfstring{$\sim$\+Action()}{~Action()}}
+{\footnotesize\ttfamily Action\+::$\sim$\+Action (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Close action queue and unlink it. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m210_1_1_action_abd7130a46d5212979903418a0888aab5}\label{class_m210_1_1_action_abd7130a46d5212979903418a0888aab5}} 
+\index{M210\+::\+Action@{M210\+::\+Action}!add@{add}}
+\index{add@{add}!M210\+::\+Action@{M210\+::\+Action}}
+\subsubsection{\texorpdfstring{add()}{add()}}
+{\footnotesize\ttfamily bool Action\+::add (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_m210_1_1_action_data}{Action\+Data}} $\ast$}]{action\+Data }\end{DoxyParamCaption})}
+
+Add action data to queue 
+\begin{DoxyParams}{Parameters}
+{\em action\+Data} & Pointer to \mbox{\hyperlink{class_m210_1_1_action_data}{Action\+Data}} object to add \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if action data has been added to queue, false otherwise 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_action_a38eac84b9b832225548d16d37b16ffbd}\label{class_m210_1_1_action_a38eac84b9b832225548d16d37b16ffbd}} 
+\index{M210\+::\+Action@{M210\+::\+Action}!process@{process}}
+\index{process@{process}!M210\+::\+Action@{M210\+::\+Action}}
+\subsubsection{\texorpdfstring{process()}{process()}}
+{\footnotesize\ttfamily void Action\+::process (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+Receive message from queue a process it. Blocking call. \mbox{\Hypertarget{class_m210_1_1_action_a2079c96a8a88d045037c730f3f752d25}\label{class_m210_1_1_action_a2079c96a8a88d045037c730f3f752d25}} 
+\index{M210\+::\+Action@{M210\+::\+Action}!set\+Flight\+Controller@{set\+Flight\+Controller}}
+\index{set\+Flight\+Controller@{set\+Flight\+Controller}!M210\+::\+Action@{M210\+::\+Action}}
+\subsubsection{\texorpdfstring{set\+Flight\+Controller()}{setFlightController()}}
+{\footnotesize\ttfamily void M210\+::\+Action\+::set\+Flight\+Controller (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_m210_1_1_flight_controller}{Flight\+Controller}} $\ast$}]{flight\+Controller }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Define the \mbox{\hyperlink{class_m210_1_1_flight_controller}{Flight\+Controller}} to whom the action should be transmitted 
+\begin{DoxyParams}{Parameters}
+{\em flight\+Controller} & Pointer to used \mbox{\hyperlink{class_m210_1_1_flight_controller}{Flight\+Controller}} \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m210_1_1_action_ac60580623e0519acbada490342fc8f0b}\label{class_m210_1_1_action_ac60580623e0519acbada490342fc8f0b}} 
+\index{M210\+::\+Action@{M210\+::\+Action}!unit\+Test@{unit\+Test}}
+\index{unit\+Test@{unit\+Test}!M210\+::\+Action@{M210\+::\+Action}}
+\subsubsection{\texorpdfstring{unit\+Test()}{unitTest()}}
+{\footnotesize\ttfamily void Action\+::unit\+Test (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Unit test to check that class is working. Called at the beginning of the program. Assert if a test fails 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Action/\mbox{\hyperlink{_action_8h}{Action.\+h}}\item 
+Action/\mbox{\hyperlink{_action_8cpp}{Action.\+cpp}}\end{DoxyCompactItemize}

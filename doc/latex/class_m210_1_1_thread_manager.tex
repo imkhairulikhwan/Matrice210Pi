@@ -1,0 +1,51 @@
+\hypertarget{class_m210_1_1_thread_manager}{}\section{M210\+:\+:Thread\+Manager Class Reference}
+\label{class_m210_1_1_thread_manager}\index{M210\+::\+Thread\+Manager@{M210\+::\+Thread\+Manager}}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static bool \mbox{\hyperlink{class_m210_1_1_thread_manager_a7a8151ede3e7950e8e092f672f8a790d}{start}} (string name, pthread\+\_\+t $\ast$tid, pthread\+\_\+attr\+\_\+t $\ast$attr, void $\ast$($\ast$thread)(void $\ast$), void $\ast$arg)
+\item 
+static void \mbox{\hyperlink{class_m210_1_1_thread_manager_a10956e3566cbf7050f16b20bf0cf3280}{stop}} (const pthread\+\_\+t $\ast$id)
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m210_1_1_thread_manager_a7a8151ede3e7950e8e092f672f8a790d}\label{class_m210_1_1_thread_manager_a7a8151ede3e7950e8e092f672f8a790d}} 
+\index{M210\+::\+Thread\+Manager@{M210\+::\+Thread\+Manager}!start@{start}}
+\index{start@{start}!M210\+::\+Thread\+Manager@{M210\+::\+Thread\+Manager}}
+\subsubsection{\texorpdfstring{start()}{start()}}
+{\footnotesize\ttfamily bool Thread\+Manager\+::start (\begin{DoxyParamCaption}\item[{string}]{name,  }\item[{pthread\+\_\+t $\ast$}]{tid,  }\item[{pthread\+\_\+attr\+\_\+t $\ast$}]{attr,  }\item[{void $\ast$($\ast$)(void $\ast$)}]{thread,  }\item[{void $\ast$}]{arg }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Create and launch thread 
+\begin{DoxyParams}{Parameters}
+{\em name} & Thread name, restricted to 16 characters \\
+\hline
+{\em tid} & Points to a pthread\+\_\+t structure in which thread id must be returned \\
+\hline
+{\em attr} & Points to a pthread\+\_\+attr\+\_\+t structure whose contents are used at thread creation time to determine attributes for the new thread \\
+\hline
+{\em thread} & Thread routine declared as follow \+: void $\ast$my\+Thread(void $\ast$param) \\
+\hline
+{\em arg} & Will be passed as argument to thread routine \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if thread creation and launch works, false otherwise 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_thread_manager_a10956e3566cbf7050f16b20bf0cf3280}\label{class_m210_1_1_thread_manager_a10956e3566cbf7050f16b20bf0cf3280}} 
+\index{M210\+::\+Thread\+Manager@{M210\+::\+Thread\+Manager}!stop@{stop}}
+\index{stop@{stop}!M210\+::\+Thread\+Manager@{M210\+::\+Thread\+Manager}}
+\subsubsection{\texorpdfstring{stop()}{stop()}}
+{\footnotesize\ttfamily void Thread\+Manager\+::stop (\begin{DoxyParamCaption}\item[{const pthread\+\_\+t $\ast$}]{id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Stop thread Doesn\textquotesingle{}t work -\/ Unused 
+\begin{DoxyParams}{Parameters}
+{\em id} & Thread id to stop \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Managers/\mbox{\hyperlink{_thread_manager_8h}{Thread\+Manager.\+h}}\item 
+Managers/\mbox{\hyperlink{_thread_manager_8cpp}{Thread\+Manager.\+cpp}}\end{DoxyCompactItemize}

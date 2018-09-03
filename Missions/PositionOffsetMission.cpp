@@ -2,6 +2,7 @@
  *  @version 1.0
  *  @date Jul 05 2018
  *  @author Jonathan Michel
+ *  @brief PositionOffsetMission.h implementation
  */
 
 #include "PositionOffsetMission.h"

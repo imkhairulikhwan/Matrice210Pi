@@ -2,6 +2,7 @@
  *  @version 1.0
  *  @date juil. 25 2018
  *  @author Jonathan Michel
+ *  @brief Emergency.h implementation
  */
 
 #include "Emergency.h"

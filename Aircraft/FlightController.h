@@ -119,7 +119,6 @@ class LinuxSetup;
          * @param offset Relative offset vector to move [m]
          * Vector is relative to the ground
          * x face to north, y face to east, z face to sky
-         * TODO explain difference with PositionOffset
          * @param yaw Absolute yaw angle to set [deg}
          */
         void moveByPosition(const Vector3f *offset, float yaw);
@@ -190,7 +189,6 @@ class LinuxSetup;
          * Vector is relative to the ground
          * x face to north, y face to east, z face to sky
          * @param yaw Absolute yaw angle to set [deg}
-         * TODO Explain why multiple calls are needed
          */
         void positionAndYawCtrl(const Vector3f *position, float yaw);
 

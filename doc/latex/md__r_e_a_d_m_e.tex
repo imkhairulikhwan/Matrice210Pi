@@ -1,0 +1,81 @@
+This code uses \href{https://github.com/dji-sdk/Onboard-SDK/}{\tt D\+JI Onboard S\+DK} to communicate with D\+JI flight controllers.
+
+\subsection*{Prerequisites}
+
+Code compiled with \href{https://cmake.org/}{\tt C\+Make} 3.\+7.\+2 on a \href{https://www.raspberrypi.org/products/raspberry-pi-zero-w/}{\tt Raspberry Pi Zero W} with \href{https://www.raspberrypi.org/downloads/raspbian/}{\tt Raspbian Stretch Lite} (June 2018 -\/ Kernel version\+:4.\+14).
+
+\subsubsection*{U\+A\+RT}
+
+\href{https://github.com/dji-sdk/Onboard-SDK/}{\tt D\+JI Onboard S\+DK} uses serial U\+A\+RT driver to communicate with D\+JI flight controllers. The U\+A\+RT transmit and receive pins are on G\+P\+IO 14 and G\+P\+IO 15 respectively, which are pins 8 and 10 on the G\+P\+IO header.
+
+In a default install of Raspbian on a Raspberry, the primary U\+A\+RT {\ttfamily /dev/serial0} is assigned to the Linux console. To stop this behaviour, the serial console setting needs to be removed from command line. This can be done using the https\+://www.raspberrypi.\+org/documentation/configuration/raspi-\/config.md \char`\"{}raspi-\/config\char`\"{} \+:
+
+
+\begin{DoxyCode}
+sudo raspi-config
+\end{DoxyCode}
+ Select option 5, {\bfseries Interfacing options}, then option {\bfseries Serial}, then {\bfseries Disable serial login shell} (disable linux\textquotesingle{}s use of console uart) and {\bfseries Enable serial interface}. Exit raspi-\/config and reboot
+
+\subsubsection*{U\+A\+RT by U\+SB}
+
+The \href{https://www.st.com/en/evaluation-tools/32f429idiscovery.html}{\tt 32\+F429\+I\+D\+I\+S\+C\+O\+V\+E\+RY} card used by the embedded sensor transmits values by U\+A\+RT. It is connected to a U\+S\+B-\/\+T\+TL adaptator and uses U\+SB User port {\ttfamily /dev/tty\+U\+S\+B0} on the Pi Zero W.
+
+\subsection*{Install}
+
+Clone the \href{https://github.com/dji-sdk/Onboard-SDK/}{\tt D\+JI Onboard S\+DK} repository and configure {\ttfamily O\+N\+B\+O\+A\+R\+D\+S\+D\+K\+\_\+\+S\+O\+U\+R\+CE} in \href{CMakeLists.txt}{\tt C\+Make\+List.\+txt} depending on your repository location.
+
+In the {\ttfamily Matrice210\+Pi} root directory, run the following commands to build the app\+: 
+\begin{DoxyCode}
+mkdir build && cd build
+cmake ..
+make
+cd bin
+\end{DoxyCode}
+
+
+You have to copy the {\ttfamily User\+Config.\+txt} file provided by D\+JI in the {\ttfamily bin} directory and fill it in with your configuration informations. You must register as a developer with D\+JI and create an O\+S\+DK application ID and Key pair, see \href{https://developer.dji.com/onboard-sdk/documentation/development-workflow/environment-setup.html#onboard-sdk-application-registration}{\tt here}.
+
+Be sure Onboard S\+DK is enabled on the aircraft and the baudrate used in {\ttfamily User\+Config.\+txt} file is the same as defined with D\+JI Assistant 2, more informations \href{https://developer.dji.com/onboard-sdk/documentation/development-workflow/environment-setup.html}{\tt here}.
+
+More informations can be found in the \href{https://developer.dji.com/onboard-sdk/documentation/quick-start/quick-start.html}{\tt Quick start Guide} or in the \href{https://developer.dji.com/onboard-sdk/documentation/introduction/homepage.html}{\tt D\+JI documentation}.
+
+You can then launch program in {\ttfamily bin} directory with 
+\begin{DoxyCode}
+sudo ./matrice210 1
+\end{DoxyCode}
+
+
+If the program is launched with {\ttfamily sudo ./matrice210 0}, the console interface is not displayed.
+
+\subsection*{Result}
+
+The following interface is shown in the program console when console is enabled.
+
+
+
+Due to the watchdog, if the program is launched after the Android Application on the mobile device, data may be received before full program initialization.
+
+
+
+If console is disabled, {\ttfamily Available commands} are not displayed.
+
+\subsection*{Linux service}
+
+The \href{Linux/runMatrice210.sh}{\tt run\+Matrice210.\+sh} script can be automatically launched from a service on Pi start-\/up if the \href{Linux/matrice210.service}{\tt matrice210.\+service} is added in {\ttfamily /etc/systemd/system}. Linux service can then be \href{Linux/stopMatrice210.sh}{\tt stopped} and \href{Linux/startMatrice210.sh}{\tt restarted} with dedicated script files
+
+\subsection*{Log}
+
+The \href{Linux/runMatrice210.sh}{\tt run\+Matrice210.\+sh} saves console output in {\ttfamily build/bin/log/} directory. Logs are formatting as follow \+: {\ttfamily log\mbox{[}index\mbox{]}-\/\mbox{[}yyyy\mbox{]}\mbox{[}mm\mbox{]}\mbox{[}dd\mbox{]}-\/\mbox{[}hh\mbox{]}\mbox{[}mm\mbox{]}\mbox{[}ss\mbox{]}.log}. G\+MT Date/\+Time is used, {\ttfamily index} is incremented to have numbered log and last log starts with \+\_\+ char.
+
+The current log file can be read in real time with command {\ttfamily tail -\/f \+\_\+$\ast$.log}.
+
+\subsection*{Usage}
+
+For full compatibility, use this code with the \href{https://github.com/jonathanmichel/Matrice210Android}{\tt Matrice210\+Android\+App} on an Android device connected to aircraft remote controller and the \href{https://github.com/jonathanmichel/Matrice210Stm32}{\tt Matrice210\+Stm32} code running on a \href{https://www.st.com/en/evaluation-tools/32f429idiscovery.html}{\tt S\+T\+M32\+F429\+I\+D\+I\+S\+C\+O\+V\+E\+RY board}.
+
+\subsection*{Authors}
+
+
+\begin{DoxyItemize}
+\item {\bfseries Jonathan Michel} -\/ {\itshape Initial work} -\/ \href{https://github.com/jonathanmichel}{\tt jonathanmichel} 
+\end{DoxyItemize}

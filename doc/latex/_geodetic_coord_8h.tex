@@ -1,0 +1,36 @@
+\hypertarget{_geodetic_coord_8h}{}\section{Gps/\+Geodetic\+Coord.h File Reference}
+\label{_geodetic_coord_8h}\index{Gps/\+Geodetic\+Coord.\+h@{Gps/\+Geodetic\+Coord.\+h}}
+
+
+This class stores geodetic coordinates and allow user to add local N\+ED vector to a point. Note that current implementation is only in 2D -\/ without altitude/Z axis.  
+
+
+{\ttfamily \#include $<$dji\+\_\+vehicle.\+hpp$>$}\newline
+{\ttfamily \#include \char`\"{}../util/define.\+h\char`\"{}}\newline
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_m210_1_1_dms}{M210\+::\+Dms}}
+\item 
+class \mbox{\hyperlink{class_m210_1_1_geodetic_coord}{M210\+::\+Geodetic\+Coord}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class stores geodetic coordinates and allow user to add local N\+ED vector to a point. Note that current implementation is only in 2D -\/ without altitude/Z axis. 
+
+\begin{DoxyVersion}{Version}
+1.\+0 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+Aou 11 2018 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Jonathan Michel -\/--- Geodetic coordinates -\/--- The geodetic coordinate system is widely used in G\+P\+S-\/based navigation. It characterizes a coordinate point near the earth’s surface in terms of longitude (λ), latitude (ϕ), and height (h) (or altitude). The longitude measures the angle (−180° to 180°) between the Prime Meridian and the measured point. The latitude measures the angle (−90° to 90°) between the equatorial plane and the normal of the reference ellipsoid that passes through the measured point. -\/--- Local North-\/\+East-\/\+Down Coordinate (N\+ED) --- The local N\+ED coordinate system is also known as a navigation or ground coordinate system. It is a coordinate frame fixed to the earth’s surface. Its origin and axes are defined as the following \+:
+\begin{DoxyEnumerate}
+\item The origin (On) is arbitrarily fixed to a point on the earth’s surface
+\item The X-\/axis (Xn) points toward the geodetic north
+\item The Y-\/axis (Yn) points toward the geodetic east
+\item The Z-\/axis (Zn) points downward along the ellipsoid normal. 
+\end{DoxyEnumerate}
+\end{DoxyAuthor}

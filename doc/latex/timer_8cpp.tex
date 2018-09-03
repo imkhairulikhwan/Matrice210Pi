@@ -1,0 +1,54 @@
+\hypertarget{timer_8cpp}{}\section{util/timer.cpp File Reference}
+\label{timer_8cpp}\index{util/timer.\+cpp@{util/timer.\+cpp}}
+
+
+\mbox{\hyperlink{timer_8h}{timer.\+h}} implementation  
+
+
+{\ttfamily \#include \char`\"{}timer.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$sys/time.\+h$>$}\newline
+{\ttfamily \#include $<$unistd.\+h$>$}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+long long \mbox{\hyperlink{timer_8cpp_a8167bb691d49f8c149d2d5fd9dfea7b4}{get\+Time\+Ms}} ()
+\item 
+void \mbox{\hyperlink{timer_8cpp_a9b3d76ba168a547d42c9e8589e383e97}{delay\+\_\+ms}} (unsigned int duration\+Ms)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\mbox{\hyperlink{timer_8h}{timer.\+h}} implementation 
+
+\begin{DoxyVersion}{Version}
+1.\+0 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+Jul 03 2018 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Jonathan Michel 
+\end{DoxyAuthor}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{timer_8cpp_a9b3d76ba168a547d42c9e8589e383e97}\label{timer_8cpp_a9b3d76ba168a547d42c9e8589e383e97}} 
+\index{timer.\+cpp@{timer.\+cpp}!delay\+\_\+ms@{delay\+\_\+ms}}
+\index{delay\+\_\+ms@{delay\+\_\+ms}!timer.\+cpp@{timer.\+cpp}}
+\subsubsection{\texorpdfstring{delay\+\_\+ms()}{delay\_ms()}}
+{\footnotesize\ttfamily void delay\+\_\+ms (\begin{DoxyParamCaption}\item[{unsigned int}]{duration\+Ms }\end{DoxyParamCaption})}
+
+Thread sleep 
+\begin{DoxyParams}{Parameters}
+{\em duration\+Ms} & sleep duration \mbox{[}ms\mbox{]} \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{timer_8cpp_a8167bb691d49f8c149d2d5fd9dfea7b4}\label{timer_8cpp_a8167bb691d49f8c149d2d5fd9dfea7b4}} 
+\index{timer.\+cpp@{timer.\+cpp}!get\+Time\+Ms@{get\+Time\+Ms}}
+\index{get\+Time\+Ms@{get\+Time\+Ms}!timer.\+cpp@{timer.\+cpp}}
+\subsubsection{\texorpdfstring{get\+Time\+Ms()}{getTimeMs()}}
+{\footnotesize\ttfamily long long get\+Time\+Ms (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Return current millisecond since the Epoch \begin{DoxyReturn}{Returns}
+Current timestamp \mbox{[}ms\mbox{]} 
+\end{DoxyReturn}

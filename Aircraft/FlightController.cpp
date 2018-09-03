@@ -2,6 +2,7 @@
  *  @version 1.0
  *  @date Jul 03 2018
  *  @author Jonathan Michel
+ *  @brief FlightController.h implementation
  */
 
 #include "FlightController.h"

@@ -2,6 +2,7 @@
  *  @version 1.0
  *  @date Aou 11 2018
  *  @author Jonathan Michel
+ *  @brief GpsManip.h implementation
  */
 
 
@@ -65,6 +66,7 @@ Vector2 GpsManip::offsetFromGpsOffset(const GeodeticCoord &origin,
 
 Telemetry::Vector3f GpsManip::offsetFromGpsOffset(const Telemetry::GPSFused &origin,
                                     const Telemetry::GPSFused &target) {
+    // see above method
     GeodeticCoord ori(origin.latitude, origin.longitude);
     GeodeticCoord tar(target.latitude, target.longitude);
     Vector2 delta = GpsManip::offsetFromGpsOffset(ori, tar);

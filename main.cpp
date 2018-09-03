@@ -4,6 +4,20 @@
  *  @author Jonathan Michel
  */
 
+/*! \mainpage Matrice210Pi
+ *
+ * This code uses DJI Onboard SDK to communicate with DJI flight controllers.
+ *
+ * More information can be found in readme.md file
+ *
+ * \section Architecture
+ * \htmlonly <style>div.image img[src="img/Architecture.jpg"]{width:50%;}</style> \endhtmlonly
+ * \image html img/Architecture.jpg "UML Architecture"
+
+ * \htmlonly <style>div.image img[src="img/Full.jpg"]{width:100%;}</style> \endhtmlonly
+ * \image html img/Full.jpg "UML Full"
+*/
+
 #include <iostream>
 #include <string>
 #include <sstream>

@@ -1,0 +1,49 @@
+\hypertarget{class_m210_1_1_monitored_mission}{}\section{M210\+:\+:Monitored\+Mission Class Reference}
+\label{class_m210_1_1_monitored_mission}\index{M210\+::\+Monitored\+Mission@{M210\+::\+Monitored\+Mission}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_m210_1_1_monitored_mission_a7f47ae2a0d72c6f28b33c81950b6c215}\label{class_m210_1_1_monitored_mission_a7f47ae2a0d72c6f28b33c81950b6c215}} 
+{\bfseries Monitored\+Mission} (\mbox{\hyperlink{class_m210_1_1_flight_controller}{Flight\+Controller}} $\ast$flight\+Controller)
+\item 
+bool \mbox{\hyperlink{class_m210_1_1_monitored_mission_a70392abfa221992cf46ffddae110ee5a}{take\+Off}} (int timeout=1) const
+\item 
+bool \mbox{\hyperlink{class_m210_1_1_monitored_mission_aa9c133ca528a6942514a5be8395b4984}{landing}} (int timeout=1) const
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m210_1_1_monitored_mission_aa9c133ca528a6942514a5be8395b4984}\label{class_m210_1_1_monitored_mission_aa9c133ca528a6942514a5be8395b4984}} 
+\index{M210\+::\+Monitored\+Mission@{M210\+::\+Monitored\+Mission}!landing@{landing}}
+\index{landing@{landing}!M210\+::\+Monitored\+Mission@{M210\+::\+Monitored\+Mission}}
+\subsubsection{\texorpdfstring{landing()}{landing()}}
+{\footnotesize\ttfamily bool Monitored\+Mission\+::landing (\begin{DoxyParamCaption}\item[{int}]{timeout = {\ttfamily 1} }\end{DoxyParamCaption}) const}
+
+Monitored landing. Blocking call 
+\begin{DoxyParams}{Parameters}
+{\em timeout} & Timeout used on S\+DK method calls \mbox{[}s\mbox{]} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if success
+\end{DoxyReturn}
+Monitored landing. Return true if success \mbox{\Hypertarget{class_m210_1_1_monitored_mission_a70392abfa221992cf46ffddae110ee5a}\label{class_m210_1_1_monitored_mission_a70392abfa221992cf46ffddae110ee5a}} 
+\index{M210\+::\+Monitored\+Mission@{M210\+::\+Monitored\+Mission}!take\+Off@{take\+Off}}
+\index{take\+Off@{take\+Off}!M210\+::\+Monitored\+Mission@{M210\+::\+Monitored\+Mission}}
+\subsubsection{\texorpdfstring{take\+Off()}{takeOff()}}
+{\footnotesize\ttfamily bool Monitored\+Mission\+::take\+Off (\begin{DoxyParamCaption}\item[{int}]{timeout = {\ttfamily 1} }\end{DoxyParamCaption}) const}
+
+Monitored take-\/off. Blocking call 
+\begin{DoxyParams}{Parameters}
+{\em timeout} & Timeout used on S\+DK method calls \mbox{[}s\mbox{]} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if success 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Missions/\mbox{\hyperlink{_monitored_mission_8h}{Monitored\+Mission.\+h}}\item 
+Missions/\mbox{\hyperlink{_monitored_mission_8cpp}{Monitored\+Mission.\+cpp}}\end{DoxyCompactItemize}

@@ -1,0 +1,154 @@
+\hypertarget{class_m210_1_1_action_data}{}\section{M210\+:\+:Action\+Data Class Reference}
+\label{class_m210_1_1_action_data}\index{M210\+::\+Action\+Data@{M210\+::\+Action\+Data}}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{class_m210_1_1_action_data_a35cd47f396d015ad523e845ddfaeab4c}{Action\+Id}} \{ \newline
+\mbox{\hyperlink{class_m210_1_1_action_data_a35cd47f396d015ad523e845ddfaeab4ca2db55758ab72814e1383f5930fe6634a}{take\+Off}}, 
+{\bfseries landing}, 
+{\bfseries mission}, 
+{\bfseries send\+Data\+To\+M\+S\+DK}, 
+\newline
+{\bfseries stop\+Aircraft}, 
+{\bfseries emergency\+Stop}, 
+{\bfseries emergency\+Release}, 
+{\bfseries watchdog}, 
+\newline
+{\bfseries obtain\+Control\+Authority}, 
+{\bfseries hello\+World}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_m210_1_1_action_data_ad6cfcb4e00155902b01e889c189fec0d}{Action\+Data}} (\mbox{\hyperlink{class_m210_1_1_action_data_a35cd47f396d015ad523e845ddfaeab4c}{Action\+Id}} action\+Id, size\+\_\+t size=0)
+\item 
+\mbox{\hyperlink{class_m210_1_1_action_data_a5ecfc6f8a7f284d5430e9a59bbe399b7}{$\sim$\+Action\+Data}} ()
+\item 
+\mbox{\hyperlink{class_m210_1_1_action_data_a35cd47f396d015ad523e845ddfaeab4c}{Action\+Id}} \mbox{\hyperlink{class_m210_1_1_action_data_a9fff91f297d917c9519f3b4d2d2e130b}{get\+Action\+Id}} () const
+\item 
+bool \mbox{\hyperlink{class_m210_1_1_action_data_afc4ee6af4070e59d6753b85e150c0b88}{push}} (char c)
+\item 
+\mbox{\Hypertarget{class_m210_1_1_action_data_a805f85660b5dcde52f0008281980ae41}\label{class_m210_1_1_action_data_a805f85660b5dcde52f0008281980ae41}} 
+bool {\bfseries push} (int i)
+\item 
+\mbox{\Hypertarget{class_m210_1_1_action_data_ae70334b31e84f40475efaa9d5e7fd856}\label{class_m210_1_1_action_data_ae70334b31e84f40475efaa9d5e7fd856}} 
+bool {\bfseries push} (unsigned u)
+\item 
+\mbox{\Hypertarget{class_m210_1_1_action_data_ab26b540b0d6d1397a6fdd5d0c765d834}\label{class_m210_1_1_action_data_ab26b540b0d6d1397a6fdd5d0c765d834}} 
+bool {\bfseries push} (float f)
+\item 
+\mbox{\Hypertarget{class_m210_1_1_action_data_a452788de9a3df42f2c71add388c6a42f}\label{class_m210_1_1_action_data_a452788de9a3df42f2c71add388c6a42f}} 
+bool {\bfseries push} (const Telemetry\+::\+Vector3f \&v)
+\item 
+\mbox{\Hypertarget{class_m210_1_1_action_data_a1be77c54720d9d22ffb9d4019575405f}\label{class_m210_1_1_action_data_a1be77c54720d9d22ffb9d4019575405f}} 
+bool {\bfseries push} (const uint8\+\_\+t $\ast$data, size\+\_\+t length)
+\item 
+bool \mbox{\hyperlink{class_m210_1_1_action_data_a590c1f07f361ace0bdf6072abec3cf48}{pop\+Char}} (char \&c)
+\item 
+\mbox{\Hypertarget{class_m210_1_1_action_data_a63d416b7fb36410d190d18a0203f715c}\label{class_m210_1_1_action_data_a63d416b7fb36410d190d18a0203f715c}} 
+bool {\bfseries pop\+Int} (int \&i)
+\item 
+\mbox{\Hypertarget{class_m210_1_1_action_data_a8e215d39d3057afeec1d4b7776066182}\label{class_m210_1_1_action_data_a8e215d39d3057afeec1d4b7776066182}} 
+bool {\bfseries pop\+Unsigned} (unsigned \&u)
+\item 
+\mbox{\Hypertarget{class_m210_1_1_action_data_a6a280037c2241d17e53e05d1fa114b30}\label{class_m210_1_1_action_data_a6a280037c2241d17e53e05d1fa114b30}} 
+bool {\bfseries pop\+Float} (float \&f)
+\item 
+\mbox{\Hypertarget{class_m210_1_1_action_data_a0606072003289b2a504e2f9d450bac60}\label{class_m210_1_1_action_data_a0606072003289b2a504e2f9d450bac60}} 
+bool {\bfseries pop\+Vector3f} (Telemetry\+::\+Vector3f \&v)
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{class_m210_1_1_action_data_acf9043b5b953a5a0c837ae679c9ab0e5}{unit\+Test}} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{class_m210_1_1_action_data_a35cd47f396d015ad523e845ddfaeab4c}\label{class_m210_1_1_action_data_a35cd47f396d015ad523e845ddfaeab4c}} 
+\index{M210\+::\+Action\+Data@{M210\+::\+Action\+Data}!Action\+Id@{Action\+Id}}
+\index{Action\+Id@{Action\+Id}!M210\+::\+Action\+Data@{M210\+::\+Action\+Data}}
+\subsubsection{\texorpdfstring{Action\+Id}{ActionId}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{class_m210_1_1_action_data_a35cd47f396d015ad523e845ddfaeab4c}{M210\+::\+Action\+Data\+::\+Action\+Id}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{take\+Off@{take\+Off}!M210\+::\+Action\+Data@{M210\+::\+Action\+Data}}\index{M210\+::\+Action\+Data@{M210\+::\+Action\+Data}!take\+Off@{take\+Off}}}\mbox{\Hypertarget{class_m210_1_1_action_data_a35cd47f396d015ad523e845ddfaeab4ca2db55758ab72814e1383f5930fe6634a}\label{class_m210_1_1_action_data_a35cd47f396d015ad523e845ddfaeab4ca2db55758ab72814e1383f5930fe6634a}} 
+take\+Off&Indicates which action is relative to current action data object \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_m210_1_1_action_data_ad6cfcb4e00155902b01e889c189fec0d}\label{class_m210_1_1_action_data_ad6cfcb4e00155902b01e889c189fec0d}} 
+\index{M210\+::\+Action\+Data@{M210\+::\+Action\+Data}!Action\+Data@{Action\+Data}}
+\index{Action\+Data@{Action\+Data}!M210\+::\+Action\+Data@{M210\+::\+Action\+Data}}
+\subsubsection{\texorpdfstring{Action\+Data()}{ActionData()}}
+{\footnotesize\ttfamily Action\+Data\+::\+Action\+Data (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_m210_1_1_action_data_a35cd47f396d015ad523e845ddfaeab4c}{Action\+Id}}}]{action\+Id,  }\item[{size\+\_\+t}]{size = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+Allocate dynamic memory for specified action 
+\begin{DoxyParams}{Parameters}
+{\em action\+Id} & \mbox{\hyperlink{class_m210_1_1_action}{Action}} id concerned by current action data \\
+\hline
+{\em size} & Size to allocate in dynamic memory \mbox{[}bytes\mbox{]} \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m210_1_1_action_data_a5ecfc6f8a7f284d5430e9a59bbe399b7}\label{class_m210_1_1_action_data_a5ecfc6f8a7f284d5430e9a59bbe399b7}} 
+\index{M210\+::\+Action\+Data@{M210\+::\+Action\+Data}!````~Action\+Data@{$\sim$\+Action\+Data}}
+\index{````~Action\+Data@{$\sim$\+Action\+Data}!M210\+::\+Action\+Data@{M210\+::\+Action\+Data}}
+\subsubsection{\texorpdfstring{$\sim$\+Action\+Data()}{~ActionData()}}
+{\footnotesize\ttfamily Action\+Data\+::$\sim$\+Action\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Delete dynamic memory allocated 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m210_1_1_action_data_a9fff91f297d917c9519f3b4d2d2e130b}\label{class_m210_1_1_action_data_a9fff91f297d917c9519f3b4d2d2e130b}} 
+\index{M210\+::\+Action\+Data@{M210\+::\+Action\+Data}!get\+Action\+Id@{get\+Action\+Id}}
+\index{get\+Action\+Id@{get\+Action\+Id}!M210\+::\+Action\+Data@{M210\+::\+Action\+Data}}
+\subsubsection{\texorpdfstring{get\+Action\+Id()}{getActionId()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_m210_1_1_action_data_a35cd47f396d015ad523e845ddfaeab4c}{Action\+Id}} M210\+::\+Action\+Data\+::get\+Action\+Id (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Return action id concerned by current action data \begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{class_m210_1_1_action}{Action}} id 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_action_data_a590c1f07f361ace0bdf6072abec3cf48}\label{class_m210_1_1_action_data_a590c1f07f361ace0bdf6072abec3cf48}} 
+\index{M210\+::\+Action\+Data@{M210\+::\+Action\+Data}!pop\+Char@{pop\+Char}}
+\index{pop\+Char@{pop\+Char}!M210\+::\+Action\+Data@{M210\+::\+Action\+Data}}
+\subsubsection{\texorpdfstring{pop\+Char()}{popChar()}}
+{\footnotesize\ttfamily bool Action\+Data\+::pop\+Char (\begin{DoxyParamCaption}\item[{char \&}]{c }\end{DoxyParamCaption})}
+
+Dedicated pop methods See \mbox{\hyperlink{_action_data_8h_a4f0419f16d53bad043d5f85da427969d}{\+\_\+pop()}} macro for details 
+\begin{DoxyParams}{Parameters}
+{\em return} & variable \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+False if there is no more data to read, true otherwise 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_action_data_afc4ee6af4070e59d6753b85e150c0b88}\label{class_m210_1_1_action_data_afc4ee6af4070e59d6753b85e150c0b88}} 
+\index{M210\+::\+Action\+Data@{M210\+::\+Action\+Data}!push@{push}}
+\index{push@{push}!M210\+::\+Action\+Data@{M210\+::\+Action\+Data}}
+\subsubsection{\texorpdfstring{push()}{push()}}
+{\footnotesize\ttfamily bool Action\+Data\+::push (\begin{DoxyParamCaption}\item[{char}]{c }\end{DoxyParamCaption})}
+
+Dedicated push methods See \mbox{\hyperlink{_action_data_8h_af32898bff77f8e81bd43ad0f30d25221}{\+\_\+push()}} macro for details 
+\begin{DoxyParams}{Parameters}
+{\em data} & to push \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+False if there is not enough memory allocated, true otherwise 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_action_data_acf9043b5b953a5a0c837ae679c9ab0e5}\label{class_m210_1_1_action_data_acf9043b5b953a5a0c837ae679c9ab0e5}} 
+\index{M210\+::\+Action\+Data@{M210\+::\+Action\+Data}!unit\+Test@{unit\+Test}}
+\index{unit\+Test@{unit\+Test}!M210\+::\+Action\+Data@{M210\+::\+Action\+Data}}
+\subsubsection{\texorpdfstring{unit\+Test()}{unitTest()}}
+{\footnotesize\ttfamily void Action\+Data\+::unit\+Test (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Unit test to check that class is working. Called at the beginning of the program. Assert if a test fails 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Action/\mbox{\hyperlink{_action_data_8h}{Action\+Data.\+h}}\item 
+Action/\mbox{\hyperlink{_action_data_8cpp}{Action\+Data.\+cpp}}\end{DoxyCompactItemize}

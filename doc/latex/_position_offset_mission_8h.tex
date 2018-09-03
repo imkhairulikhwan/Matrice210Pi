@@ -1,0 +1,33 @@
+\hypertarget{_position_offset_mission_8h}{}\section{Missions/\+Position\+Offset\+Mission.h File Reference}
+\label{_position_offset_mission_8h}\index{Missions/\+Position\+Offset\+Mission.\+h@{Missions/\+Position\+Offset\+Mission.\+h}}
+
+
+Calculate the inputs to send the position controller. Basic receding setpoint position control with the setpoint always 2m away from the current position -\/ until aircraft get within a threshold of the goal. From that point on, the remaining distance is sent as the setpoint.  
+
+
+{\ttfamily \#include $<$dji\+\_\+vehicle.\+hpp$>$}\newline
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_m210_1_1_position_offset_mission}{M210\+::\+Position\+Offset\+Mission}}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{_position_offset_mission_8h_ac5a945020d3528355cda82d383676736}\label{_position_offset_mission_8h_ac5a945020d3528355cda82d383676736}} 
+\#define {\bfseries R\+A\+D2\+D\+EG}~57.\+2957795129
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Calculate the inputs to send the position controller. Basic receding setpoint position control with the setpoint always 2m away from the current position -\/ until aircraft get within a threshold of the goal. From that point on, the remaining distance is sent as the setpoint. 
+
+\begin{DoxyVersion}{Version}
+1.\+0 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+Jul 05 2018 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Jonathan Michel 
+\end{DoxyAuthor}

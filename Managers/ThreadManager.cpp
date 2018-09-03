@@ -2,6 +2,7 @@
  *  @version 1.0
  *  @date Jul 17 2018
  *  @author Jonathan Michel
+ *  @brief ThreadManager.h implementation
  */
 
 #include "ThreadManager.h"

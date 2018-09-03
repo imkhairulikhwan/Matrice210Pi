@@ -1,0 +1,130 @@
+\hypertarget{_action_data_8h}{}\section{Action/\+Action\+Data.h File Reference}
+\label{_action_data_8h}\index{Action/\+Action\+Data.\+h@{Action/\+Action\+Data.\+h}}
+
+
+Action\+Data objects are added in Action queue (\mbox{\hyperlink{_action_8h}{Action.\+h}}) The goal is to provide an object with variable data size.  
+
+
+{\ttfamily \#include $<$pthread.\+h$>$}\newline
+{\ttfamily \#include $<$dji\+\_\+vehicle.\+hpp$>$}\newline
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_m210_1_1_action_data}{M210\+::\+Action\+Data}}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{_action_data_8h_ab2c23ab476d4f7a0207895fe1ab00e50}{\+\_\+\+\_\+push}}(\+\_\+data\+\_\+,  \+\_\+length\+\_\+)
+\item 
+\#define \mbox{\hyperlink{_action_data_8h_af32898bff77f8e81bd43ad0f30d25221}{\+\_\+push}}(\+\_\+data\+\_\+,  \+\_\+type\+\_\+)
+\item 
+\#define \mbox{\hyperlink{_action_data_8h_a4f0419f16d53bad043d5f85da427969d}{\+\_\+pop}}(\+\_\+data\+\_\+,  \+\_\+type\+\_\+)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Action\+Data objects are added in Action queue (\mbox{\hyperlink{_action_8h}{Action.\+h}}) The goal is to provide an object with variable data size. 
+
+\begin{DoxyVersion}{Version}
+1.\+0 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+Jul 20 2018 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Jonathan Michel It is useful because all actions doesn\textquotesingle{}t need the same amount of data. On object creation, dynamic memory is allocated. Size depends of user need. Data can next be pushed (not all type are yet supported, only main ones). Then, data can be recovered with pop method. /!\textbackslash{} Push/\+Pop methods works as a lifo, last pushed value will be first popped Example of use in unit\+Test() method 
+\end{DoxyAuthor}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{_action_data_8h_ab2c23ab476d4f7a0207895fe1ab00e50}\label{_action_data_8h_ab2c23ab476d4f7a0207895fe1ab00e50}} 
+\index{Action\+Data.\+h@{Action\+Data.\+h}!\+\_\+\+\_\+push@{\+\_\+\+\_\+push}}
+\index{\+\_\+\+\_\+push@{\+\_\+\+\_\+push}!Action\+Data.\+h@{Action\+Data.\+h}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+push}{\_\_push}}
+{\footnotesize\ttfamily \#define \+\_\+\+\_\+push(\begin{DoxyParamCaption}\item[{}]{\+\_\+data\+\_\+,  }\item[{}]{\+\_\+length\+\_\+ }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\{                                                       \(\backslash\)
+    pthread\_mutex\_lock(&mutex);                         \(\backslash\)
+    \textcolor{comment}{/* Copy data in dynamic memory allocated if there */}\(\backslash\)
+    \textcolor{comment}{/* is enough place                                */}\(\backslash\)
+    auto ptr = \textcolor{keyword}{reinterpret\_cast<}\textcolor{keyword}{const }\textcolor{keywordtype}{char} *\textcolor{keyword}{>}(\_data\_);  \(\backslash\)
+    if(!checkSize(\_length\_)) \{                          \(\backslash\)
+        DERROR(\textcolor{stringliteral}{"Unable to push data"});                  \(\backslash\)
+        pthread\_mutex\_unlock(&mutex);                   \(\backslash\)
+        return \textcolor{keyword}{false};                                   \(\backslash\)
+    \}                                                   \(\backslash\)
+    memcpy(dataPtr + dataPosCnt, ptr, \_length\_);        \(\backslash\)
+    dataPosCnt += (\_length\_);                             \(\backslash\)
+    pthread\_mutex\_unlock(&mutex);                       \(\backslash\)
+    return \textcolor{keyword}{true};                                        \(\backslash\)
+\}
+\end{DoxyCode}
+Copy data to allocated dynamic memory 
+\begin{DoxyParams}{Parameters}
+{\em \+\_\+data\+\_\+} & Pointer to data to copy \\
+\hline
+{\em \+\_\+length\+\_\+} & Length of data to copy \mbox{[}bytes\mbox{]} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+False if there is not enough memory allocated, true otherwise 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_action_data_8h_a4f0419f16d53bad043d5f85da427969d}\label{_action_data_8h_a4f0419f16d53bad043d5f85da427969d}} 
+\index{Action\+Data.\+h@{Action\+Data.\+h}!\+\_\+pop@{\+\_\+pop}}
+\index{\+\_\+pop@{\+\_\+pop}!Action\+Data.\+h@{Action\+Data.\+h}}
+\subsubsection{\texorpdfstring{\+\_\+pop}{\_pop}}
+{\footnotesize\ttfamily \#define \+\_\+pop(\begin{DoxyParamCaption}\item[{}]{\+\_\+data\+\_\+,  }\item[{}]{\+\_\+type\+\_\+ }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\{                                                   \(\backslash\)
+    pthread\_mutex\_lock(&mutex);                     \(\backslash\)
+    \textcolor{comment}{/* Pop data from dynamic memory allocated if */} \(\backslash\)
+    \textcolor{comment}{/* there is remaining data                   */} \(\backslash\)
+    size\_t length = \textcolor{keyword}{sizeof}(\_type\_);                 \(\backslash\)
+    if(dataPosCnt < length) \{                       \(\backslash\)
+        DERROR(\textcolor{stringliteral}{"Unable to pop %s"}, #\_type\_);        \(\backslash\)
+        pthread\_mutex\_unlock(&mutex);               \(\backslash\)
+        return \textcolor{keyword}{false};                               \(\backslash\)
+    \}                                               \(\backslash\)
+    dataPosCnt -= length;                           \(\backslash\)
+    memcpy(&(\_data\_), dataPtr + dataPosCnt, length);  \(\backslash\)
+    pthread\_mutex\_unlock(&mutex);                   \(\backslash\)
+    return \textcolor{keyword}{true};                                    \(\backslash\)
+\}
+\end{DoxyCode}
+Read data from dynamic memory 
+\begin{DoxyParams}{Parameters}
+{\em \+\_\+data\+\_\+} & Pointer to data where write result \\
+\hline
+{\em \+\_\+type\+\_\+} & Type of data to read \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+False if there is no more data to read in allocated dynamic memory, true otherwise 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_action_data_8h_af32898bff77f8e81bd43ad0f30d25221}\label{_action_data_8h_af32898bff77f8e81bd43ad0f30d25221}} 
+\index{Action\+Data.\+h@{Action\+Data.\+h}!\+\_\+push@{\+\_\+push}}
+\index{\+\_\+push@{\+\_\+push}!Action\+Data.\+h@{Action\+Data.\+h}}
+\subsubsection{\texorpdfstring{\+\_\+push}{\_push}}
+{\footnotesize\ttfamily \#define \+\_\+push(\begin{DoxyParamCaption}\item[{}]{\+\_\+data\+\_\+,  }\item[{}]{\+\_\+type\+\_\+ }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\{                                       \(\backslash\)
+    \_\_push(\_data\_, \textcolor{keyword}{sizeof}(\_type\_));     \(\backslash\)
+\}
+\end{DoxyCode}
+Copy data to allocated dynamic memory 
+\begin{DoxyParams}{Parameters}
+{\em \+\_\+data\+\_\+} & Pointer to data to copy \\
+\hline
+{\em \+\_\+type\+\_\+} & Type of data to copy \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+False if there is not enough memory allocated, true otherwise 
+\end{DoxyReturn}

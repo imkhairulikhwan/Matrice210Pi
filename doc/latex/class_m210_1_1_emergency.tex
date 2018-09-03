@@ -1,0 +1,52 @@
+\hypertarget{class_m210_1_1_emergency}{}\section{M210\+:\+:Emergency Class Reference}
+\label{class_m210_1_1_emergency}\index{M210\+::\+Emergency@{M210\+::\+Emergency}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_m210_1_1_emergency_aa461736b60192940860a5f71839049b5}{set}} ()
+\item 
+void \mbox{\hyperlink{class_m210_1_1_emergency_a44add09d4d5016a54ffb714e468a40ac}{release}} ()
+\item 
+bool \mbox{\hyperlink{class_m210_1_1_emergency_a071e3eb6d67ee647b9d1aa9442f253e2}{is\+Enabled}} (bool display\+Error=false)
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_m210_1_1_emergency_a8282c33e7103d30584832fb20357e844}\label{class_m210_1_1_emergency_a8282c33e7103d30584832fb20357e844}} 
+static const bool {\bfseries display\+Error} = true
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m210_1_1_emergency_a071e3eb6d67ee647b9d1aa9442f253e2}\label{class_m210_1_1_emergency_a071e3eb6d67ee647b9d1aa9442f253e2}} 
+\index{M210\+::\+Emergency@{M210\+::\+Emergency}!is\+Enabled@{is\+Enabled}}
+\index{is\+Enabled@{is\+Enabled}!M210\+::\+Emergency@{M210\+::\+Emergency}}
+\subsubsection{\texorpdfstring{is\+Enabled()}{isEnabled()}}
+{\footnotesize\ttfamily bool Emergency\+::is\+Enabled (\begin{DoxyParamCaption}\item[{bool}]{display\+Error = {\ttfamily false} }\end{DoxyParamCaption})}
+
+Verify emergency state and display error message on first call (until emergency state is released) 
+\begin{DoxyParams}{Parameters}
+{\em display\+Error} & Force error message to be displayed. Use Emergency\+::display\+Error for a better readability \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if emergency state is set 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_emergency_a44add09d4d5016a54ffb714e468a40ac}\label{class_m210_1_1_emergency_a44add09d4d5016a54ffb714e468a40ac}} 
+\index{M210\+::\+Emergency@{M210\+::\+Emergency}!release@{release}}
+\index{release@{release}!M210\+::\+Emergency@{M210\+::\+Emergency}}
+\subsubsection{\texorpdfstring{release()}{release()}}
+{\footnotesize\ttfamily void Emergency\+::release (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Release emergency state \mbox{\Hypertarget{class_m210_1_1_emergency_aa461736b60192940860a5f71839049b5}\label{class_m210_1_1_emergency_aa461736b60192940860a5f71839049b5}} 
+\index{M210\+::\+Emergency@{M210\+::\+Emergency}!set@{set}}
+\index{set@{set}!M210\+::\+Emergency@{M210\+::\+Emergency}}
+\subsubsection{\texorpdfstring{set()}{set()}}
+{\footnotesize\ttfamily void Emergency\+::set (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Set emergency state 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Aircraft/\mbox{\hyperlink{_emergency_8h}{Emergency.\+h}}\item 
+Aircraft/\mbox{\hyperlink{_emergency_8cpp}{Emergency.\+cpp}}\end{DoxyCompactItemize}

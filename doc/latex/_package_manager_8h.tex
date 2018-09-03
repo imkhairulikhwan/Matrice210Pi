@@ -1,0 +1,29 @@
+\hypertarget{_package_manager_8h}{}\section{Managers/\+Package\+Manager.h File Reference}
+\label{_package_manager_8h}\index{Managers/\+Package\+Manager.\+h@{Managers/\+Package\+Manager.\+h}}
+
+
+This class provides an user friendly interface to manage subscription.  
+
+
+{\ttfamily \#include $<$pthread.\+h$>$}\newline
+{\ttfamily \#include $<$dji\+\_\+vehicle.\+hpp$>$}\newline
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_m210_1_1_package_manager}{M210\+::\+Package\+Manager}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class provides an user friendly interface to manage subscription. 
+
+\begin{DoxyVersion}{Version}
+1.\+0 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+Jul 05 2018 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Jonathan Michel Data Subscription is a paradigm proposed by D\+JI, it offers real-\/time telemetry data transmission from the aircraft to the Onboard S\+DK. User can choose a set of Topics or Subscription data sets, add them to a Subscription package and configure the package to arrive on preferred frequency. There are total of five packages available. Each package has fixed-\/size buffer of 300-\/\+Bytes allowing user to add as many Telemetry Topics per package as desired.
+\end{DoxyAuthor}
+Package\+Manager is a singleton class providing easy use of package A\+PI. When user need a package, subscribe() method return used package\+Id (0 to 5). Subscription errors (no more package available, init or start errror from A\+PI, ...) are handle. 

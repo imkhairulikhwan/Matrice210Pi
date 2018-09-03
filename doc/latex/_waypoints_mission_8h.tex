@@ -1,0 +1,35 @@
+\hypertarget{_waypoints_mission_8h}{}\section{Missions/\+Waypoints\+Mission.h File Reference}
+\label{_waypoints_mission_8h}\index{Missions/\+Waypoints\+Mission.\+h@{Missions/\+Waypoints\+Mission.\+h}}
+
+
+This class allows user to add G\+PS coordinates to a waypoints mission.  
+
+
+{\ttfamily \#include $<$pthread.\+h$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include \char`\"{}dji\+\_\+vehicle.\+hpp\char`\"{}}\newline
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_m210_1_1_waypoint_mission}{M210\+::\+Waypoint\+Mission}}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{_waypoints_mission_8h_a0351e86a69da7f513f59240246a49d09}\label{_waypoints_mission_8h_a0351e86a69da7f513f59240246a49d09}} 
+\#define {\bfseries M\+A\+X\+\_\+\+W\+A\+Y\+P\+O\+I\+N\+TS}~15 /$\ast$$<$! Maximum waypoints list size, D\+JI maximum waypoints number is 99 $\ast$/
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class allows user to add G\+PS coordinates to a waypoints mission. 
+
+\begin{DoxyVersion}{Version}
+1.\+0 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+Jul 26 2018 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Jonathan Michel The goal is to make autonomous flight with a sequence of coordinates that the aircraft will reach. Once the missions played, it can be paused/resumed and stopped. Current implementation use current position of the aircraft as the new point to add to the waypoints mission 
+\end{DoxyAuthor}

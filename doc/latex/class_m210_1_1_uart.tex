@@ -1,0 +1,79 @@
+\hypertarget{class_m210_1_1_uart}{}\section{M210\+:\+:Uart Class Reference}
+\label{class_m210_1_1_uart}\index{M210\+::\+Uart@{M210\+::\+Uart}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_m210_1_1_uart_af1f7108bb9b2519bb0bd6e57990aec07}{Uart}} (const char $\ast$device, uint32\+\_\+t baud\+Rate)
+\item 
+\mbox{\hyperlink{class_m210_1_1_uart_a7160154094413395a23dbaa287dbef3c}{$\sim$\+Uart}} ()
+\item 
+void \mbox{\hyperlink{class_m210_1_1_uart_a7aa2fba14c420024a1e2ec9079684def}{send}} (const uint8\+\_\+t $\ast$buf, size\+\_\+t len) const
+\item 
+bool \mbox{\hyperlink{class_m210_1_1_uart_ad793a587c421c2e8d6bde5d6ddfd95d8}{launch\+Rx\+Thread}} ()
+\item 
+void \mbox{\hyperlink{class_m210_1_1_uart_a294e7c110b8bb09dd7b4fde43ed1fce4}{set\+Flight\+Controller}} (const \mbox{\hyperlink{class_m210_1_1_flight_controller}{Flight\+Controller}} $\ast$flight\+Controller)
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_m210_1_1_uart_af1f7108bb9b2519bb0bd6e57990aec07}\label{class_m210_1_1_uart_af1f7108bb9b2519bb0bd6e57990aec07}} 
+\index{M210\+::\+Uart@{M210\+::\+Uart}!Uart@{Uart}}
+\index{Uart@{Uart}!M210\+::\+Uart@{M210\+::\+Uart}}
+\subsubsection{\texorpdfstring{Uart()}{Uart()}}
+{\footnotesize\ttfamily Uart\+::\+Uart (\begin{DoxyParamCaption}\item[{const char $\ast$}]{device,  }\item[{uint32\+\_\+t}]{baud\+Rate }\end{DoxyParamCaption})}
+
+Create serial device with D\+JI Linux\+Serial\+Device class and initialize it 
+\begin{DoxyParams}{Parameters}
+{\em device} & Linux serial device port \\
+\hline
+{\em baud\+Rate} & Baud rate \mbox{[}Bd\mbox{]} \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m210_1_1_uart_a7160154094413395a23dbaa287dbef3c}\label{class_m210_1_1_uart_a7160154094413395a23dbaa287dbef3c}} 
+\index{M210\+::\+Uart@{M210\+::\+Uart}!````~Uart@{$\sim$\+Uart}}
+\index{````~Uart@{$\sim$\+Uart}!M210\+::\+Uart@{M210\+::\+Uart}}
+\subsubsection{\texorpdfstring{$\sim$\+Uart()}{~Uart()}}
+{\footnotesize\ttfamily Uart\+::$\sim$\+Uart (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Delete serial device 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m210_1_1_uart_ad793a587c421c2e8d6bde5d6ddfd95d8}\label{class_m210_1_1_uart_ad793a587c421c2e8d6bde5d6ddfd95d8}} 
+\index{M210\+::\+Uart@{M210\+::\+Uart}!launch\+Rx\+Thread@{launch\+Rx\+Thread}}
+\index{launch\+Rx\+Thread@{launch\+Rx\+Thread}!M210\+::\+Uart@{M210\+::\+Uart}}
+\subsubsection{\texorpdfstring{launch\+Rx\+Thread()}{launchRxThread()}}
+{\footnotesize\ttfamily bool Uart\+::launch\+Rx\+Thread (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Launch uart rx thread \begin{DoxyReturn}{Returns}
+true if thread creation and launch works, false otherwise 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_uart_a7aa2fba14c420024a1e2ec9079684def}\label{class_m210_1_1_uart_a7aa2fba14c420024a1e2ec9079684def}} 
+\index{M210\+::\+Uart@{M210\+::\+Uart}!send@{send}}
+\index{send@{send}!M210\+::\+Uart@{M210\+::\+Uart}}
+\subsubsection{\texorpdfstring{send()}{send()}}
+{\footnotesize\ttfamily void Uart\+::send (\begin{DoxyParamCaption}\item[{const uint8\+\_\+t $\ast$}]{buf,  }\item[{size\+\_\+t}]{len }\end{DoxyParamCaption}) const}
+
+Send data by uart 
+\begin{DoxyParams}{Parameters}
+{\em buf} & Buffer pointer \\
+\hline
+{\em len} & data length \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m210_1_1_uart_a294e7c110b8bb09dd7b4fde43ed1fce4}\label{class_m210_1_1_uart_a294e7c110b8bb09dd7b4fde43ed1fce4}} 
+\index{M210\+::\+Uart@{M210\+::\+Uart}!set\+Flight\+Controller@{set\+Flight\+Controller}}
+\index{set\+Flight\+Controller@{set\+Flight\+Controller}!M210\+::\+Uart@{M210\+::\+Uart}}
+\subsubsection{\texorpdfstring{set\+Flight\+Controller()}{setFlightController()}}
+{\footnotesize\ttfamily void M210\+::\+Uart\+::set\+Flight\+Controller (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_m210_1_1_flight_controller}{Flight\+Controller}} $\ast$}]{flight\+Controller }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Configure flight controller to use 
+\begin{DoxyParams}{Parameters}
+{\em flight\+Controller} & Flight controller pointer \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Communication/\mbox{\hyperlink{_uart_8h}{Uart.\+h}}\item 
+Communication/\mbox{\hyperlink{_uart_8cpp}{Uart.\+cpp}}\end{DoxyCompactItemize}

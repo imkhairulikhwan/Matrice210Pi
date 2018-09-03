@@ -2,6 +2,7 @@
  *  @version 1.0
  *  @date Jul 26 2018
  *  @author Jonathan Michel
+ *  @brief WaypointsMission.h implementation
  */
 
 #include "WaypointsMission.h"

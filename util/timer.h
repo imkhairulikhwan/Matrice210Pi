@@ -1,4 +1,4 @@
-/*! @file tiemer.h
+/*! @file timer.h
  *  @version 1.0
  *  @date Jul 03 2018
  *  @author Jonathan Michel

@@ -1,0 +1,253 @@
+\hypertarget{class_m210_1_1_flight_controller}{}\section{M210\+:\+:Flight\+Controller Class Reference}
+\label{class_m210_1_1_flight_controller}\index{M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_m210_1_1_flight_controller_a5094a2c6e0bb587cdc9bffabbad11551}{Flight\+Controller}} ()
+\item 
+\mbox{\hyperlink{class_m210_1_1_flight_controller_a9e78eb4ab3bea35b29a031b607a68c12}{$\sim$\+Flight\+Controller}} ()
+\item 
+void \mbox{\hyperlink{class_m210_1_1_flight_controller_ab8249276f7d2079bf8c363d92fec56de}{setup\+Vehicle}} (int argc, char $\ast$$\ast$argv)
+\item 
+void \mbox{\hyperlink{class_m210_1_1_flight_controller_a922010e478d2e6cca4432fd076c8a857}{obtain\+Ctrl\+Authority}} ()
+\item 
+void \mbox{\hyperlink{class_m210_1_1_flight_controller_afb8ae49d6b33d9e45b35b626cb51446a}{launch\+Flight\+Controller\+Thread}} ()
+\item 
+void \mbox{\hyperlink{class_m210_1_1_flight_controller_aa84f9729545c25d95efdf7d5b58fa635}{send\+Data\+To\+M\+S\+DK}} (const uint8\+\_\+t $\ast$data, size\+\_\+t length) const
+\item 
+bool \mbox{\hyperlink{class_m210_1_1_flight_controller_a543d0eeef65856bf15675707cd8fc9c7}{take\+Off}} ()
+\item 
+bool \mbox{\hyperlink{class_m210_1_1_flight_controller_a5ea1c7a5b70af967b0449a945e1758b9}{landing}} ()
+\item 
+void \mbox{\hyperlink{class_m210_1_1_flight_controller_a9d2685ace4ecff840505a37b348c6860}{move\+By\+Position}} (const Vector3f $\ast$offset, float yaw)
+\item 
+void \mbox{\hyperlink{class_m210_1_1_flight_controller_a7468154793bfd7dd6c1d2f19d0744ee1}{move\+By\+Velocity}} (const Vector3f $\ast$velocity, float yaw)
+\item 
+void \mbox{\hyperlink{class_m210_1_1_flight_controller_a3921aba5edb9b26e717fbbace6f837cd}{move\+By\+Position\+Offset}} (const Vector3f $\ast$offset, float yaw, float pos\+Threshold=0.\+2, float yaw\+Threshold=1.\+0)
+\item 
+void \mbox{\hyperlink{class_m210_1_1_flight_controller_a81fc1a9c9495f93ffebab36d4d574ea9}{waypoints\+Mission\+Action}} (unsigned task)
+\item 
+void \mbox{\hyperlink{class_m210_1_1_flight_controller_a60d0858a9cfd91bc362ec8b5b894d3b4}{stop\+Aircraft}} ()
+\item 
+void \mbox{\hyperlink{class_m210_1_1_flight_controller_a58dfd6c7a1777d8a2cd9820b9ce1763a}{emergency\+Stop}} ()
+\item 
+void \mbox{\hyperlink{class_m210_1_1_flight_controller_ae9bee302ab720de3436896e09b5a4d9e}{emergency\+Release}} ()
+\item 
+void \mbox{\hyperlink{class_m210_1_1_flight_controller_a0f1d22f6099140194df9639e04e458bb}{velocity\+And\+Yaw\+Rate\+Ctrl}} (const Vector3f $\ast$velocity, float yaw)
+\item 
+void \mbox{\hyperlink{class_m210_1_1_flight_controller_a664a1699471956c2caa80321dc4f3dfd}{position\+And\+Yaw\+Ctrl}} (const Vector3f $\ast$position, float yaw)
+\item 
+Vehicle $\ast$ \mbox{\hyperlink{class_m210_1_1_flight_controller_a3cb6f75de342d02a8856fff49c20c9d4}{get\+Vehicle}} () const
+\item 
+\mbox{\Hypertarget{class_m210_1_1_flight_controller_a5aa4c8f8c19a7772ef4718887667a38e}\label{class_m210_1_1_flight_controller_a5aa4c8f8c19a7772ef4718887667a38e}} 
+S\+M\+State\+\_\+ {\bfseries get\+S\+M\+State} () const
+\item 
+\mbox{\Hypertarget{class_m210_1_1_flight_controller_ac66650cc3c68c4b319c801bfa38f7efc}\label{class_m210_1_1_flight_controller_ac66650cc3c68c4b319c801bfa38f7efc}} 
+\mbox{\hyperlink{class_m210_1_1_watchdog}{Watchdog}} $\ast$ {\bfseries get\+Watchdog} () const
+\item 
+\mbox{\Hypertarget{class_m210_1_1_flight_controller_aaf7b6cfeb0f5e7bf200ea45feafec3a4}\label{class_m210_1_1_flight_controller_aaf7b6cfeb0f5e7bf200ea45feafec3a4}} 
+void {\bfseries set\+S\+M\+State} (S\+M\+State\+\_\+ mode)
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static bool \mbox{\hyperlink{class_m210_1_1_flight_controller_adc83a3c84c9472f0c2a62c1949cfdbfc}{start\+Global\+Position\+Broadcast}} (Vehicle $\ast$vehicle)
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_m210_1_1_flight_controller_a5094a2c6e0bb587cdc9bffabbad11551}\label{class_m210_1_1_flight_controller_a5094a2c6e0bb587cdc9bffabbad11551}} 
+\index{M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}!Flight\+Controller@{Flight\+Controller}}
+\index{Flight\+Controller@{Flight\+Controller}!M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}}
+\subsubsection{\texorpdfstring{Flight\+Controller()}{FlightController()}}
+{\footnotesize\ttfamily Flight\+Controller\+::\+Flight\+Controller (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Initialize flight controller and create mission \mbox{\Hypertarget{class_m210_1_1_flight_controller_a9e78eb4ab3bea35b29a031b607a68c12}\label{class_m210_1_1_flight_controller_a9e78eb4ab3bea35b29a031b607a68c12}} 
+\index{M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}!````~Flight\+Controller@{$\sim$\+Flight\+Controller}}
+\index{````~Flight\+Controller@{$\sim$\+Flight\+Controller}!M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}}
+\subsubsection{\texorpdfstring{$\sim$\+Flight\+Controller()}{~FlightController()}}
+{\footnotesize\ttfamily Flight\+Controller\+::$\sim$\+Flight\+Controller (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Delete missions and flight controller attributes 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m210_1_1_flight_controller_ae9bee302ab720de3436896e09b5a4d9e}\label{class_m210_1_1_flight_controller_ae9bee302ab720de3436896e09b5a4d9e}} 
+\index{M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}!emergency\+Release@{emergency\+Release}}
+\index{emergency\+Release@{emergency\+Release}!M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}}
+\subsubsection{\texorpdfstring{emergency\+Release()}{emergencyRelease()}}
+{\footnotesize\ttfamily void Flight\+Controller\+::emergency\+Release (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Reset flight controller emergency state \mbox{\Hypertarget{class_m210_1_1_flight_controller_a58dfd6c7a1777d8a2cd9820b9ce1763a}\label{class_m210_1_1_flight_controller_a58dfd6c7a1777d8a2cd9820b9ce1763a}} 
+\index{M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}!emergency\+Stop@{emergency\+Stop}}
+\index{emergency\+Stop@{emergency\+Stop}!M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}}
+\subsubsection{\texorpdfstring{emergency\+Stop()}{emergencyStop()}}
+{\footnotesize\ttfamily void Flight\+Controller\+::emergency\+Stop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Set flight controller emergency state and stop aircraft \mbox{\Hypertarget{class_m210_1_1_flight_controller_a3cb6f75de342d02a8856fff49c20c9d4}\label{class_m210_1_1_flight_controller_a3cb6f75de342d02a8856fff49c20c9d4}} 
+\index{M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}!get\+Vehicle@{get\+Vehicle}}
+\index{get\+Vehicle@{get\+Vehicle}!M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}}
+\subsubsection{\texorpdfstring{get\+Vehicle()}{getVehicle()}}
+{\footnotesize\ttfamily Vehicle$\ast$ M210\+::\+Flight\+Controller\+::get\+Vehicle (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Getters and setters functions \mbox{\Hypertarget{class_m210_1_1_flight_controller_a5ea1c7a5b70af967b0449a945e1758b9}\label{class_m210_1_1_flight_controller_a5ea1c7a5b70af967b0449a945e1758b9}} 
+\index{M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}!landing@{landing}}
+\index{landing@{landing}!M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}}
+\subsubsection{\texorpdfstring{landing()}{landing()}}
+{\footnotesize\ttfamily bool Flight\+Controller\+::landing (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Monitored landing blocking call. \begin{DoxyReturn}{Returns}
+True is landing success 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_flight_controller_afb8ae49d6b33d9e45b35b626cb51446a}\label{class_m210_1_1_flight_controller_afb8ae49d6b33d9e45b35b626cb51446a}} 
+\index{M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}!launch\+Flight\+Controller\+Thread@{launch\+Flight\+Controller\+Thread}}
+\index{launch\+Flight\+Controller\+Thread@{launch\+Flight\+Controller\+Thread}!M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}}
+\subsubsection{\texorpdfstring{launch\+Flight\+Controller\+Thread()}{launchFlightControllerThread()}}
+{\footnotesize\ttfamily void Flight\+Controller\+::launch\+Flight\+Controller\+Thread (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Launch flight controller thread \mbox{\Hypertarget{class_m210_1_1_flight_controller_a9d2685ace4ecff840505a37b348c6860}\label{class_m210_1_1_flight_controller_a9d2685ace4ecff840505a37b348c6860}} 
+\index{M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}!move\+By\+Position@{move\+By\+Position}}
+\index{move\+By\+Position@{move\+By\+Position}!M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}}
+\subsubsection{\texorpdfstring{move\+By\+Position()}{moveByPosition()}}
+{\footnotesize\ttfamily void Flight\+Controller\+::move\+By\+Position (\begin{DoxyParamCaption}\item[{const Vector3f $\ast$}]{offset,  }\item[{float}]{yaw }\end{DoxyParamCaption})}
+
+Control the position and yaw angle of the vehicle. Here to try D\+JI S\+DK \mbox{\hyperlink{class_m210_1_1_flight_controller_a664a1699471956c2caa80321dc4f3dfd}{position\+And\+Yaw\+Ctrl()}} method To move aircraft of a desired offset please use \mbox{\hyperlink{class_m210_1_1_flight_controller_a3921aba5edb9b26e717fbbace6f837cd}{move\+By\+Position\+Offset()}} 
+\begin{DoxyParams}{Parameters}
+{\em offset} & Relative offset vector to move \mbox{[}m\mbox{]} Vector is relative to the ground x face to north, y face to east, z face to sky \\
+\hline
+{\em yaw} & Absolute yaw angle to set \mbox{[}deg\} \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m210_1_1_flight_controller_a3921aba5edb9b26e717fbbace6f837cd}\label{class_m210_1_1_flight_controller_a3921aba5edb9b26e717fbbace6f837cd}} 
+\index{M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}!move\+By\+Position\+Offset@{move\+By\+Position\+Offset}}
+\index{move\+By\+Position\+Offset@{move\+By\+Position\+Offset}!M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}}
+\subsubsection{\texorpdfstring{move\+By\+Position\+Offset()}{moveByPositionOffset()}}
+{\footnotesize\ttfamily void Flight\+Controller\+::move\+By\+Position\+Offset (\begin{DoxyParamCaption}\item[{const Vector3f $\ast$}]{offset,  }\item[{float}]{yaw,  }\item[{float}]{pos\+Threshold = {\ttfamily 0.2},  }\item[{float}]{yaw\+Threshold = {\ttfamily 1.0} }\end{DoxyParamCaption})}
+
+Position Control. Allows user to set an offset from current location. The aircraft will move to that position and stay there. 
+\begin{DoxyParams}{Parameters}
+{\em offset} & Relative offset vector to move \mbox{[}m\mbox{]} Vector is relative to the ground x face to north, y face to east, z face to sky \\
+\hline
+{\em yaw} & Absolute yaw angle to set \mbox{[}deg\mbox{]} \\
+\hline
+{\em pos\+Threshold} & Position threshold used by mission to consider position as reached \mbox{[}m\mbox{]} \\
+\hline
+{\em yaw\+Threshold} & Angle threshold used by mission to consider angle as reached \mbox{[}deg\mbox{]} \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m210_1_1_flight_controller_a7468154793bfd7dd6c1d2f19d0744ee1}\label{class_m210_1_1_flight_controller_a7468154793bfd7dd6c1d2f19d0744ee1}} 
+\index{M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}!move\+By\+Velocity@{move\+By\+Velocity}}
+\index{move\+By\+Velocity@{move\+By\+Velocity}!M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}}
+\subsubsection{\texorpdfstring{move\+By\+Velocity()}{moveByVelocity()}}
+{\footnotesize\ttfamily void Flight\+Controller\+::move\+By\+Velocity (\begin{DoxyParamCaption}\item[{const Vector3f $\ast$}]{velocity,  }\item[{float}]{yaw }\end{DoxyParamCaption})}
+
+Velocity Control. Allows user to set a velocity vector. The aircraft will move as described by vector until \mbox{\hyperlink{class_m210_1_1_flight_controller_a60d0858a9cfd91bc362ec8b5b894d3b4}{stop\+Aircraft()}} is called. 
+\begin{DoxyParams}{Parameters}
+{\em velocity} & Absolute velocity vector to set \mbox{[}m/s\mbox{]} Vector is relative to the ground x face to north, y face to east, z face to sky \\
+\hline
+{\em yaw} & Absolute yaw rate to set \mbox{[}deg/s\mbox{]} \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m210_1_1_flight_controller_a922010e478d2e6cca4432fd076c8a857}\label{class_m210_1_1_flight_controller_a922010e478d2e6cca4432fd076c8a857}} 
+\index{M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}!obtain\+Ctrl\+Authority@{obtain\+Ctrl\+Authority}}
+\index{obtain\+Ctrl\+Authority@{obtain\+Ctrl\+Authority}!M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}}
+\subsubsection{\texorpdfstring{obtain\+Ctrl\+Authority()}{obtainCtrlAuthority()}}
+{\footnotesize\ttfamily void Flight\+Controller\+::obtain\+Ctrl\+Authority (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Blocking call to obtain control authority \mbox{\Hypertarget{class_m210_1_1_flight_controller_a664a1699471956c2caa80321dc4f3dfd}\label{class_m210_1_1_flight_controller_a664a1699471956c2caa80321dc4f3dfd}} 
+\index{M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}!position\+And\+Yaw\+Ctrl@{position\+And\+Yaw\+Ctrl}}
+\index{position\+And\+Yaw\+Ctrl@{position\+And\+Yaw\+Ctrl}!M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}}
+\subsubsection{\texorpdfstring{position\+And\+Yaw\+Ctrl()}{positionAndYawCtrl()}}
+{\footnotesize\ttfamily void Flight\+Controller\+::position\+And\+Yaw\+Ctrl (\begin{DoxyParamCaption}\item[{const Vector3f $\ast$}]{position,  }\item[{float}]{yaw }\end{DoxyParamCaption})}
+
+Control the position and yaw angle of the vehicle. On-\/board S\+DK method call with safety verification (emergency and watchdog states) This method must be used by all missions instead of direct call to vehicle method 
+\begin{DoxyParams}{Parameters}
+{\em position} & Relative position vector to move \mbox{[}m\mbox{]} Vector is relative to the ground x face to north, y face to east, z face to sky \\
+\hline
+{\em yaw} & Absolute yaw angle to set \mbox{[}deg\} \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m210_1_1_flight_controller_aa84f9729545c25d95efdf7d5b58fa635}\label{class_m210_1_1_flight_controller_aa84f9729545c25d95efdf7d5b58fa635}} 
+\index{M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}!send\+Data\+To\+M\+S\+DK@{send\+Data\+To\+M\+S\+DK}}
+\index{send\+Data\+To\+M\+S\+DK@{send\+Data\+To\+M\+S\+DK}!M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}}
+\subsubsection{\texorpdfstring{send\+Data\+To\+M\+S\+D\+K()}{sendDataToMSDK()}}
+{\footnotesize\ttfamily void Flight\+Controller\+::send\+Data\+To\+M\+S\+DK (\begin{DoxyParamCaption}\item[{const uint8\+\_\+t $\ast$}]{data,  }\item[{size\+\_\+t}]{length }\end{DoxyParamCaption}) const}
+
+Send data to mobile S\+DK 
+\begin{DoxyParams}{Parameters}
+{\em data} & Pointer to data to send \\
+\hline
+{\em length} & Length of data to send \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m210_1_1_flight_controller_ab8249276f7d2079bf8c363d92fec56de}\label{class_m210_1_1_flight_controller_ab8249276f7d2079bf8c363d92fec56de}} 
+\index{M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}!setup\+Vehicle@{setup\+Vehicle}}
+\index{setup\+Vehicle@{setup\+Vehicle}!M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}}
+\subsubsection{\texorpdfstring{setup\+Vehicle()}{setupVehicle()}}
+{\footnotesize\ttfamily void Flight\+Controller\+::setup\+Vehicle (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$$\ast$}]{argv }\end{DoxyParamCaption})}
+
+Configure linux environment, get vehicle and obtain control authority 
+\begin{DoxyParams}{Parameters}
+{\em argc} & main parameter \\
+\hline
+{\em argv} & main parameter \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m210_1_1_flight_controller_adc83a3c84c9472f0c2a62c1949cfdbfc}\label{class_m210_1_1_flight_controller_adc83a3c84c9472f0c2a62c1949cfdbfc}} 
+\index{M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}!start\+Global\+Position\+Broadcast@{start\+Global\+Position\+Broadcast}}
+\index{start\+Global\+Position\+Broadcast@{start\+Global\+Position\+Broadcast}!M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}}
+\subsubsection{\texorpdfstring{start\+Global\+Position\+Broadcast()}{startGlobalPositionBroadcast()}}
+{\footnotesize\ttfamily bool Flight\+Controller\+::start\+Global\+Position\+Broadcast (\begin{DoxyParamCaption}\item[{Vehicle $\ast$}]{vehicle }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Start broadcast send of position from aircaft 
+\begin{DoxyParams}{Parameters}
+{\em vehicle} & Vehicle concerned \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if broadcast successfully started 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_flight_controller_a60d0858a9cfd91bc362ec8b5b894d3b4}\label{class_m210_1_1_flight_controller_a60d0858a9cfd91bc362ec8b5b894d3b4}} 
+\index{M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}!stop\+Aircraft@{stop\+Aircraft}}
+\index{stop\+Aircraft@{stop\+Aircraft}!M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}}
+\subsubsection{\texorpdfstring{stop\+Aircraft()}{stopAircraft()}}
+{\footnotesize\ttfamily void Flight\+Controller\+::stop\+Aircraft (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Stop aircraft Stop flight controller state machine and stop all current missions \mbox{\Hypertarget{class_m210_1_1_flight_controller_a543d0eeef65856bf15675707cd8fc9c7}\label{class_m210_1_1_flight_controller_a543d0eeef65856bf15675707cd8fc9c7}} 
+\index{M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}!take\+Off@{take\+Off}}
+\index{take\+Off@{take\+Off}!M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}}
+\subsubsection{\texorpdfstring{take\+Off()}{takeOff()}}
+{\footnotesize\ttfamily bool Flight\+Controller\+::take\+Off (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Monitored take-\/off blocking call \begin{DoxyReturn}{Returns}
+True if take-\/off success 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_flight_controller_a0f1d22f6099140194df9639e04e458bb}\label{class_m210_1_1_flight_controller_a0f1d22f6099140194df9639e04e458bb}} 
+\index{M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}!velocity\+And\+Yaw\+Rate\+Ctrl@{velocity\+And\+Yaw\+Rate\+Ctrl}}
+\index{velocity\+And\+Yaw\+Rate\+Ctrl@{velocity\+And\+Yaw\+Rate\+Ctrl}!M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}}
+\subsubsection{\texorpdfstring{velocity\+And\+Yaw\+Rate\+Ctrl()}{velocityAndYawRateCtrl()}}
+{\footnotesize\ttfamily void Flight\+Controller\+::velocity\+And\+Yaw\+Rate\+Ctrl (\begin{DoxyParamCaption}\item[{const Vector3f $\ast$}]{velocity,  }\item[{float}]{yaw }\end{DoxyParamCaption})}
+
+Control the velocity and yaw rate of the aircraft On-\/board S\+DK method call with safety verification (emergency and watchdog states) This method must be used by all missions instead of direct call to vehicle method 
+\begin{DoxyParams}{Parameters}
+{\em velocity} & Absolute velocity vector to set \mbox{[}m/s\mbox{]} Vector is relative to the ground x face to north, y face to east, z face to sky \\
+\hline
+{\em yaw} & Absolute yaw rate to set \mbox{[}deg/s\mbox{]} \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m210_1_1_flight_controller_a81fc1a9c9495f93ffebab36d4d574ea9}\label{class_m210_1_1_flight_controller_a81fc1a9c9495f93ffebab36d4d574ea9}} 
+\index{M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}!waypoints\+Mission\+Action@{waypoints\+Mission\+Action}}
+\index{waypoints\+Mission\+Action@{waypoints\+Mission\+Action}!M210\+::\+Flight\+Controller@{M210\+::\+Flight\+Controller}}
+\subsubsection{\texorpdfstring{waypoints\+Mission\+Action()}{waypointsMissionAction()}}
+{\footnotesize\ttfamily void Flight\+Controller\+::waypoints\+Mission\+Action (\begin{DoxyParamCaption}\item[{unsigned}]{task }\end{DoxyParamCaption})}
+
+Modify action flow of the waypoints mission 
+\begin{DoxyParams}{Parameters}
+{\em task} & Task to do, value of \mbox{\hyperlink{class_m210_1_1_action_a0bb36f0932c930e1193428e3c3c98046}{Action\+::\+Mission\+Action}} (\mbox{\hyperlink{_action_8h}{Action.\+h}}) structure \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Aircraft/\mbox{\hyperlink{_flight_controller_8h}{Flight\+Controller.\+h}}\item 
+Aircraft/\mbox{\hyperlink{_flight_controller_8cpp}{Flight\+Controller.\+cpp}}\end{DoxyCompactItemize}

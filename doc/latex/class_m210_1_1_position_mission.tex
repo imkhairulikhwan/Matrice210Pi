@@ -1,0 +1,40 @@
+\hypertarget{class_m210_1_1_position_mission}{}\section{M210\+:\+:Position\+Mission Class Reference}
+\label{class_m210_1_1_position_mission}\index{M210\+::\+Position\+Mission@{M210\+::\+Position\+Mission}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_m210_1_1_position_mission_a3b3a2c4bb91fb6e01b73b0969a79a39a}\label{class_m210_1_1_position_mission_a3b3a2c4bb91fb6e01b73b0969a79a39a}} 
+{\bfseries Position\+Mission} (\mbox{\hyperlink{class_m210_1_1_flight_controller}{Flight\+Controller}} $\ast$flight\+Controller)
+\item 
+void \mbox{\hyperlink{class_m210_1_1_position_mission_a683a572a71e0ace4b63748be39e2d6e8}{move}} (const Vector3f $\ast$position, float yaw)
+\item 
+void \mbox{\hyperlink{class_m210_1_1_position_mission_ab2f7cf5caff61d1f73df7253bcc097c6}{update}} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m210_1_1_position_mission_a683a572a71e0ace4b63748be39e2d6e8}\label{class_m210_1_1_position_mission_a683a572a71e0ace4b63748be39e2d6e8}} 
+\index{M210\+::\+Position\+Mission@{M210\+::\+Position\+Mission}!move@{move}}
+\index{move@{move}!M210\+::\+Position\+Mission@{M210\+::\+Position\+Mission}}
+\subsubsection{\texorpdfstring{move()}{move()}}
+{\footnotesize\ttfamily void Position\+Mission\+::move (\begin{DoxyParamCaption}\item[{const Vector3f $\ast$}]{position,  }\item[{float}]{yaw }\end{DoxyParamCaption})}
+
+Allows user to move aircraft in position and yaw mode 
+\begin{DoxyParams}{Parameters}
+{\em position} & Position relative values to move in X and Y direction \mbox{[}m\mbox{]} x face to north, y face to east Z value is absolute altitude from take-\/off point \\
+\hline
+{\em yaw} & Absolute yaw angle to set \mbox{[}deg\mbox{]} \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m210_1_1_position_mission_ab2f7cf5caff61d1f73df7253bcc097c6}\label{class_m210_1_1_position_mission_ab2f7cf5caff61d1f73df7253bcc097c6}} 
+\index{M210\+::\+Position\+Mission@{M210\+::\+Position\+Mission}!update@{update}}
+\index{update@{update}!M210\+::\+Position\+Mission@{M210\+::\+Position\+Mission}}
+\subsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily void Position\+Mission\+::update (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Has to be called continuously 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Missions/\mbox{\hyperlink{_position_mission_8h}{Position\+Mission.\+h}}\item 
+Missions/\mbox{\hyperlink{_position_mission_8cpp}{Position\+Mission.\+cpp}}\end{DoxyCompactItemize}

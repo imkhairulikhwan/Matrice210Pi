@@ -25,7 +25,7 @@ project(matrice210)
 add_definitions(-DCMAKE_SH="CMAKE_SH-NOTFOUND")
 
 if(NOT ONBOARDSDK_SOURCE)
-    set(ONBOARDSDK_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/../../Onboard-SDK/osdk-core")
+    set(ONBOARDSDK_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/../Onboard-SDK/osdk-core")
 endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread -lrt -g -O0")

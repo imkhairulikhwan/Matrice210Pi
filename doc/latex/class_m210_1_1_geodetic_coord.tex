@@ -1,0 +1,231 @@
+\hypertarget{class_m210_1_1_geodetic_coord}{}\section{M210\+:\+:Geodetic\+Coord Class Reference}
+\label{class_m210_1_1_geodetic_coord}\index{M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_m210_1_1_geodetic_coord_aa2a09cf073856b5f4411926ee1e8ddbc}\label{class_m210_1_1_geodetic_coord_aa2a09cf073856b5f4411926ee1e8ddbc}} 
+{\bfseries Geodetic\+Coord} (double latitude, double longitude)
+\item 
+void \mbox{\hyperlink{class_m210_1_1_geodetic_coord_a5786ede63ff5e1ce58f56f76c1f183c1}{set\+From\+Rad}} (double lat, double lon)
+\item 
+void \mbox{\hyperlink{class_m210_1_1_geodetic_coord_a701bb7be9dcf1dc15e0bb3563e4f5470}{set\+From\+Deg}} (double lat, double lon)
+\item 
+void \mbox{\hyperlink{class_m210_1_1_geodetic_coord_a90974b429e6d1b7392998d56e934199c}{set\+From\+Dms}} (\mbox{\hyperlink{struct_m210_1_1_dms}{Dms}} $\ast$lat, \mbox{\hyperlink{struct_m210_1_1_dms}{Dms}} $\ast$lon)
+\item 
+void \mbox{\hyperlink{class_m210_1_1_geodetic_coord_aaa31d62bc5a256454057f0beef807e30}{set}} (\mbox{\hyperlink{class_m210_1_1_geodetic_coord}{Geodetic\+Coord}} \&p)
+\item 
+void \mbox{\hyperlink{class_m210_1_1_geodetic_coord_a91f14ba9099dba8ea3b6044d74663525}{dms}} (\mbox{\hyperlink{struct_m210_1_1_dms}{Dms}} \&lat, \mbox{\hyperlink{struct_m210_1_1_dms}{Dms}} \&lon) const
+\item 
+\mbox{\hyperlink{struct_m210_1_1_dms}{Dms}} \mbox{\hyperlink{class_m210_1_1_geodetic_coord_aed72a7b5422dbcdfe84a3168364cc4c0}{longitude\+Dms}} () const
+\item 
+\mbox{\hyperlink{struct_m210_1_1_dms}{Dms}} \mbox{\hyperlink{class_m210_1_1_geodetic_coord_ac55715a3e4b46492ec8c2fe497bcd1c0}{latitude\+Dms}} () const
+\item 
+double \mbox{\hyperlink{class_m210_1_1_geodetic_coord_a8ba9a63a7d067d52c9745ce6d20c7ec8}{longitude\+Rad}} () const
+\item 
+double \mbox{\hyperlink{class_m210_1_1_geodetic_coord_aaeb0aa298f82f3c8c122be133f2cedf3}{latitude\+Rad}} () const
+\item 
+double \mbox{\hyperlink{class_m210_1_1_geodetic_coord_a015d828931c1e3bb05de39bdbe415af9}{longitude\+Deg}} () const
+\item 
+double \mbox{\hyperlink{class_m210_1_1_geodetic_coord_ad5ade40ea0085e303396ffaec259aec7}{latitude\+Deg}} () const
+\item 
+\mbox{\hyperlink{class_m210_1_1_geodetic_coord}{Geodetic\+Coord}} \mbox{\hyperlink{class_m210_1_1_geodetic_coord_a763b712e1d458ba213f03bc4f45c1862}{operator+}} (const \mbox{\hyperlink{struct_vector2}{Vector2}} \&vec)
+\item 
+\mbox{\hyperlink{class_m210_1_1_geodetic_coord}{Geodetic\+Coord}} \mbox{\hyperlink{class_m210_1_1_geodetic_coord_ab3e11a59306f739faedd8be52472d2c4}{operator-\/}} (const \mbox{\hyperlink{struct_vector2}{Vector2}} \&vec)
+\item 
+\mbox{\hyperlink{class_m210_1_1_geodetic_coord}{Geodetic\+Coord}} \mbox{\hyperlink{class_m210_1_1_geodetic_coord_acf1d0b551179adc795b70a6d17d16fe2}{operator+=}} (const \mbox{\hyperlink{struct_vector2}{Vector2}} \&vec)
+\item 
+\mbox{\hyperlink{class_m210_1_1_geodetic_coord}{Geodetic\+Coord}} \mbox{\hyperlink{class_m210_1_1_geodetic_coord_ab73b337cbae14719e288ad88dcfdefd4}{operator-\/=}} (const \mbox{\hyperlink{struct_vector2}{Vector2}} \&vec)
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{class_m210_1_1_geodetic_coord_ab3ec669f7868af7901701dc6a615147e}{unit\+Test}} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m210_1_1_geodetic_coord_a91f14ba9099dba8ea3b6044d74663525}\label{class_m210_1_1_geodetic_coord_a91f14ba9099dba8ea3b6044d74663525}} 
+\index{M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}!dms@{dms}}
+\index{dms@{dms}!M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}}
+\subsubsection{\texorpdfstring{dms()}{dms()}}
+{\footnotesize\ttfamily void Geodetic\+Coord\+::dms (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_m210_1_1_dms}{Dms}} \&}]{lat,  }\item[{\mbox{\hyperlink{struct_m210_1_1_dms}{Dms}} \&}]{lon }\end{DoxyParamCaption}) const}
+
+Get current position 
+\begin{DoxyParams}{Parameters}
+{\em lat} & \mbox{\hyperlink{struct_m210_1_1_dms}{Dms}} structure to store latitude \\
+\hline
+{\em lon} & \mbox{\hyperlink{struct_m210_1_1_dms}{Dms}} structure to store longitude \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m210_1_1_geodetic_coord_ad5ade40ea0085e303396ffaec259aec7}\label{class_m210_1_1_geodetic_coord_ad5ade40ea0085e303396ffaec259aec7}} 
+\index{M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}!latitude\+Deg@{latitude\+Deg}}
+\index{latitude\+Deg@{latitude\+Deg}!M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}}
+\subsubsection{\texorpdfstring{latitude\+Deg()}{latitudeDeg()}}
+{\footnotesize\ttfamily double Geodetic\+Coord\+::latitude\+Deg (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+Get current latitude \begin{DoxyReturn}{Returns}
+Latitude \mbox{[}deg\mbox{]} 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_geodetic_coord_ac55715a3e4b46492ec8c2fe497bcd1c0}\label{class_m210_1_1_geodetic_coord_ac55715a3e4b46492ec8c2fe497bcd1c0}} 
+\index{M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}!latitude\+Dms@{latitude\+Dms}}
+\index{latitude\+Dms@{latitude\+Dms}!M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}}
+\subsubsection{\texorpdfstring{latitude\+Dms()}{latitudeDms()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_m210_1_1_dms}{Dms}} Geodetic\+Coord\+::latitude\+Dms (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+Get current latitude \begin{DoxyReturn}{Returns}
+Latitude \mbox{[}\mbox{\hyperlink{struct_m210_1_1_dms}{Dms}}\} 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_geodetic_coord_aaeb0aa298f82f3c8c122be133f2cedf3}\label{class_m210_1_1_geodetic_coord_aaeb0aa298f82f3c8c122be133f2cedf3}} 
+\index{M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}!latitude\+Rad@{latitude\+Rad}}
+\index{latitude\+Rad@{latitude\+Rad}!M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}}
+\subsubsection{\texorpdfstring{latitude\+Rad()}{latitudeRad()}}
+{\footnotesize\ttfamily double Geodetic\+Coord\+::latitude\+Rad (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+Get current latitude \begin{DoxyReturn}{Returns}
+Latitude \mbox{[}rad\mbox{]} 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_geodetic_coord_a015d828931c1e3bb05de39bdbe415af9}\label{class_m210_1_1_geodetic_coord_a015d828931c1e3bb05de39bdbe415af9}} 
+\index{M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}!longitude\+Deg@{longitude\+Deg}}
+\index{longitude\+Deg@{longitude\+Deg}!M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}}
+\subsubsection{\texorpdfstring{longitude\+Deg()}{longitudeDeg()}}
+{\footnotesize\ttfamily double Geodetic\+Coord\+::longitude\+Deg (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+Get current longitude \begin{DoxyReturn}{Returns}
+Longitude \mbox{[}deg\mbox{]} 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_geodetic_coord_aed72a7b5422dbcdfe84a3168364cc4c0}\label{class_m210_1_1_geodetic_coord_aed72a7b5422dbcdfe84a3168364cc4c0}} 
+\index{M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}!longitude\+Dms@{longitude\+Dms}}
+\index{longitude\+Dms@{longitude\+Dms}!M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}}
+\subsubsection{\texorpdfstring{longitude\+Dms()}{longitudeDms()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_m210_1_1_dms}{Dms}} Geodetic\+Coord\+::longitude\+Dms (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+Get current longitude \begin{DoxyReturn}{Returns}
+Longitude \mbox{[}\mbox{\hyperlink{struct_m210_1_1_dms}{Dms}}\mbox{]} 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_geodetic_coord_a8ba9a63a7d067d52c9745ce6d20c7ec8}\label{class_m210_1_1_geodetic_coord_a8ba9a63a7d067d52c9745ce6d20c7ec8}} 
+\index{M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}!longitude\+Rad@{longitude\+Rad}}
+\index{longitude\+Rad@{longitude\+Rad}!M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}}
+\subsubsection{\texorpdfstring{longitude\+Rad()}{longitudeRad()}}
+{\footnotesize\ttfamily double Geodetic\+Coord\+::longitude\+Rad (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+Get current longitude \begin{DoxyReturn}{Returns}
+Longitude \mbox{[}rad\mbox{]} 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_geodetic_coord_a763b712e1d458ba213f03bc4f45c1862}\label{class_m210_1_1_geodetic_coord_a763b712e1d458ba213f03bc4f45c1862}} 
+\index{M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}!operator+@{operator+}}
+\index{operator+@{operator+}!M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}}
+\subsubsection{\texorpdfstring{operator+()}{operator+()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_m210_1_1_geodetic_coord}{Geodetic\+Coord}} Geodetic\+Coord\+::operator+ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_vector2}{Vector2}} \&}]{vec }\end{DoxyParamCaption})}
+
+Add a N\+ED vector to a geodetic position 
+\begin{DoxyParams}{Parameters}
+{\em vec} & Vector to add \mbox{[}m\mbox{]} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Geodetic coordinates of the new point 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_geodetic_coord_acf1d0b551179adc795b70a6d17d16fe2}\label{class_m210_1_1_geodetic_coord_acf1d0b551179adc795b70a6d17d16fe2}} 
+\index{M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}!operator+=@{operator+=}}
+\index{operator+=@{operator+=}!M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}}
+\subsubsection{\texorpdfstring{operator+=()}{operator+=()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_m210_1_1_geodetic_coord}{Geodetic\+Coord}} Geodetic\+Coord\+::operator+= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_vector2}{Vector2}} \&}]{vec }\end{DoxyParamCaption})}
+
+Add a N\+ED vector to the current geodetic position 
+\begin{DoxyParams}{Parameters}
+{\em vec} & Vector to add \mbox{[}m\mbox{]} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Current geodetic coordinates object 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_geodetic_coord_ab3e11a59306f739faedd8be52472d2c4}\label{class_m210_1_1_geodetic_coord_ab3e11a59306f739faedd8be52472d2c4}} 
+\index{M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}!operator-\/@{operator-\/}}
+\index{operator-\/@{operator-\/}!M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}}
+\subsubsection{\texorpdfstring{operator-\/()}{operator-()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_m210_1_1_geodetic_coord}{Geodetic\+Coord}} Geodetic\+Coord\+::operator-\/ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_vector2}{Vector2}} \&}]{vec }\end{DoxyParamCaption})}
+
+Subtract a N\+ED vector to a geodetic position 
+\begin{DoxyParams}{Parameters}
+{\em vec} & Vector to Subtract \mbox{[}m\mbox{]} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Geodetic coordinates of the new point 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_geodetic_coord_ab73b337cbae14719e288ad88dcfdefd4}\label{class_m210_1_1_geodetic_coord_ab73b337cbae14719e288ad88dcfdefd4}} 
+\index{M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}!operator-\/=@{operator-\/=}}
+\index{operator-\/=@{operator-\/=}!M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}}
+\subsubsection{\texorpdfstring{operator-\/=()}{operator-=()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_m210_1_1_geodetic_coord}{Geodetic\+Coord}} Geodetic\+Coord\+::operator-\/= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_vector2}{Vector2}} \&}]{vec }\end{DoxyParamCaption})}
+
+Subtract a N\+ED vector to the current geodetic position 
+\begin{DoxyParams}{Parameters}
+{\em vec} & Vector to Subtract \mbox{[}m\mbox{]} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Current geodetic coordinates object 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_geodetic_coord_aaa31d62bc5a256454057f0beef807e30}\label{class_m210_1_1_geodetic_coord_aaa31d62bc5a256454057f0beef807e30}} 
+\index{M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}!set@{set}}
+\index{set@{set}!M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}}
+\subsubsection{\texorpdfstring{set()}{set()}}
+{\footnotesize\ttfamily void Geodetic\+Coord\+::set (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_m210_1_1_geodetic_coord}{Geodetic\+Coord}} \&}]{p }\end{DoxyParamCaption})}
+
+Set current position from an other \mbox{\hyperlink{class_m210_1_1_geodetic_coord}{Geodetic\+Coord}} object 
+\begin{DoxyParams}{Parameters}
+{\em p} & Object whose position has to be copied \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m210_1_1_geodetic_coord_a701bb7be9dcf1dc15e0bb3563e4f5470}\label{class_m210_1_1_geodetic_coord_a701bb7be9dcf1dc15e0bb3563e4f5470}} 
+\index{M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}!set\+From\+Deg@{set\+From\+Deg}}
+\index{set\+From\+Deg@{set\+From\+Deg}!M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}}
+\subsubsection{\texorpdfstring{set\+From\+Deg()}{setFromDeg()}}
+{\footnotesize\ttfamily void Geodetic\+Coord\+::set\+From\+Deg (\begin{DoxyParamCaption}\item[{double}]{lat,  }\item[{double}]{lon }\end{DoxyParamCaption})}
+
+Set current position 
+\begin{DoxyParams}{Parameters}
+{\em lat} & Latitude \mbox{[}deg\mbox{]} \\
+\hline
+{\em lon} & Longitude \mbox{[}deg\mbox{]} \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m210_1_1_geodetic_coord_a90974b429e6d1b7392998d56e934199c}\label{class_m210_1_1_geodetic_coord_a90974b429e6d1b7392998d56e934199c}} 
+\index{M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}!set\+From\+Dms@{set\+From\+Dms}}
+\index{set\+From\+Dms@{set\+From\+Dms}!M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}}
+\subsubsection{\texorpdfstring{set\+From\+Dms()}{setFromDms()}}
+{\footnotesize\ttfamily void Geodetic\+Coord\+::set\+From\+Dms (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_m210_1_1_dms}{Dms}} $\ast$}]{lat,  }\item[{\mbox{\hyperlink{struct_m210_1_1_dms}{Dms}} $\ast$}]{lon }\end{DoxyParamCaption})}
+
+Set current position 
+\begin{DoxyParams}{Parameters}
+{\em lat} & Latitude \mbox{[}\mbox{\hyperlink{struct_m210_1_1_dms}{Dms}}\mbox{]} \\
+\hline
+{\em lon} & Longitude \mbox{[}\mbox{\hyperlink{struct_m210_1_1_dms}{Dms}}\mbox{]} \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m210_1_1_geodetic_coord_a5786ede63ff5e1ce58f56f76c1f183c1}\label{class_m210_1_1_geodetic_coord_a5786ede63ff5e1ce58f56f76c1f183c1}} 
+\index{M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}!set\+From\+Rad@{set\+From\+Rad}}
+\index{set\+From\+Rad@{set\+From\+Rad}!M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}}
+\subsubsection{\texorpdfstring{set\+From\+Rad()}{setFromRad()}}
+{\footnotesize\ttfamily void Geodetic\+Coord\+::set\+From\+Rad (\begin{DoxyParamCaption}\item[{double}]{lat,  }\item[{double}]{lon }\end{DoxyParamCaption})}
+
+Set current position 
+\begin{DoxyParams}{Parameters}
+{\em lat} & Latitude \mbox{[}rad\mbox{]} \\
+\hline
+{\em lon} & Longitude \mbox{[}rad\mbox{]} \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m210_1_1_geodetic_coord_ab3ec669f7868af7901701dc6a615147e}\label{class_m210_1_1_geodetic_coord_ab3ec669f7868af7901701dc6a615147e}} 
+\index{M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}!unit\+Test@{unit\+Test}}
+\index{unit\+Test@{unit\+Test}!M210\+::\+Geodetic\+Coord@{M210\+::\+Geodetic\+Coord}}
+\subsubsection{\texorpdfstring{unit\+Test()}{unitTest()}}
+{\footnotesize\ttfamily void Geodetic\+Coord\+::unit\+Test (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Unit test to check that class is working. Called at the beginning of the program. Assert if a test fails 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Gps/\mbox{\hyperlink{_geodetic_coord_8h}{Geodetic\+Coord.\+h}}\item 
+Gps/\mbox{\hyperlink{_geodetic_coord_8cpp}{Geodetic\+Coord.\+cpp}}\end{DoxyCompactItemize}

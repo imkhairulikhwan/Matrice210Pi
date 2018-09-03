@@ -2,6 +2,7 @@
  *  @version 1.0
  *  @date Jul 03 2018
  *  @author Jonathan Michel
+ *  @brief Mobile.h implementation
  */
 
 #include "Mobile.h"

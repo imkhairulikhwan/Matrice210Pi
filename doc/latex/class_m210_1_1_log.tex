@@ -1,0 +1,40 @@
+\hypertarget{class_m210_1_1_log}{}\section{M210\+:\+:Log Class Reference}
+\label{class_m210_1_1_log}\index{M210\+::\+Log@{M210\+::\+Log}}
+Inheritance diagram for M210\+:\+:Log\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_m210_1_1_log}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_m210_1_1_log_a443fed7516e6cf2928a70e42587aa28a}\label{class_m210_1_1_log_a443fed7516e6cf2928a70e42587aa28a}} 
+void {\bfseries set\+Flight\+Controller} (\mbox{\hyperlink{class_m210_1_1_flight_controller}{Flight\+Controller}} $\ast$flight\+Controller)
+\item 
+void \mbox{\hyperlink{class_m210_1_1_log_a83662b0f91b3504917713d0b489b2e7d}{send}} (const char $\ast$type, const char $\ast$format,...)
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m210_1_1_log_a83662b0f91b3504917713d0b489b2e7d}\label{class_m210_1_1_log_a83662b0f91b3504917713d0b489b2e7d}} 
+\index{M210\+::\+Log@{M210\+::\+Log}!send@{send}}
+\index{send@{send}!M210\+::\+Log@{M210\+::\+Log}}
+\subsubsection{\texorpdfstring{send()}{send()}}
+{\footnotesize\ttfamily void M210\+::\+Log\+::send (\begin{DoxyParamCaption}\item[{const char $\ast$}]{type,  }\item[{const char $\ast$}]{format,  }\item[{}]{... }\end{DoxyParamCaption})}
+
+Send log message to mobile. 
+\begin{DoxyParams}{Parameters}
+{\em type} & \mbox{\hyperlink{class_m210_1_1_log}{Log}} type (D\+S\+T\+A\+T\+US, D\+E\+R\+R\+OR or D\+D\+E\+B\+UG) \\
+\hline
+{\em format} & Text to be sent to mobile. Can optionally contain embedded format specifiers that are replaced by the values specified in subsequent additional arguments and formatted as requested. \\
+\hline
+{\em ...} & Variadic additional arguments \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+util/\mbox{\hyperlink{_log_8h}{Log.\+h}}\item 
+util/\mbox{\hyperlink{_log_8cpp}{Log.\+cpp}}\end{DoxyCompactItemize}

@@ -2,6 +2,7 @@
  *  @version 1.0
  *  @date Jul 20 2018
  *  @author Jonathan Michel
+ *  @brief ActionData.h implementation
  */
 
 #include "ActionData.h"

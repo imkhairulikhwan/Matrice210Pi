@@ -1,0 +1,69 @@
+\hypertarget{class_m210_1_1_mobile}{}\section{M210\+:\+:Mobile Class Reference}
+\label{class_m210_1_1_mobile}\index{M210\+::\+Mobile@{M210\+::\+Mobile}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_m210_1_1_mobile_aa3e3dfa96e148844b0f2cfa912e0e615}{Mobile}} (\mbox{\hyperlink{class_m210_1_1_flight_controller}{Flight\+Controller}} $\ast$flight\+Controller)
+\item 
+void \mbox{\hyperlink{class_m210_1_1_mobile_a9315a171e151194c073ef6101a5a395f}{setup}} ()
+\item 
+\mbox{\hyperlink{class_m210_1_1_flight_controller}{Flight\+Controller}} $\ast$ \mbox{\hyperlink{class_m210_1_1_mobile_ad4cdcfe5206d1aae2b62c457591ef480}{get\+Flight\+Controller}} () const
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{class_m210_1_1_mobile_a1213532d9326b0bbb8b679299c93a1a2}{mobile\+Callback}} (Vehicle $\ast$vehicle, Recv\+Container recv\+Frame, User\+Data user\+Data)
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_m210_1_1_mobile_aa3e3dfa96e148844b0f2cfa912e0e615}\label{class_m210_1_1_mobile_aa3e3dfa96e148844b0f2cfa912e0e615}} 
+\index{M210\+::\+Mobile@{M210\+::\+Mobile}!Mobile@{Mobile}}
+\index{Mobile@{Mobile}!M210\+::\+Mobile@{M210\+::\+Mobile}}
+\subsubsection{\texorpdfstring{Mobile()}{Mobile()}}
+{\footnotesize\ttfamily Mobile\+::\+Mobile (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_m210_1_1_flight_controller}{Flight\+Controller}} $\ast$}]{flight\+Controller }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+Create \mbox{\hyperlink{class_m210_1_1_mobile}{Mobile}} Object 
+\begin{DoxyParams}{Parameters}
+{\em flight\+Controller} & flight controller to use \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m210_1_1_mobile_ad4cdcfe5206d1aae2b62c457591ef480}\label{class_m210_1_1_mobile_ad4cdcfe5206d1aae2b62c457591ef480}} 
+\index{M210\+::\+Mobile@{M210\+::\+Mobile}!get\+Flight\+Controller@{get\+Flight\+Controller}}
+\index{get\+Flight\+Controller@{get\+Flight\+Controller}!M210\+::\+Mobile@{M210\+::\+Mobile}}
+\subsubsection{\texorpdfstring{get\+Flight\+Controller()}{getFlightController()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_m210_1_1_flight_controller}{Flight\+Controller}}$\ast$ M210\+::\+Mobile\+::get\+Flight\+Controller (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Get used flight controller \begin{DoxyReturn}{Returns}
+Flight controller pointer 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m210_1_1_mobile_a1213532d9326b0bbb8b679299c93a1a2}\label{class_m210_1_1_mobile_a1213532d9326b0bbb8b679299c93a1a2}} 
+\index{M210\+::\+Mobile@{M210\+::\+Mobile}!mobile\+Callback@{mobile\+Callback}}
+\index{mobile\+Callback@{mobile\+Callback}!M210\+::\+Mobile@{M210\+::\+Mobile}}
+\subsubsection{\texorpdfstring{mobile\+Callback()}{mobileCallback()}}
+{\footnotesize\ttfamily void Mobile\+::mobile\+Callback (\begin{DoxyParamCaption}\item[{Vehicle $\ast$}]{vehicle,  }\item[{Recv\+Container}]{recv\+Frame,  }\item[{User\+Data}]{user\+Data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Callback for incoming mobile data. Process data and decide what to do with them 
+\begin{DoxyParams}{Parameters}
+{\em vehicle} & Vehicle receiving data \\
+\hline
+{\em recv\+Frame} & Incoming data \\
+\hline
+{\em user\+Data} & \mbox{\hyperlink{class_m210_1_1_mobile}{Mobile}} object casted as void$\ast$ \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m210_1_1_mobile_a9315a171e151194c073ef6101a5a395f}\label{class_m210_1_1_mobile_a9315a171e151194c073ef6101a5a395f}} 
+\index{M210\+::\+Mobile@{M210\+::\+Mobile}!setup@{setup}}
+\index{setup@{setup}!M210\+::\+Mobile@{M210\+::\+Mobile}}
+\subsubsection{\texorpdfstring{setup()}{setup()}}
+{\footnotesize\ttfamily void Mobile\+::setup (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Define callback for parsing incoming data 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Communication/\mbox{\hyperlink{_mobile_8h}{Mobile.\+h}}\item 
+Communication/\mbox{\hyperlink{_mobile_8cpp}{Mobile.\+cpp}}\end{DoxyCompactItemize}

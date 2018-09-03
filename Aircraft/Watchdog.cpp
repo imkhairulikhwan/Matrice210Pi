@@ -2,6 +2,7 @@
  *  @version 1.0
  *  @date Jul 25 2018
  *  @author Jonathan Michel
+ *  @brief Watchdog.h implementation
  */
 
 #include "Watchdog.h"

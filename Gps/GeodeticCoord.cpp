@@ -1,7 +1,8 @@
-/*! @file GeodeticCoord.h
+/*! @file GeodeticCoord.cpp
  *  @version 1.0
  *  @date Aou 11 2018
  *  @author Jonathan Michel
+ *  @brief GeodeticCoord.h implementation
  */
 
 #include "GeodeticCoord.h"
